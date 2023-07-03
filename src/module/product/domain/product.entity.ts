@@ -1,3 +1,1 @@
-export class Product {
-    hello: string;
-}
+export class Product {}
