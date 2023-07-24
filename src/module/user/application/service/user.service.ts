@@ -1,26 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { IUserRepository } from '../repository/user.repository.interface';
+import { User } from '../../domain/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserRepository } from '../../infrastructure/user.repository';
+import { Auth } from 'src/module/auth/domain/auth.entity';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @Inject(UserRepository)
+    @InjectRepository(User)
+    private readonly userRepository: IUserRepository,
+  ) {}
+  async getUserByEmail(email: string): Promise<User | null> {
+    const user = await this.userRepository.getUserByEmail(email);
+
+    if (!user) {
+      throw HttpStatus.NOT_FOUND;
+    }
+    return user;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async addUser(user: User): Promise<User> {
+    if (!(user instanceof User)) {
+      throw new HttpException(
+        'To create a user, the data must be instantiated.',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
+
+    const saveUser = await this.userRepository.saveUser(user);
+
+    return saveUser;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async saveSession(session:Auth){
+    this.userRepository.saveSession(session)
   }
 }

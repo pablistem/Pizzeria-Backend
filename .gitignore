@@ -1,7 +1,7 @@
 # compiled output
 /dist
 /node_modules
-
+/data
 
 # Logs
 logs
@@ -41,3 +41,4 @@ lerna-debug.log*
 
 data/tests.db
 data/tests
+devdb.sqlite

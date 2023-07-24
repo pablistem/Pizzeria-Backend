@@ -37,9 +37,9 @@ const staging: DataSourceOptions = {
 
 const development: DataSourceOptions = {
   type: 'better-sqlite3',
-  database: process.env.DB_PATH,
-  migrations: ['./data/migration/**/*.js'],
+  database: 'devdb.sqlite',
   synchronize: true,
+  entities:[__dirname+ '/**/*.entity{.ts,.js}'],
   namingStrategy: new SnakeNamingStrategy(),
 };
 
@@ -77,3 +77,19 @@ export default new DataSource({
   ...datasourceOptions,
   entities: [join(__dirname, 'src/**/infrastructure/persistence/*.schema.ts')],
 });
+
+export const databaseProviders = [
+  {
+    provide: 'DATA_SOURCE',
+    useFactory: async () => {
+      const dataSource = new DataSource({
+        ...datasourceOptions,
+        entities: [
+          join(__dirname, 'src/**/infrastructure/persistence/*.schema.ts'),
+        ],
+      });
+
+      return dataSource.initialize();
+    },
+  },
+];
