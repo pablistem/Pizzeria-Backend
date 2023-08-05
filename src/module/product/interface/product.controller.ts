@@ -6,20 +6,23 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductService } from '../application/service/product.service';
 import { CreateProductDto } from '../application/dto/create-product.dto';
 import { UpdateProductDto } from '../application/dto/update-product.dto';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { AdminGuard } from 'src/module/user/infrastructure/guards/admin.guard';
 
 @ApiTags('Products')
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post()
+  @UseGuards(AdminGuard)
+  @Post('create')
   create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+    return this.productService.createProduct(createProductDto)
   }
 
   @Get()
