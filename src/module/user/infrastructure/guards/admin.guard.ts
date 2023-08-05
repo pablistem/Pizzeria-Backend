@@ -13,7 +13,7 @@ export class AdminGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRole = RoleEnum.admin;
     const request = context.switchToHttp().getRequest();
-    const token = request.headers.authorization;
+    const token = request.headers.refreshtoken;
 
     if (!token) {
       return false;
@@ -21,9 +21,9 @@ export class AdminGuard implements CanActivate {
 
     try {
       const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
-      const user = decodedToken.user;
 
-      if (!user || user.role !== requiredRole) {
+
+      if ( decodedToken.role !== requiredRole) {
         return false;
       }
 

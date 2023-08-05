@@ -18,7 +18,7 @@ import { UserRepository } from '../user/infrastructure/user.repository';
     JwtModule.register({
       global: true,
       secret: 'asdfasdfasdf',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '60h' },
     }),
   ],
   controllers: [AuthController],
