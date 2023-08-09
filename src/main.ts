@@ -5,19 +5,11 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 
 declare const module: any;
 
-const corsOptions: CorsOptions = {
-  origin: 'http://localhost:8080',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-};
-
-
-
 async function bootstrap() {
   const port = process.env.PORT || 3000;
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors(corsOptions);
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('Pizzeria API')
