@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProductService } from '../application/service/product.service';
 import { CreateProductDto } from '../application/dto/create-product.dto';
@@ -23,6 +24,17 @@ export class ProductController {
   @Post('create')
   create(@Body() createProductDto: CreateProductDto) {
     return this.productService.createProduct(createProductDto)
+  }
+
+  @Post('update/:id')
+  
+  updateProduct(@Body() updateProDto: UpdateProductDto, @Param('id', ParseIntPipe) id: number ){
+    this.productService.updateProduct(updateProDto, id)
+  }
+
+  @Post('delete/:id')
+  deleteProduct(@Param('id', ParseIntPipe) id: number){
+    this.productService.removeProduct(id)
   }
 
   @Get()
