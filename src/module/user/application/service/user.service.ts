@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { IUserRepository } from '../repository/user.repository.interface';
 import { User } from '../../domain/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +13,9 @@ import { Auth } from '../../../../../src/module/auth/domain/auth.entity';
 
 @Injectable()
 export class UserService {
+  getUserById(userId: number) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @Inject(UserRepository)
     @InjectRepository(User)
@@ -16,7 +25,7 @@ export class UserService {
     const user = await this.userRepository.getUserByEmail(email);
 
     if (!user) {
-      throw new NotFoundException()
+      throw new NotFoundException();
     }
     return user;
   }
@@ -34,7 +43,7 @@ export class UserService {
     return saveUser;
   }
 
-  async saveSession(session:Auth){
-    this.userRepository.saveSession(session)
+  async saveSession(session: Auth) {
+    this.userRepository.saveSession(session);
   }
 }

@@ -18,12 +18,10 @@ export class AdminGuard implements CanActivate {
     if (!token) {
       return false;
     }
-
     try {
       const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
 
-
-      if ( decodedToken.role !== requiredRole) {
+      if (decodedToken.role !== requiredRole) {
         return false;
       }
 

@@ -21,28 +21,30 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get('/')
-  getAllProdcuts(){
-    return this.getAllProdcuts()
+  getAllProdcuts() {
+    return this.getAllProdcuts();
   }
 
   @UseGuards(AdminGuard)
   @Post('create')
   create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.createProduct(createProductDto)
+    return this.productService.createProduct(createProductDto);
   }
 
   @UseGuards(AdminGuard)
   @Post('update/:id')
-  
-  updateProduct(@Body() updateProDto: UpdateProductDto, @Param('id', ParseIntPipe) id: number ){
-    this.productService.updateProduct(updateProDto, id)
+  updateProduct(
+    @Body() updateProDto: UpdateProductDto,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    this.productService.updateProduct(updateProDto, id);
   }
 
   @UseGuards(AdminGuard)
-  @ApiParam({name: 'id'})
+  @ApiParam({ name: 'id' })
   @Post('delete/:id')
-  deleteProduct(@Param('id', ParseIntPipe) id: number){
-    this.productService.removeProduct(id)
+  deleteProduct(@Param('id', ParseIntPipe) id: number) {
+    this.productService.removeProduct(id);
   }
 
   @UseGuards(AdminGuard)
@@ -65,5 +67,4 @@ export class ProductController {
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);
   }
-
 }
