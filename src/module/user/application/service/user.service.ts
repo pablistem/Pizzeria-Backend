@@ -1,9 +1,9 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { IUserRepository } from '../repository/user.repository.interface';
 import { User } from '../../domain/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../../infrastructure/user.repository';
-import { Auth } from 'src/module/auth/domain/auth.entity';
+import { Auth } from '../../../../../src/module/auth/domain/auth.entity';
 
 @Injectable()
 export class UserService {
@@ -12,11 +12,11 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: IUserRepository,
   ) {}
-  async getUserByEmail(email: string): Promise<User | null> {
+  async getUserByEmail(email: string): Promise<User> {
     const user = await this.userRepository.getUserByEmail(email);
 
     if (!user) {
-      throw HttpStatus.NOT_FOUND;
+      throw new NotFoundException()
     }
     return user;
   }

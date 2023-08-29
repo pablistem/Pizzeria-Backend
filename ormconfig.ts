@@ -45,12 +45,12 @@ const development: DataSourceOptions = {
 
 const automatedTests: DataSourceOptions = {
   type: 'better-sqlite3',
-  database: `data/tests/test.${Math.random()}.db`,
+  database: `data/tests/test.${Math.random()}.sqlite`,
   migrations: ['./data/migration/**/*.ts'],
   synchronize: true,
   dropSchema: false,
   namingStrategy: new SnakeNamingStrategy(),
-  verbose: console.log,
+  // verbose: console.log,
 };
 
 export const datasourceOptions: DataSourceOptions = (() => {

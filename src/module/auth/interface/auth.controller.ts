@@ -11,14 +11,12 @@ export class AuthController {
 
   @Post('signup')
   async create(@Body() createAuthDto: CreateAuthDto) {
-    await this.authService.signUp(createAuthDto);
-    return HttpStatus.CREATED;
+   return await this.authService.signUp(createAuthDto);
   }
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
-    const loginUser = await this.authService.login(loginDto);
-    return loginUser;
+    return await this.authService.login(loginDto);
   }
 
   @Post('logout')

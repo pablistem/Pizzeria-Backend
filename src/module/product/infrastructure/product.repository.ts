@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Product } from '../domain/product.entity';
 import { DataSource, Repository } from 'typeorm';
 import { IProductRepository } from '../application/repository/product.repository.interface';
-import { setMaxIdleHTTPParsers } from 'http';
 
 @Injectable()
 export class ProductRepository implements IProductRepository {
@@ -22,5 +21,9 @@ export class ProductRepository implements IProductRepository {
 
   async deleteProduct(product:Product){
     await this.repository.remove(product)
+  }
+
+  async getAllProducts():Promise<Product[]>{
+    return await this.repository.find()
   }
 }
