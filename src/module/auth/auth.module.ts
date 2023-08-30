@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module';
 import { User } from '../user/domain/user.entity';
 import { Auth } from './domain/auth.entity';
 import { AuthRepository } from './infrastructure/auth.repository';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
   imports: [
@@ -17,9 +18,10 @@ import { AuthRepository } from './infrastructure/auth.repository';
       global: true,
       secret: process.env.ACCESS_TOKEN_SECRET,
       signOptions: { expiresIn: '60h' },
+      
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, JwtModule],
+  providers: [AuthService, AuthRepository, JwtModule, JwtStrategy],
 })
 export class AuthModule {}
