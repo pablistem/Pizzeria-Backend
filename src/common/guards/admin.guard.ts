@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core'; // Importa tu RoleEnum aquí
 import { JwtService } from '@nestjs/jwt'; // Importa el servicio JWT
-import { RoleEnum } from '../../domain/user.entity';
+import { RoleEnum } from '../../module/user/domain/user.entity';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -14,7 +14,6 @@ export class AdminGuard implements CanActivate {
     const requiredRole = RoleEnum.admin;
     const request = context.switchToHttp().getRequest();
     const token = request.headers.refreshtoken;
-
     if (!token) {
       return false;
     }
@@ -30,4 +29,6 @@ export class AdminGuard implements CanActivate {
       return false;
     }
   }
+
+  
 }

@@ -9,6 +9,7 @@ import { User } from '../user/domain/user.entity';
 import { Auth } from './domain/auth.entity';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { UserGuard } from 'src/common/guards/user.guard';
 
 @Module({
   imports: [
@@ -16,12 +17,12 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     UserModule,
     JwtModule.register({
       global: true,
-      secret: process.env.ACCESS_TOKEN_SECRET,
+      secret: 'secret',
       signOptions: { expiresIn: '60h' },
-      
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, JwtModule, JwtStrategy],
+  providers: [AuthService, AuthRepository, JwtModule, JwtStrategy, UserGuard],
+  exports:[AuthService]
 })
 export class AuthModule {}

@@ -1,4 +1,5 @@
 import {
+  ExecutionContext,
   HttpException,
   HttpStatus,
   Inject,
@@ -90,5 +91,14 @@ export class AuthService {
     const payload = { id: user.id, email: user.email, role: user.role };
     const accessToken = await this.jwtService.signAsync(payload);
     return accessToken;
+  }
+
+  async decodedToken(token): Promise<Object> {
+    try {
+      const decodedToken = this.jwtService.decode(token);
+      return decodedToken;
+    } catch (error) {
+      return false;
+    }
   }
 }

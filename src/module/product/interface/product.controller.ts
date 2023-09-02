@@ -13,7 +13,7 @@ import { ProductService } from '../application/service/product.service';
 import { CreateProductDto } from '../application/dto/create-product.dto';
 import { UpdateProductDto } from '../application/dto/update-product.dto';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
-import { AdminGuard } from '../../../../src/module/user/infrastructure/guards/admin.guard';
+import { AdminGuard } from '../../../common/guards/admin.guard';
 
 @ApiTags('Products')
 @Controller('product')

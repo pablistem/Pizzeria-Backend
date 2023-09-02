@@ -5,4 +5,6 @@ export interface IUserRepository {
   getUserByEmail(email: string): Promise<User | null>;
   saveUser(user: User): Promise<User | null>;
   saveSession(session:Auth):Promise<void>
+  findOnebyId(id: number): Promise<User>
+  getUserWithOrders(userId: number)
 }

@@ -7,15 +7,15 @@ import { OrderMapper } from './application/order.mapper';
 import { OrderService } from './application/service/order.service';
 import { OrderController } from './interface/order.controller';
 import { UserModule } from '../user/user.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [UserModule, TypeOrmModule.forFeature([Order])],
+  imports: [UserModule, TypeOrmModule.forFeature([Order]), AuthModule],
   controllers: [OrderController],
   providers: [
     OrderMapper,
     OrderService,
     { provide: ORDER_REPOSITORY, useClass: OrderRepository },
   ],
-  exports: [],
 })
 export class OrderModule {}

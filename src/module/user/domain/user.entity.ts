@@ -31,7 +31,8 @@ export class User extends Base {
   role: string | undefined;
 
   @OneToMany(() => Order, (order) => order.user)
-  orders: Order[];
+  @JoinColumn()
+  orders: Order[] | undefined;
 
   @OneToOne(() => Auth)
   @JoinColumn()

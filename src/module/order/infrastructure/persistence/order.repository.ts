@@ -12,15 +12,16 @@ export class OrderRepository implements IOrderRepository {
   }
 
   find(): Promise<Order[]> {
-    throw new Error('Method not implemented.');
+    return
   }
   findOne(id: number): Promise<Order> {
-    throw new Error('Method not implemented.');
+    return this.repository.findOne({ where: { id } });
   }
-  create(order: Order): Promise<Order> {
-    throw new Error('Method not implemented.');
+  async create(order: Order): Promise<Order> {
+    const newOrder = this.repository.create(order)
+     return await this.repository.save(newOrder)
   }
   update(id: number, order: Order): Promise<Order> {
-    throw new Error('Method not implemented.');
+    return
   }
 }

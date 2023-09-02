@@ -1,9 +1,8 @@
+import { Base } from 'src/common/domain/base.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Product {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class Product extends Base{
 
   @Column({ unique: true })
   name: string;
@@ -16,6 +15,7 @@ export class Product {
 
   @Column()
   category: string;
+  
 
   @Column({default:0})
   price: number;
@@ -23,13 +23,8 @@ export class Product {
   @Column({default:0})
   stock: number;
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date | undefined;
-
-  @Column({ default: null })
-  updatedAt: Date | undefined;
-
   constructor(
+
     name:string,
     description:string,
     category: string,
@@ -37,6 +32,7 @@ export class Product {
     image?:string,
     stock?:number,
   ){
+    super();
     this.name=name
     this.description=description
     this.image=image
