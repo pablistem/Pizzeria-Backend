@@ -11,11 +11,10 @@ import { JwtGuard } from 'src/common/guards/jwt.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-
   @Get('me')
   async getMe(){
 
-    return 'la reclacadaconthay'
+    return ''
   }
   // //   @Post()
   //   create(@Body() createUserDto: CreateUserDto) {

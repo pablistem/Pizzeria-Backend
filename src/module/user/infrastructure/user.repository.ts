@@ -34,6 +34,9 @@ export class UserRepository implements IUserRepository {
 
   async getOrderFromUser(id: number) {
     return await this.repository.find({
+      where: {
+        id
+      },
       relations: {
         orders:true
       }
