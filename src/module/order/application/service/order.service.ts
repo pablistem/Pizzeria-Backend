@@ -12,7 +12,7 @@ export class OrderService {
   constructor(
     @Inject(ORDER_REPOSITORY) private orderRepository: IOrderRepository,
     @Inject(UserService) private userService: UserService,
-    @Inject(AuthService) private authservice:AuthService
+    @Inject(AuthService) private authService:AuthService
   ) {}
 
   async create(order: Order): Promise<Order> {
@@ -21,9 +21,9 @@ export class OrderService {
 
   async generatedOrderFromUser(order: Order, token:string) {
     let tokenDto:TokenDto
-    const decodedToken = await this.authservice.decodedToken(token)
+    const decodedToken = await this.authService.decodedToken(token)
     Object.assign(tokenDto,decodedToken)
-    const findUser = await this.userService.findUserbyId(tokenDto.id)
+    const findUser = await this.userService.findUserById(tokenDto.id)
 
     const newOrder = new Order()
     newOrder.status = order.status
@@ -31,8 +31,8 @@ export class OrderService {
     newOrder.user = findUser
     
     await this.orderRepository.create(newOrder)
-    const OrdersUserTotal = await this.userService.getOdersFromUser(tokenDto.id)
+    const OrdersUser:Order[] = await this.userService.getOrdersFromUser(tokenDto.id)
 
-    return OrdersUserTotal
+    return OrdersUser
   }
 }

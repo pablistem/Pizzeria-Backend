@@ -28,7 +28,7 @@ export class UserRepository implements IUserRepository {
     userFound.sessions = session;
   }
 
-  async findOnebyId(id: number): Promise<User> {
+  async findOneById(id: number): Promise<User> {
     return this.repository.findOne({ where: { id } });
   }
 
