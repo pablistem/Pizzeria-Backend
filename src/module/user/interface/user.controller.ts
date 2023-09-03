@@ -1,13 +1,22 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { UserService } from '../application/service/user.service';
 
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
 
 @ApiTags('User')
-@Controller('user')
+@UseGuards(JwtGuard)
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+
+  @Get('me')
+  async getMe(){
+
+    return 'la reclacadaconthay'
+  }
   // //   @Post()
   //   create(@Body() createUserDto: CreateUserDto) {
   //     return this.userService.create(createUserDto);

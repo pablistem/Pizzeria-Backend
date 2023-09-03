@@ -53,7 +53,7 @@ const automatedTests: DataSourceOptions = {
   // verbose: console.log,
 };
 
-export const datasourceOptions: DataSourceOptions = (() => {
+export const dataSourceOptions: DataSourceOptions = (() => {
   if (process.env.NODE_ENV === ENVIRONMENTS.PRODUCTION) {
     return production;
   }
@@ -74,7 +74,7 @@ export const datasourceOptions: DataSourceOptions = (() => {
 })();
 
 export default new DataSource({
-  ...datasourceOptions,
+  ...dataSourceOptions,
   entities: [join(__dirname, 'src/**/infrastructure/persistence/*.schema.ts')],
 });
 
@@ -83,7 +83,7 @@ export const databaseProviders = [
     provide: 'DATA_SOURCE',
     useFactory: async () => {
       const dataSource = new DataSource({
-        ...datasourceOptions,
+        ...dataSourceOptions,
         entities: [
           join(__dirname, 'src/**/infrastructure/persistence/*.schema.ts'),
         ],

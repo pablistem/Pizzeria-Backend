@@ -3,7 +3,7 @@ import { UserModule } from './module/user/user.module';
 import { AuthModule } from './module/auth/auth.module';
 import { ProductModule } from './module/product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { datasourceOptions } from '../ormconfig';
+import { dataSourceOptions } from '../ormconfig';
 import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { OrderModule } from './module/order/order.module';
@@ -12,10 +12,11 @@ import { OrderModule } from './module/order/order.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
+      isGlobal:true
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
-        ...datasourceOptions,
+        ...dataSourceOptions,
         autoLoadEntities: true,
       }),
       dataSourceFactory: async (options) => {

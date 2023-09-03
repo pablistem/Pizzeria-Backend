@@ -14,9 +14,6 @@ import { Order } from 'src/module/order/domain/order.entity';
 
 @Injectable()
 export class UserService {
-  getUserById(userId: number) {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @Inject(UserRepository)
     @InjectRepository(User)
@@ -48,11 +45,11 @@ export class UserService {
     this.userRepository.saveSession(session);
   }
 
-  async findUserbyId(id:number):Promise<User>{
-    return this.userRepository.findOnebyId(id)
+  async findUserById(id:number):Promise<User>{
+    return this.userRepository.findOneById(id)
   }
 
-  async getOdersFromUser(id:number):Promise<Order[]>{
+  async getOrdersFromUser(id:number):Promise<Order[]>{
     const userOrders = await this.userRepository.getUserWithOrders(id)
     return userOrders[0].orders
   }

@@ -13,7 +13,6 @@ import { ProductService } from '../application/service/product.service';
 import { CreateProductDto } from '../application/dto/create-product.dto';
 import { UpdateProductDto } from '../application/dto/update-product.dto';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
-import { AdminGuard } from '../../../common/guards/admin.guard';
 
 @ApiTags('Products')
 @Controller('product')
@@ -25,13 +24,11 @@ export class ProductController {
     return this.getAllProdcuts();
   }
 
-  @UseGuards(AdminGuard)
   @Post('create')
   create(@Body() createProductDto: CreateProductDto) {
     return this.productService.createProduct(createProductDto);
   }
 
-  @UseGuards(AdminGuard)
   @Post('update/:id')
   updateProduct(
     @Body() updateProDto: UpdateProductDto,
@@ -40,28 +37,24 @@ export class ProductController {
     this.productService.updateProduct(updateProDto, id);
   }
 
-  @UseGuards(AdminGuard)
   @ApiParam({ name: 'id' })
   @Post('delete/:id')
   deleteProduct(@Param('id', ParseIntPipe) id: number) {
     this.productService.removeProduct(id);
   }
 
-  @UseGuards(AdminGuard)
   @ApiParam({ name: 'id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(+id);
   }
 
-  @UseGuards(AdminGuard)
   @ApiParam({ name: 'id' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
   }
 
-  @UseGuards(AdminGuard)
   @ApiParam({ name: 'id' })
   @Delete(':id')
   remove(@Param('id') id: string) {

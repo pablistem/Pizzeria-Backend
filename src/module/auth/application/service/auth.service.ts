@@ -15,6 +15,7 @@ import { RoleEnum, User } from '../../../user/domain/user.entity';
 import { Auth } from '../../domain/auth.entity';
 import { AuthRepository } from '../../infrastructure/auth.repository';
 import { IAuthRepository } from '../repository/auth.repository.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,7 @@ export class AuthService {
     private readonly authRepository: IAuthRepository,
     @Inject(UserService) private userService: UserService,
     private jwtService: JwtService,
+    private config: ConfigService
   ) {}
   async signUp(createAuthDto: CreateAuthDto) {
     try {
@@ -88,8 +90,16 @@ export class AuthService {
   }
 
   async getRefreshToken(user: User) {
-    const payload = { id: user.id, email: user.email, role: user.role };
-    const accessToken = await this.jwtService.signAsync(payload);
+    const payload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
+    const secret = this.config.get('ACCESS_TOKEN_SECRET')
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: secret,
+      expiresIn: '15min',
+    });
     return accessToken;
   }
 
