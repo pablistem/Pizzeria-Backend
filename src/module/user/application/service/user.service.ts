@@ -45,12 +45,12 @@ export class UserService {
     this.userRepository.saveSession(session);
   }
 
-  async findUserById(id:number):Promise<User>{
-    return this.userRepository.findOneById(id)
+  async findUserById(id: number): Promise<User> {
+    return this.userRepository.findOneById(id);
   }
 
-  async getOrdersFromUser(id:number):Promise<Order[]>{
-    const userOrders = await this.userRepository.getUserWithOrders(id)
-    return userOrders[0].orders
+  async getOrdersFromUser(id: number): Promise<Order[]> {
+    const userOrders = await this.userRepository.getUserWithOrders(id);
+    return userOrders[0].orders;
   }
 }

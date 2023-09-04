@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 
 import { AuthService } from './application/service/auth.service';
 import { AuthController } from './interface/auth.controller';
@@ -9,15 +9,12 @@ import { User } from '../user/domain/user.entity';
 import { Auth } from './domain/auth.entity';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { JwtStrategy } from './application/strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Auth]),
     UserModule,
-    JwtModule.register({
-
-    }),
+    JwtModule.register({}),
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthRepository, JwtStrategy],
