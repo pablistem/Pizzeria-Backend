@@ -1,10 +1,10 @@
-import { User } from '../../../../src/module/user/domain/user.entity';
+import { User } from '../../../module/user/domain/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 
 @Entity()
 export class Auth {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
   idUser: number | undefined;
@@ -12,8 +12,8 @@ export class Auth {
   @Column()
   refreshToken: string;
 
-  @OneToOne(()=>User, (user)=>user.sessions)
-  user:User
+  @OneToOne(() => User, (user) => user.sessions)
+  user: User;
 
   constructor(refreshToken: string, idUser?: number) {
     this.idUser = idUser;

@@ -1,14 +1,7 @@
-import { Base } from '../../../../src/common/domain/base.entity';
+import { Base } from '../../../common/domain/base.entity';
 import { Auth } from '../../auth/domain/auth.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Order } from 'src/module/order/domain/order.entity';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Order } from '../../../module/order/domain/order.entity';
 
 export enum RoleEnum {
   admin = 'admin',

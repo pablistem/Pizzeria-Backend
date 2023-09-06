@@ -1,9 +1,8 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { UserService } from '../application/service/user.service';
 
 import { ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
-import { JwtGuard } from 'src/common/guards/jwt.guard';
+import { JwtGuard } from '../../../common/guards/jwt.guard';
 
 @ApiTags('User')
 @UseGuards(JwtGuard)
@@ -12,9 +11,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('me')
-  async getMe(){
-
-    return ''
+  async getMe() {
+    return '';
   }
   // //   @Post()
   //   create(@Body() createUserDto: CreateUserDto) {
