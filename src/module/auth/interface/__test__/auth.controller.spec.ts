@@ -1,7 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { AppModule } from '../../../../app.module';
 import * as request from 'supertest';
 import { HttpStatus, INestApplication } from '@nestjs/common';
+
+import { AppModule } from '../../../../app.module';
 import { CreateUserDto } from '../../../user/application/dto/create-user.dto';
 import { UserService } from '../../../../../src/module/user/application/service/user.service';
 import { Auth } from '../../domain/auth.entity';

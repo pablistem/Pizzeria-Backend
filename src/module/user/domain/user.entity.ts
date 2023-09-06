@@ -1,4 +1,4 @@
-import { Base } from 'src/common/domain/base.entity';
+import { Base } from '../../../../src/common/domain/base.entity';
 import { Auth } from '../../auth/domain/auth.entity';
 import {
   Column,

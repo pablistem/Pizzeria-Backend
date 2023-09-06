@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 import { CreateAuthDto, LoginDto } from '../dto/index';
 import { UserService } from '../../../user/application/service/user.service';
@@ -15,7 +16,7 @@ import { RoleEnum, User } from '../../../user/domain/user.entity';
 import { Auth } from '../../domain/auth.entity';
 import { AuthRepository } from '../../infrastructure/auth.repository';
 import { IAuthRepository } from '../repository/auth.repository.interface';
-import { ConfigService } from '@nestjs/config';
+
 
 @Injectable()
 export class AuthService {

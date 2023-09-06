@@ -9,7 +9,6 @@ import { User } from '../user/domain/user.entity';
 import { Auth } from './domain/auth.entity';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { JwtStrategy } from './application/strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [

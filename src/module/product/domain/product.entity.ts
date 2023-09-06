@@ -1,4 +1,4 @@
-import { Base } from 'src/common/domain/base.entity';
+import { Base } from '../../../../src/common/domain/base.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

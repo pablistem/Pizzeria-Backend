@@ -1,8 +1,11 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, Get, UseGuards, Req } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 
 import { AuthService } from '../application/service/auth.service';
 import { LoginDto, CreateAuthDto } from '../application/dto';
-import { ApiTags } from '@nestjs/swagger';
+import { JwtGuard } from '../../../../src/common/guards/jwt.guard';
+
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -23,5 +26,11 @@ export class AuthController {
   async logout(@Body() id:number){
     this.authService.logOut(id)
     return HttpStatus.ACCEPTED
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('me')
+  async getUserInfo(@Req() req:Request){
+    return req.user
   }
 }

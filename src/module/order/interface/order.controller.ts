@@ -33,7 +33,6 @@ export class OrderController {
   @UseGuards(JwtGuard)
   @Get('me/:id')
   async findOne(@Param('id', ParseIntPipe) orderId: number): Promise<Order> {
-    console.log(orderId)
     const order = await this.orderRepository.findOne(orderId);
     return order;
   }
