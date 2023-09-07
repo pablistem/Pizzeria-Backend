@@ -106,7 +106,7 @@ export class AuthService {
 
   async decodedToken(token): Promise<Object> {
     try {
-      const decodedToken = this.jwtService.decode(token);
+      const decodedToken = this.jwtService.decode(token, this.config.get('ACCESS_TOKEN_SECRET'));
       return decodedToken;
     } catch (error) {
       return false;

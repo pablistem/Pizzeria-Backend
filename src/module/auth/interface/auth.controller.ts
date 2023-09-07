@@ -31,6 +31,6 @@ export class AuthController {
   @UseGuards(JwtGuard)
   @Get('me')
   async getUserInfo(@Req() req:Request){
-    return req.user
+    return 'ok'
   }
 }

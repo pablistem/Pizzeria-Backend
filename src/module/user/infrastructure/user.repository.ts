@@ -15,9 +15,6 @@ export class UserRepository implements IUserRepository {
     private readonly dataSource: DataSource,
   ) {
     this.repository = this.dataSource.getRepository(User);
-    if (config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST) {
-      this.loadTestData();
-    }
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
