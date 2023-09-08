@@ -1,11 +1,13 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '../application/service/user.service';
 
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../../../common/guards/jwt.guard';
 import { UserRepository } from '../infrastructure/user.repository';
 import { ENVIRONMENTS } from '../../../../ormconfig';
 import { ConfigService } from '@nestjs/config';
+import { User } from '../domain/user.entity';
+import { Request } from 'express';
 
 @ApiTags('User')
 // @UseGuards(JwtGuard)
@@ -14,20 +16,24 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly userRepository: UserRepository,
-    private readonly config: ConfigService
+    private readonly config: ConfigService,
   ) {}
-// @UseGuards(JwtGuard)
+
+  @ApiBearerAuth('Authorization')
+  @UseGuards(JwtGuard)
   @Get('me')
-  async getMe() {
-    return 'ok';
+  async getMe(@Req() req:Request) {
+    return req.user
   }
 
   @Get('reset')
   async loadTestDb() {
     if (this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST) {
-      await this.userRepository.loadTestData().then(()=>console.log('Data is deployment'));
+      await this.userRepository
+        .loadTestData()
+        .then(() => console.log('Data is deployment'));
     }
-    return 'ok'
+    return 'ok';
   }
 
   // //   @Post()

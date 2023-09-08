@@ -11,7 +11,6 @@ import { JwtService } from '@nestjs/jwt';
 describe('AuthController', () => {
   let app: INestApplication;
   let userService: UserService;
-  let jwtService: JwtService;
   let authService: AuthService;
 
   beforeAll(async () => {
@@ -108,7 +107,7 @@ describe('AuthController', () => {
       .expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('Should grant access to the user/me route  with the token in the header', async () => {
+  it('Should grant access to the auth/me route  with the token in the header', async () => {
     const token =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
       'eyJpZCI6IjEiLCJlbWFpbCI6ImFkbWluVXNlckBlbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1MTYyMzkwMjJ9.' +
