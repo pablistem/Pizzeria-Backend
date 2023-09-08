@@ -1,16 +1,13 @@
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { Header, HttpStatus, INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 
 import { AppModule } from '../../../../app.module';
 import { CreateUserDto } from '../../../user/application/dto/create-user.dto';
-import { UserService } from '../../../../../src/module/user/application/service/user.service';
 import { AuthService } from '../../application/service/auth.service';
-import { JwtService } from '@nestjs/jwt';
 
 describe('AuthController', () => {
   let app: INestApplication;
-  let userService: UserService;
   let authService: AuthService;
 
   beforeAll(async () => {
@@ -20,7 +17,6 @@ describe('AuthController', () => {
 
     app = moduleRef.createNestApplication();
 
-    userService = app.get<UserService>(UserService);
     authService = app.get<AuthService>(AuthService);
     await app.init();
 
@@ -65,7 +61,7 @@ describe('AuthController', () => {
       .post('/auth/login')
       .send(userLogin);
     const authResponse: { user: number; token: string } = response.body;
-    const token = await authService.decodedToken(authResponse.token);
+    const token = await authService.decodeToken(authResponse.token);
     expect(token).toMatchObject({ role: 'user' });
   });
 
@@ -79,7 +75,7 @@ describe('AuthController', () => {
       .post('/auth/login')
       .send(userLogin);
     const authResponse: { user: number; token: string } = response.body;
-    let token = await authService.decodedToken(authResponse.token);
+    const token = await authService.decodeToken(authResponse.token);
     expect(token).toMatchObject({ role: 'admin' });
   });
 
@@ -122,9 +118,3 @@ describe('AuthController', () => {
     await app.close();
   });
 });
-
-// jest
-//   .spyOn(userService, 'getUserByEmail')
-//   .mockImplementation((email: string) => {
-//     throw new NotFoundException();
-//   });

@@ -7,12 +7,13 @@ import { dataSourceOptions } from '../ormconfig';
 import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { OrderModule } from './module/order/order.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
-      isGlobal:true
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
@@ -27,6 +28,7 @@ import { OrderModule } from './module/order/order.module';
     AuthModule,
     ProductModule,
     OrderModule,
+    CommonModule,
   ],
 })
 export class AppModule {}
