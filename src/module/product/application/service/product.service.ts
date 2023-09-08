@@ -55,8 +55,8 @@ export class ProductService {
     const productFound = await this.productRepository.findProduct(id);
     await this.productRepository.deleteProduct(productFound);
   }
-  getAllProducts() {
-    return this.productRepository.getAllProducts;
+  async getAllProducts() {
+    return this.productRepository.getAllProducts();
   }
 
   findOne(id: number) {

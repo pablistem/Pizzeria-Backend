@@ -27,8 +27,8 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get('/')
-  getAllProdcuts() {
-    return this.getAllProdcuts();
+  async getAllProducts() {
+    return await this.productService.getAllProducts();
   }
   @UseGuards(AdminGuard)
   @Post('create')
