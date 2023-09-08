@@ -17,10 +17,10 @@ export class ProductService {
     @Inject(ProductRepository)
     private readonly productRepository: IProductRepository,
   ) {}
-  async createProduct(product: CreateProductDto): Promise<HttpException | void> {
+  async createProduct(product: Product): Promise<HttpException | void> {
     if (!(product instanceof Product)) {
       throw new HttpException(
-        'To create a user, the data must be instantiated.',
+        'To create a product, the data must be instantiated.',
         HttpStatus.NOT_ACCEPTABLE,
       );
     } else {
@@ -40,7 +40,7 @@ export class ProductService {
       productFound.description = updateProDto.description;
       productFound.name = updateProDto.name;
       productFound.price = updateProDto.price;
-      productFound.stock = updateProDto.sotck;
+      productFound.stock = updateProDto.stock;
       productFound.image = updateProDto.image;
 
       try {

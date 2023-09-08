@@ -14,10 +14,6 @@ export class CreateProductDto {
   description: string;
 
   @ApiProperty()
-  @IsString()
-  image: string;
-
-  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   category: string;
@@ -29,7 +25,11 @@ export class CreateProductDto {
 
   @ApiProperty()
   @IsNumber()
-  sotck: number;
+  stock: number;
+
+  @ApiProperty()
+  @IsString()
+  image: string;
 
   constructor(
     name: string,
@@ -44,6 +44,6 @@ export class CreateProductDto {
     this.image = image;
     this.category = category;
     this.price = price;
-    this.sotck = stock;
+    this.stock = stock;
   }
 }
