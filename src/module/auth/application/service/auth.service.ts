@@ -1,5 +1,4 @@
 import {
-  ExecutionContext,
   HttpException,
   HttpStatus,
   Inject,
@@ -17,7 +16,6 @@ import { Auth } from '../../domain/auth.entity';
 import { AuthRepository } from '../../infrastructure/auth.repository';
 import { IAuthRepository } from '../repository/auth.repository.interface';
 
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -25,7 +23,7 @@ export class AuthService {
     private readonly authRepository: IAuthRepository,
     @Inject(UserService) private userService: UserService,
     private jwtService: JwtService,
-    private config: ConfigService
+    private config: ConfigService,
   ) {}
   async signUp(createAuthDto: CreateAuthDto) {
     try {
@@ -96,7 +94,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
-    const secret = this.config.get('ACCESS_TOKEN_SECRET')
+    const secret = this.config.get('ACCESS_TOKEN_SECRET');
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: secret,
       expiresIn: '15min',
@@ -104,9 +102,12 @@ export class AuthService {
     return accessToken;
   }
 
-  async decodedToken(token): Promise<Object> {
+  async decodeToken(token): Promise<any> {
     try {
-      const decodedToken = this.jwtService.decode(token, this.config.get('ACCESS_TOKEN_SECRET'));
+      const decodedToken = this.jwtService.decode(
+        token,
+        this.config.get('ACCESS_TOKEN_SECRET'),
+      );
       return decodedToken;
     } catch (error) {
       return false;

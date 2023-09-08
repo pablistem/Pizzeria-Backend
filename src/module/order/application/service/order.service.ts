@@ -21,7 +21,7 @@ export class OrderService {
 
   async generatedOrderFromUser(order: Order, token: string) {
     let tokenDto: TokenDto;
-    const decodedToken = await this.authService.decodedToken(token);
+    const decodedToken = await this.authService.decodeToken(token);
     Object.assign(tokenDto, decodedToken);
     const findUser = await this.userService.findUserById(tokenDto.id);
 

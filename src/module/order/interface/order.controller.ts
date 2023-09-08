@@ -27,10 +27,10 @@ export class OrderController {
     @Inject(OrderMapper) private readonly orderMapper: OrderMapper,
   ) {}
 
-  @Get(':id')
-  async findAll(@Param('id', ParseIntPipe) orderId: number): Promise<Order> {
-    const order = await this.orderRepository.findOne(orderId);
-    return order;
+  @Get()
+  async findAll(): Promise<Order[]> {
+    const orders = await this.orderRepository.find();
+    return orders;
   }
 
   @UseGuards(JwtGuard)
