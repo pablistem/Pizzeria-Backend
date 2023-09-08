@@ -34,28 +34,10 @@ export class UserRepository implements IUserRepository {
   }
 
   async findOneById(id: number): Promise<User> {
-    return this.repository.findOne({ where: { id } });
-  }
-
-  async getOrderFromUser(id: number) {
-    return await this.repository.find({
-      where: {
-        id,
-      },
-      relations: {
-        orders: true,
-      },
+    return this.repository.findOne({
+      where: { id },
+      relations: { orders: true },
     });
-  }
-
-  async getUserWithOrders(userId: number) {
-    const orderFound = await this.repository.find({
-      where: { id: userId },
-      relations: {
-        orders: true,
-      },
-    });
-    return orderFound;
   }
 
   async loadTestData() {

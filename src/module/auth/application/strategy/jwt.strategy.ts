@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../../../../module/user/application/service/user.service';
-import { User } from '../../../../module/user/domain/user.entity';
 import { ENVIRONMENTS } from '../../../../../ormconfig';
+import { UserToken } from 'src/common/interfaces/UserRequest';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -23,9 +23,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super(options);
   }
 
-  async validate(payload: { sub: number; email: string }) {
-    const user: User = await this.userService.findUserById(payload.sub);
-    delete user.hash;
-    return user;
+  async validate(payload: UserToken) {
+    console.log(payload, 'token payload');
+    return payload;
   }
 }

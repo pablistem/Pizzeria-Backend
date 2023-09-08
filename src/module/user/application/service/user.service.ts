@@ -10,7 +10,6 @@ import { User } from '../../domain/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../../infrastructure/user.repository';
 import { Auth } from '../../../../../src/module/auth/domain/auth.entity';
-import { Order } from 'src/module/order/domain/order.entity';
 
 @Injectable()
 export class UserService {
@@ -47,10 +46,5 @@ export class UserService {
 
   async findUserById(id: number): Promise<User> {
     return this.userRepository.findOneById(id);
-  }
-
-  async getOrdersFromUser(id: number): Promise<Order[]> {
-    const userOrders = await this.userRepository.getUserWithOrders(id);
-    return userOrders[0].orders;
   }
 }

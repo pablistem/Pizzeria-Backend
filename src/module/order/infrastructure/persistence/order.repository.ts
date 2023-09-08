@@ -10,17 +10,24 @@ export class OrderRepository implements IOrderRepository {
     this.repository = datasource.getRepository(Order);
   }
 
-  find(): Promise<Order[]> {
+  async find(): Promise<Order[]> {
     return this.repository.find();
   }
-  findOne(id: number): Promise<Order> {
-    return this.repository.findOne({ where: { id } });
+  async findOne(id: number): Promise<Order> {
+    return this.repository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
   }
   async create(order: Order): Promise<Order> {
     const newOrder = this.repository.create(order);
     return await this.repository.save(newOrder);
   }
-  update(id: number, order: Order): Promise<Order> {
-    return;
+  async update(id: number, order: Order): Promise<Order> {
+    const updatedOrder = await this.repository.save(order);
+    return updatedOrder;
+  }
+  async delete(orderId: number): Promise<void> {
+    await this.repository.delete(orderId);
   }
 }

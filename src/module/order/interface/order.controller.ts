@@ -7,6 +7,9 @@ import {
   Post,
   Body,
   UseGuards,
+  Req,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { OrderService } from '../application/service/order.service';
 import {
@@ -17,7 +20,9 @@ import { Order } from '../domain/order.entity';
 import { CreateOrderDto } from '../application/dto/create-order.dto';
 import { OrderMapper } from '../application/order.mapper';
 import { JwtGuard } from '../../../common/guards/jwt.guard';
-
+import { UserRequest } from 'src/common/interfaces/UserRequest';
+import { UpdateOrderDto } from '../application/dto/update-order.dto';
+@UseGuards(JwtGuard)
 @Controller('order')
 export class OrderController {
   constructor(
@@ -28,32 +33,47 @@ export class OrderController {
   ) {}
 
   @Get()
-  async findAll(): Promise<Order[]> {
-    const orders = await this.orderRepository.find();
+  async findAll(@Req() req: UserRequest): Promise<Order[]> {
+    const orders = await this.orderService.findAll(req.user.id);
     return orders;
   }
 
-  @UseGuards(JwtGuard)
-  @Get('me/:id')
-  async findOne(@Param('id', ParseIntPipe) orderId: number): Promise<Order> {
-    const order = await this.orderRepository.findOne(orderId);
+  @Get(':id')
+  async findOne(
+    @Req() req: UserRequest,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const order = await this.orderService.findById(req.user.id, id);
     return order;
   }
 
   @Post()
-  async create(@Body() dto: CreateOrderDto): Promise<Order> {
-    const order = this.orderMapper.fromDtoToEntity(dto);
-    const newOrder = await this.orderService.create(order);
-    return newOrder;
+  async create(
+    @Req() req: UserRequest,
+    @Body() createOrderDto: CreateOrderDto,
+  ) {
+    const newOrder = this.orderMapper.fromDtoToEntity(createOrderDto);
+    const order = await this.orderService.create(req.user.id, newOrder);
+    return order;
   }
 
-  @Post('me')
-  async createByUser(@Body() dto: CreateOrderDto, @Body() req) {
-    const order = this.orderMapper.fromDtoToEntity(dto);
-    const newOrder = await this.orderService.generatedOrderFromUser(
-      order,
-      req.token,
+  @Put(':id')
+  async update(
+    @Req() req: UserRequest,
+    @Param('id', ParseIntPipe) orderId: number,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    updateOrderDto.id = orderId;
+    const order = await this.orderService.update(
+      req.user.id,
+      orderId,
+      this.orderMapper.fromDtoToEntity(updateOrderDto),
     );
-    return newOrder;
+    return order;
+  }
+
+  @Delete(':id')
+  async delete(@Req() req: UserRequest, @Param('id', ParseIntPipe) id: number) {
+    await this.orderService.delete(req.user.id, id);
   }
 }
