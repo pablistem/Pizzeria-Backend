@@ -6,8 +6,8 @@ import { DataSource } from 'typeorm';
 export class DbLoaderRepository {
   dataSource: DataSource;
 
-  constructor(datasource: DataSource) {
-    this.dataSource = datasource;
+  constructor(dataSource: DataSource) {
+    this.dataSource = dataSource;
   }
 
   async loadFixture(fixture: object[], entity: EntityClassOrSchema | string) {

@@ -9,7 +9,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   const app = await NestFactory.create(AppModule);
   
-  // app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
 
   const config = new DocumentBuilder()
@@ -21,11 +21,11 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(port);
-  console.log(`Listenning in ${port}`);
+  console.log(`Listening in ${port}`);
 
   if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }
 }
-bootstrap().then(() => console.log('boostrap'));
+bootstrap().then(() => console.log('bootstrap'));

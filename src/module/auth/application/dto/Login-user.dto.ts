@@ -14,8 +14,4 @@ export class LoginDto {
   @IsString()
   password: string;
 
-  constructor({ email, password }) {
-    this.email = email.toLowerCase();
-    this.password = password;
-  }
 }

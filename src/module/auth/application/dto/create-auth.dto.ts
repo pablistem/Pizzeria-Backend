@@ -24,10 +24,4 @@ export class CreateAuthDto {
   @IsString()
   password: string;
 
-  constructor({ name, lastName, email, password }) {
-    this.name = name;
-    this.lastName = lastName;
-    this.email = email.toLowerCase();
-    this.password = password;
-  }
 }
