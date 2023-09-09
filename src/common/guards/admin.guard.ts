@@ -1,11 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
-import { ENVIRONMENTS } from 'ormconfig';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { UserService } from 'src/module/user/application/service/user.service';
-import { User } from 'src/module/user/domain/user.entity';
+import { ENVIRONMENTS } from '../../../ormconfig';
+import { UserService } from '../../../src/module/user/application/service/user.service';
+import { User } from '../../../src/module/user/domain/user.entity';
+
+
+export class AdminGuard extends AuthGuard('admin') {
+  constructor() {
+    super();
+  }
+}
 
 @Injectable()
 export class AdminStrategy extends PassportStrategy(Strategy, 'admin') {
@@ -35,8 +42,4 @@ export class AdminStrategy extends PassportStrategy(Strategy, 'admin') {
   }
 }
 
-export class AdminGuard extends AuthGuard('admin') {
-  constructor() {
-    super();
-  }
-}
+

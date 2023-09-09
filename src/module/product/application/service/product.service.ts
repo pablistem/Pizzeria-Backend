@@ -5,8 +5,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateProductDto } from '../dto/create-product.dto';
-import { UpdateProductDto } from '../dto/update-product.dto';
 import { ProductRepository } from '../../infrastructure/product.repository';
 import { IProductRepository } from '../repository/product.repository.interface';
 import { Product } from '../../domain/product.entity';
@@ -17,27 +15,19 @@ export class ProductService {
     @Inject(ProductRepository)
     private readonly productRepository: IProductRepository,
   ) {}
-  async createProduct(product: CreateProductDto): Promise<HttpException | Product> {
-    const newProduct = new Product()
-    const savedProduct = await this.productRepository.save(newProduct)
-    return savedProduct
+  async create(product: Product): Promise<HttpException | Product> {
+    return await this.productRepository.save(product)
   }
 
   async updateProduct(
-    updateProductDto: UpdateProductDto,
+    updateProductDto: Product,
     id: number,
   ): Promise<Product> {
     const productFound = await this.productRepository.findOne(id);
     if (!productFound) {
       throw new NotFoundException('Product not found');
     } else {
-
-
-      try {
-        return await this.productRepository.save(productFound);
-      } catch (err) {
-        return err;
-      }
+      return this.productRepository.update(updateProductDto)
     }
   }
 

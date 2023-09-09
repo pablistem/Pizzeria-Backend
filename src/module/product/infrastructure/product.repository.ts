@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from '../domain/product.entity';
 import { DataSource, Repository } from 'typeorm';
+
+import { Product } from '../domain/product.entity';
 import { IProductRepository } from '../application/repository/product.repository.interface';
 
 @Injectable()
@@ -21,6 +22,10 @@ export class ProductRepository implements IProductRepository {
 
   async delete(product:Product):Promise<void>{
     await this.repository.remove(product)
+  }
+
+  async update(product:Product):Promise<Product>{
+    return await this.repository.save(product)
   }
 
   async getAll():Promise<Product[]>{

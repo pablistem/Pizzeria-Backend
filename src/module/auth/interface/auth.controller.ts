@@ -29,8 +29,10 @@ export class AuthController {
   }
 
   @UseGuards(JwtGuard)
+
   @Get('me')
   async getUserInfo(@Req() req:Request){
+    console.log(req.user, req.headers)
     return 'ok'
   }
 }

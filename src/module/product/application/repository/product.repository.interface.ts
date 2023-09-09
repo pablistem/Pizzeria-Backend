@@ -5,4 +5,5 @@ export interface IProductRepository {
   findOne(id: number): Promise<Product | null>;
   delete(product: Product):Promise<void>;
   getAll():Promise<Product[]>;
+  update(product:Product):Promise<Product>
 }

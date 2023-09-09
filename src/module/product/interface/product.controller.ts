@@ -10,38 +10,46 @@ import {
   ParseIntPipe,
   Req,
   HttpException,
+  Put,
 } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { ProductService } from '../application/service/product.service';
 import { CreateProductDto } from '../application/dto/create-product.dto';
 import { UpdateProductDto } from '../application/dto/update-product.dto';
-import { Request } from 'express';
-import { AdminGuard } from 'src/common/guards/admin.guard';
 import { Product } from '../domain/product.entity';
+import { ProductMapper } from '../product.mapper';
+import { JwtGuard } from '../../../../src/common/guards/jwt.guard';
 
 
 @ApiTags('Products')
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService, private readonly productMapper: ProductMapper) {}
 
   @Get('/')
   async getAllProducts() {
     return await this.productService.getAllProducts();
   }
-  @UseGuards(AdminGuard)
+  
+  @UseGuards(JwtGuard)
   @Post('create')
-  async create(@Body() createProductDto: CreateProductDto, @Req() req: Request):Promise<Product| HttpException> {
-    return await this.productService.createProduct(createProductDto)
+  async create(@Body() createProductDto: CreateProductDto, @Req() req: Express.Request):Promise<Product| HttpException> {
+    console.log(req)
+    console.log(createProductDto)
+    const newProduct = this.productMapper.fromDtoToEntity(createProductDto)
+    return await this.productService.create(newProduct)
   }
 
-  @Post('update/:id')
-  updateProduct(
+  @UseGuards(JwtGuard)
+  @Put('update/:id')
+  async updateProduct(
     @Body() updateProDto: UpdateProductDto,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) productId: number,
   ) {
-    this.productService.updateProduct(updateProDto, id);
+    updateProDto.id = productId
+    const updateProduct = this.productMapper.fromDtoToEntity(updateProDto);
+    return this.productService.updateProduct(updateProduct, productId)
   }
 
   @ApiParam({ name: 'id' })

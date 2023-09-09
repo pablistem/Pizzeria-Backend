@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import { Product } from './domain/product.entity';
 import {
   CreateProductDto,
@@ -14,10 +15,12 @@ export class ProductMapper {
         dto.id = product.id;
         dto.title = product.title;
         dto.description = product.description;
-        dto. = product.id;
-        dto.id = product.id;
-        dto.id = product.id;
-        dto.id = product.id;
+        dto.image = product.image;
+        dto.price = product.price;
+        dto.stock = product.stock;
+        dto.category = product.category;
+        dto.options = product.options;
+
         return dto;
   }
 
@@ -36,31 +39,3 @@ export class ProductMapper {
     return product;
   }
 }
-
-// import { Injectable } from '@nestjs/common';
-// import { Order } from '../domain/order.entity';
-// import { OrderDto } from './dto/order.dto';
-// import { UpdateOrderDto } from './dto/update-order.dto';
-// import { CreateOrderDto } from './dto/create-order.dto';
-
-// @Injectable()
-// export class OrderMapper {
-//   fromEntityToDto(order: Order): OrderDto {
-//     const dto = new OrderDto();
-//     dto.id = order.id;
-//     dto.status = order.status;
-//     dto.total = order.total;
-//     return dto;
-//   }
-
-//   fromDtoToEntity(dto: UpdateOrderDto | CreateOrderDto): Order {
-//     const order = new Order();
-//     if ('id' in dto) {
-//       order.id = dto.id;
-//     }
-//     order.status = dto.status;
-//     order.total = dto.total;
-
-//     return order;
-//   }
-// }
