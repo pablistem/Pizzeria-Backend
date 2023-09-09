@@ -23,6 +23,9 @@ export class User extends Base {
   @Column()
   role: string | undefined;
 
+  @Column()
+  phone: string;
+
   @OneToMany(() => Order, (order) => order.user)
   @JoinColumn()
   orders: Order[] | undefined;
@@ -38,6 +41,7 @@ export class User extends Base {
     hash?: string | undefined,
     verified?: boolean | undefined,
     role?: string | undefined,
+    phone?: string,
     createdAt?: Date | undefined,
     updatedAt?: Date | undefined,
     sessions?: undefined,
@@ -49,6 +53,7 @@ export class User extends Base {
     this.hash = hash;
     this.verified = verified;
     this.role = role;
+    this.phone = phone;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.sessions = sessions;

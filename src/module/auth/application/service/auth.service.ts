@@ -44,6 +44,7 @@ export class AuthService {
           hash,
           true,
           RoleEnum.user,
+          createAuthDto?.phone
         );
         await this.userService.addUser(newUser);
       } else {

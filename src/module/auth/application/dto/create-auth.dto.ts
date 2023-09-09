@@ -24,4 +24,7 @@ export class CreateAuthDto {
   @IsString()
   password: string;
 
+  @ApiProperty()
+  @IsString()
+  phone: string;
 }
