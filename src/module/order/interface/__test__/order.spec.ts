@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from '../../../../app.module';
 
@@ -15,10 +15,9 @@ describe('Order', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
-
+    }).compile();    
     app = moduleRef.createNestApplication();
-
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
     await app.init();
 
     await request(app.getHttpServer())
