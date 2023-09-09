@@ -22,8 +22,8 @@ export class UserController {
   @ApiBearerAuth('Authorization')
   @UseGuards(JwtGuard)
   @Get('me')
-  async getMe(@Req() req:Request) {
-    return req.user
+  async getMe(@Req() req: Request) {
+    return req.user;
   }
 
   @Get('reset')
