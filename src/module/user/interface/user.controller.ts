@@ -14,9 +14,9 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly userRepository: UserRepository,
-    private readonly config: ConfigService
+    private readonly config: ConfigService,
   ) {}
-// @UseGuards(JwtGuard)
+  // @UseGuards(JwtGuard)
   @Get('me')
   async getMe() {
     return 'ok';
@@ -25,9 +25,11 @@ export class UserController {
   @Get('reset')
   async loadTestDb() {
     if (this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST) {
-      await this.userRepository.loadTestData().then(()=>console.log('Data is deployment'));
+      await this.userRepository
+        .loadTestData()
+        .then(() => console.log('Data is deployment'));
     }
-    return 'ok'
+    return 'ok';
   }
 
   // //   @Post()
