@@ -3,8 +3,9 @@ import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class Product extends Base {
-  @Column({ unique: true })
-  name: string;
+
+  @Column()
+  title:string
 
   @Column()
   description: string;
@@ -15,29 +16,16 @@ export class Product extends Base {
   })
   image: string;
 
-  @Column()
+  @Column({default: 'Not implemented'})
   category: string;
 
   @Column({ default: 0 })
-  price: number;
+  price: number | undefined;
 
   @Column({ default: 0 })
-  stock: number;
+  stock: number| undefined;
 
-  constructor(
-    name: string,
-    description: string,
-    category: string,
-    price: number,
-    image?: string,
-    stock?: number,
-  ) {
-    super();
-    this.name = name;
-    this.description = description;
-    this.image = image;
-    this.category = category;
-    this.price = price;
-    this.stock = stock;
-  }
+  @Column({default: 'Not implemented'})
+  options:string | undefined
+
 }

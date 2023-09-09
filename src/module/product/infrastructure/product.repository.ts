@@ -10,20 +10,20 @@ export class ProductRepository implements IProductRepository {
     this.repository = this.dataSource.getRepository(Product);
   }
 
-  async saveProduct(product: Product): Promise<void> {
+  async save(product: Product): Promise<Product> {
     const createProduct = this.repository.create(product);
-    await this.repository.save(createProduct);
+    return await this.repository.save(createProduct);
   }
 
-  async findProduct(id: number): Promise<Product | null> {
+  async findOne(id: number): Promise<Product | null> {
     return await this.repository.findOne({ where: { id } });
   }
 
-  async deleteProduct(product:Product){
+  async delete(product:Product):Promise<void>{
     await this.repository.remove(product)
   }
 
-  async getAllProducts():Promise<Product[]>{
+  async getAll():Promise<Product[]>{
     return await this.repository.find()
   }
 }

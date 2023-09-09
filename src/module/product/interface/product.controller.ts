@@ -32,9 +32,8 @@ export class ProductController {
   }
   @UseGuards(AdminGuard)
   @Post('create')
-  async create(@Body() createProductDto: CreateProductDto, @Req() req: Request):Promise<void| HttpException> {
-    const newProduct = new Product(createProductDto.name, createProductDto.description, createProductDto.category, createProductDto.price, createProductDto?.image, createProductDto?.stock)
-    return await this.productService.createProduct(newProduct)
+  async create(@Body() createProductDto: CreateProductDto, @Req() req: Request):Promise<Product| HttpException> {
+    return await this.productService.createProduct(createProductDto)
   }
 
   @Post('update/:id')
@@ -51,21 +50,4 @@ export class ProductController {
     this.productService.removeProduct(id);
   }
 
-  @ApiParam({ name: 'id' })
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
-  }
-
-  @ApiParam({ name: 'id' })
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
-  }
-
-  @ApiParam({ name: 'id' })
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
-  }
 }

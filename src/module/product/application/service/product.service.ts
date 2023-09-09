@@ -17,34 +17,24 @@ export class ProductService {
     @Inject(ProductRepository)
     private readonly productRepository: IProductRepository,
   ) {}
-  async createProduct(product: Product): Promise<HttpException | void> {
-    if (!(product instanceof Product)) {
-      throw new HttpException(
-        'To create a product, the data must be instantiated.',
-        HttpStatus.NOT_ACCEPTABLE,
-      );
-    } else {
-      return await this.productRepository.saveProduct(product);
-    }
+  async createProduct(product: CreateProductDto): Promise<HttpException | Product> {
+    const newProduct = new Product()
+    const savedProduct = await this.productRepository.save(newProduct)
+    return savedProduct
   }
 
   async updateProduct(
-    updateProDto: UpdateProductDto,
+    updateProductDto: UpdateProductDto,
     id: number,
-  ): Promise<void> {
-    const productFound = await this.productRepository.findProduct(id);
+  ): Promise<Product> {
+    const productFound = await this.productRepository.findOne(id);
     if (!productFound) {
       throw new NotFoundException('Product not found');
     } else {
-      productFound.category = updateProDto.category;
-      productFound.description = updateProDto.description;
-      productFound.name = updateProDto.name;
-      productFound.price = updateProDto.price;
-      productFound.stock = updateProDto.stock;
-      productFound.image = updateProDto.image;
+
 
       try {
-        return await this.productRepository.saveProduct(productFound);
+        return await this.productRepository.save(productFound);
       } catch (err) {
         return err;
       }
@@ -52,22 +42,11 @@ export class ProductService {
   }
 
   async removeProduct(id: number) {
-    const productFound = await this.productRepository.findProduct(id);
-    await this.productRepository.deleteProduct(productFound);
+    const productFound = await this.productRepository.findOne(id);
+    await this.productRepository.delete(productFound);
   }
   async getAllProducts() {
-    return this.productRepository.getAllProducts();
+    return this.productRepository.getAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
-  }
-
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} product`;
-  }
 }
