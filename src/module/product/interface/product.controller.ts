@@ -8,11 +8,18 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
+  Req,
+  HttpException,
 } from '@nestjs/common';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
+
 import { ProductService } from '../application/service/product.service';
 import { CreateProductDto } from '../application/dto/create-product.dto';
 import { UpdateProductDto } from '../application/dto/update-product.dto';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { AdminGuard } from 'src/common/guards/admin.guard';
+import { Product } from '../domain/product.entity';
+
 
 @ApiTags('Products')
 @Controller('product')
@@ -20,13 +27,14 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get('/')
-  getAllProdcuts() {
-    return this.getAllProdcuts();
+  async getAllProducts() {
+    return await this.productService.getAllProducts();
   }
-
+  @UseGuards(AdminGuard)
   @Post('create')
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.createProduct(createProductDto);
+  async create(@Body() createProductDto: CreateProductDto, @Req() req: Request):Promise<void| HttpException> {
+    const newProduct = new Product(createProductDto.name, createProductDto.description, createProductDto.category, createProductDto.price, createProductDto?.image, createProductDto?.stock)
+    return await this.productService.createProduct(newProduct)
   }
 
   @Post('update/:id')
