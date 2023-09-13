@@ -16,27 +16,34 @@ export class ProductService {
     private readonly productRepository: IProductRepository,
   ) {}
   async create(product: Product): Promise<HttpException | Product> {
-    return await this.productRepository.save(product)
+    return await this.productRepository.save(product);
   }
 
-  async updateProduct(
-    updateProductDto: Product,
-    id: number,
-  ): Promise<Product> {
+  async getOne(id: number):Promise<Product> {
+    const productFound = await this.productRepository.findOne(id);
+    if (!productFound) {
+      throw new HttpException('Product Not Found', 404);
+    }
+    return productFound;
+  }
+
+  async updateProduct(updateProductDto: Product, id: number): Promise<Product> {
     const productFound = await this.productRepository.findOne(id);
     if (!productFound) {
       throw new NotFoundException('Product not found');
     } else {
-      return this.productRepository.update(updateProductDto)
+      return this.productRepository.update(updateProductDto);
     }
   }
 
-  async removeProduct(id: number) {
-    const productFound = await this.productRepository.findOne(id);
-    await this.productRepository.delete(productFound);
+  async remove(id: number) {
+    const productFound = await this.productRepository.findOne(id)
+    if(!productFound) {
+      throw new NotFoundException('Product not found');
+    }
+    return await this.productRepository.delete(productFound);
   }
   async getAllProducts() {
     return this.productRepository.getAll();
   }
-
 }

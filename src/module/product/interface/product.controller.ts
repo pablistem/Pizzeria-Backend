@@ -27,22 +27,18 @@ import { JwtGuard } from '../../../../src/common/guards/jwt.guard';
 export class ProductController {
   constructor(private readonly productService: ProductService, private readonly productMapper: ProductMapper) {}
 
-  @Get('/')
+  @Get()
   async getAllProducts() {
     return await this.productService.getAllProducts();
   }
+
+  @Get(':id')
+  async getOneProduct(@Param('id', ParseIntPipe) productId :number  ) {
+    return await this.productService.getOne(productId);
+  }
   
   @UseGuards(JwtGuard)
-  @Post('create')
-  async create(@Body() createProductDto: CreateProductDto, @Req() req: Express.Request):Promise<Product| HttpException> {
-    console.log(req)
-    console.log(createProductDto)
-    const newProduct = this.productMapper.fromDtoToEntity(createProductDto)
-    return await this.productService.create(newProduct)
-  }
-
-  @UseGuards(JwtGuard)
-  @Put('update/:id')
+  @Put(':id')
   async updateProduct(
     @Body() updateProDto: UpdateProductDto,
     @Param('id', ParseIntPipe) productId: number,
@@ -52,10 +48,18 @@ export class ProductController {
     return this.productService.updateProduct(updateProduct, productId)
   }
 
-  @ApiParam({ name: 'id' })
-  @Post('delete/:id')
-  deleteProduct(@Param('id', ParseIntPipe) id: number) {
-    this.productService.removeProduct(id);
+  @UseGuards(JwtGuard)
+  @Post('create')
+  async create(@Body() createProductDto: CreateProductDto, @Req() req: Express.Request):Promise<Product| HttpException> {
+    const newProduct = this.productMapper.fromDtoToEntity(createProductDto)
+    return await this.productService.create(newProduct)
+  }
+
+  @UseGuards(JwtGuard)
+  // @ApiParam({ name: 'id' })
+  @Delete(':id')
+  deleteProduct(@Param('id', ParseIntPipe) productId: number) {
+    return this.productService.remove(productId);
   }
 
 }
