@@ -22,7 +22,11 @@ import { OrderMapper } from '../application/order.mapper';
 import { JwtGuard } from '../../../common/guards/jwt.guard';
 import { UserRequest } from 'src/common/interfaces/UserRequest';
 import { UpdateOrderDto } from '../application/dto/update-order.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+@ApiBearerAuth()
 @UseGuards(JwtGuard)
+@ApiTags('Order')
 @Controller('order')
 export class OrderController {
   constructor(
