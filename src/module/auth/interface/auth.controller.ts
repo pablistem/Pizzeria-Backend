@@ -1,11 +1,18 @@
-import { Controller, Post, Body, HttpStatus, Get, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  Get,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { AuthService } from '../application/service/auth.service';
 import { LoginDto, CreateAuthDto } from '../application/dto';
 import { JwtGuard } from '../../../../src/common/guards/jwt.guard';
-
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -14,7 +21,7 @@ export class AuthController {
 
   @Post('signup')
   async create(@Body() createAuthDto: CreateAuthDto) {
-   return await this.authService.signUp(createAuthDto);
+    return await this.authService.signUp(createAuthDto);
   }
 
   @Post('login')
@@ -23,16 +30,15 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Body() id:number){
-    this.authService.logOut(id)
-    return HttpStatus.ACCEPTED
+  async logout(@Body() id: number) {
+    this.authService.logOut(id);
+    return HttpStatus.ACCEPTED;
   }
 
   @UseGuards(JwtGuard)
-
   @Get('me')
-  async getUserInfo(@Req() req:Request){
-    console.log(req.user, req.headers)
-    return 'ok'
+  async getUserInfo(@Req() req: Request) {
+    console.log(req.user, req.headers);
+    return 'ok';
   }
 }

@@ -21,11 +21,13 @@ import { Product } from '../domain/product.entity';
 import { ProductMapper } from '../product.mapper';
 import { JwtGuard } from '../../../../src/common/guards/jwt.guard';
 
-
 @ApiTags('Products')
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService, private readonly productMapper: ProductMapper) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly productMapper: ProductMapper,
+  ) {}
 
   @Get()
   async getAllProducts() {
@@ -33,26 +35,29 @@ export class ProductController {
   }
 
   @Get(':id')
-  async getOneProduct(@Param('id', ParseIntPipe) productId :number  ) {
+  async getOneProduct(@Param('id', ParseIntPipe) productId: number) {
     return await this.productService.getOne(productId);
   }
-  
+
   @UseGuards(JwtGuard)
   @Put(':id')
   async updateProduct(
     @Body() updateProDto: UpdateProductDto,
     @Param('id', ParseIntPipe) productId: number,
   ) {
-    updateProDto.id = productId
+    updateProDto.id = productId;
     const updateProduct = this.productMapper.fromDtoToEntity(updateProDto);
-    return this.productService.updateProduct(updateProduct, productId)
+    return this.productService.updateProduct(updateProduct, productId);
   }
 
   @UseGuards(JwtGuard)
   @Post('create')
-  async create(@Body() createProductDto: CreateProductDto, @Req() req: Express.Request):Promise<Product| HttpException> {
-    const newProduct = this.productMapper.fromDtoToEntity(createProductDto)
-    return await this.productService.create(newProduct)
+  async create(
+    @Body() createProductDto: CreateProductDto,
+    @Req() req: Express.Request,
+  ): Promise<Product | HttpException> {
+    const newProduct = this.productMapper.fromDtoToEntity(createProductDto);
+    return await this.productService.create(newProduct);
   }
 
   @UseGuards(JwtGuard)
@@ -61,5 +66,4 @@ export class ProductController {
   deleteProduct(@Param('id', ParseIntPipe) productId: number) {
     return this.productService.remove(productId);
   }
-
 }

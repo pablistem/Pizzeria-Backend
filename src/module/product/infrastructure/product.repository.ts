@@ -20,15 +20,15 @@ export class ProductRepository implements IProductRepository {
     return await this.repository.findOne({ where: { id } });
   }
 
-  async delete(product:Product):Promise<void>{
-    await this.repository.remove(product)
+  async delete(product: Product): Promise<void> {
+    await this.repository.remove(product);
   }
 
-  async update(product:Product):Promise<Product>{
-    return await this.repository.save(product)
+  async update(product: Product): Promise<Product> {
+    return await this.repository.save(product);
   }
 
-  async getAll():Promise<Product[]>{
-    return await this.repository.find()
+  async getAll(): Promise<Product[]> {
+    return await this.repository.find();
   }
 }

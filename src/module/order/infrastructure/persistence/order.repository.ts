@@ -11,12 +11,14 @@ export class OrderRepository implements IOrderRepository {
   }
 
   async find(): Promise<Order[]> {
-    return this.repository.find();
+    return this.repository.find({
+      relations: { user: true, items: { product: true } },
+    });
   }
   async findOne(id: number): Promise<Order> {
     return this.repository.findOne({
       where: { id },
-      relations: { user: true },
+      relations: { user: true, items: true },
     });
   }
   async create(order: Order): Promise<Order> {

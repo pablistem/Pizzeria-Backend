@@ -23,7 +23,7 @@ export class User extends Base {
   @Column()
   role: string | undefined;
 
-  @Column({default : ''})
+  @Column({ default: '' })
   phone: string | undefined;
 
   @OneToMany(() => Order, (order) => order.user)

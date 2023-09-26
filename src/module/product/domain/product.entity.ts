@@ -1,11 +1,11 @@
+import { Item } from 'src/module/item/domain/item.entity';
 import { Base } from '../../../common/domain/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
 export class Product extends Base {
-
   @Column()
-  title:string
+  title: string;
 
   @Column()
   description: string;
@@ -16,16 +16,15 @@ export class Product extends Base {
   })
   image: string;
 
-  @Column({default: 'Not implemented'})
+  @Column({ default: 'Not implemented' })
   category: string;
 
   @Column({ default: 0 })
-  price: number | undefined;
+  price: number;
 
   @Column({ default: 0 })
-  stock: number| undefined;
+  stock: number;
 
-  @Column({default: 'Not implemented'})
-  options:string | undefined
-
+  @Column({ default: 'Not implemented' })
+  options: string;
 }

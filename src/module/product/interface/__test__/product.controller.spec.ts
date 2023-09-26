@@ -3,14 +3,10 @@ import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 
 import { AppModule } from '../../../../app.module';
-import {
-  tokens,
-  userFixtures,
-} from '../../../../../src/module/order/interface/__test__/order.fixtures';
-import { User } from '../../../../../src/module/user/domain/user.entity';
 import { productFixture } from './product.fixture';
-import { Product } from '../../domain/product.entity';
 import { UpdateProductDto } from '../../application/dto';
+import { loadFixtures } from 'src/common/fixtures/loader';
+import { tokens } from 'src/common/fixtures/user';
 
 describe('Products', () => {
   let app: INestApplication;
@@ -23,13 +19,7 @@ describe('Products', () => {
     app = moduleRef.createNestApplication();
 
     await app.init();
-    await request(app.getHttpServer())
-      .post('/loader')
-      .send({ fixtures: userFixtures, entity: User.name });
-
-    await request(app.getHttpServer())
-      .post('/loader')
-      .send({ fixtures: productFixture, entity: Product.name });
+    await loadFixtures(app);
   });
 
   describe('GET /product', () => {
