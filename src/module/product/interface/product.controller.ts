@@ -12,7 +12,7 @@ import {
   HttpException,
   Put,
 } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { ProductService } from '../application/service/product.service';
 import { CreateProductDto } from '../application/dto/create-product.dto';
@@ -38,7 +38,7 @@ export class ProductController {
   async getOneProduct(@Param('id', ParseIntPipe) productId: number) {
     return await this.productService.getOne(productId);
   }
-
+  @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @Put(':id')
   async updateProduct(
@@ -49,7 +49,7 @@ export class ProductController {
     const updateProduct = this.productMapper.fromDtoToEntity(updateProDto);
     return this.productService.updateProduct(updateProduct, productId);
   }
-
+  @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @Post('create')
   async create(
@@ -59,9 +59,9 @@ export class ProductController {
     const newProduct = this.productMapper.fromDtoToEntity(createProductDto);
     return await this.productService.create(newProduct);
   }
-
+  @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  // @ApiParam({ name: 'id' })
+  @ApiParam({ name: 'id' })
   @Delete(':id')
   deleteProduct(@Param('id', ParseIntPipe) productId: number) {
     return this.productService.remove(productId);
