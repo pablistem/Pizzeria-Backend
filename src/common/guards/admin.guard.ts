@@ -7,7 +7,6 @@ import { ENVIRONMENTS } from '../../../ormconfig';
 import { UserService } from '../../../src/module/user/application/service/user.service';
 import { User } from '../../../src/module/user/domain/user.entity';
 
-
 export class AdminGuard extends AuthGuard('admin') {
   constructor() {
     super();
@@ -37,9 +36,10 @@ export class AdminStrategy extends PassportStrategy(Strategy, 'admin') {
     if (user.role == 'admin') {
       return user;
     } else {
-      throw new HttpException('Credentials insufficient to access this route', HttpStatus.UNAUTHORIZED)
+      throw new HttpException(
+        'Credentials insufficient to access this route',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 }
-
-

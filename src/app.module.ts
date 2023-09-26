@@ -8,6 +8,7 @@ import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { OrderModule } from './module/order/order.module';
 import { CommonModule } from './common/common.module';
+import { CategoryModule } from './module/category/category.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CommonModule } from './common/common.module';
     ProductModule,
     OrderModule,
     CommonModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

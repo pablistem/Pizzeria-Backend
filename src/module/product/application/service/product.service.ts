@@ -19,7 +19,7 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
-  async getOne(id: number):Promise<Product> {
+  async getOne(id: number): Promise<Product> {
     const productFound = await this.productRepository.findOne(id);
     if (!productFound) {
       throw new HttpException('Product Not Found', 404);
@@ -37,8 +37,8 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    const productFound = await this.productRepository.findOne(id)
-    if(!productFound) {
+    const productFound = await this.productRepository.findOne(id);
+    if (!productFound) {
       throw new NotFoundException('Product not found');
     }
     return await this.productRepository.delete(productFound);
