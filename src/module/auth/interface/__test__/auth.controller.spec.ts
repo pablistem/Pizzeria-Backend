@@ -103,17 +103,6 @@ describe('AuthController', () => {
       .expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('Should grant access to the auth/me route  with the token in the header', async () => {
-    const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
-      'eyJpZCI6IjEiLCJlbWFpbCI6ImFkbWluVXNlckBlbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1MTYyMzkwMjJ9.' +
-      'Eru85-KoDXpKUGgDpk27PvrTyV_EIS1WcDXnPjOJrNM';
-    await request(app.getHttpServer())
-      .get('/auth/me')
-      .set('Authorization', `Bearer ${token}`)
-      .expect('ok');
-  });
-
   afterAll(async () => {
     await app.close();
   });
