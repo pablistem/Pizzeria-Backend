@@ -34,11 +34,4 @@ export class AuthController {
     this.authService.logOut(id);
     return HttpStatus.ACCEPTED;
   }
-
-  @UseGuards(JwtGuard)
-  @Get('me')
-  async getUserInfo(@Req() req: Request) {
-    console.log(req.user, req.headers);
-    return 'ok';
-  }
 }

@@ -8,6 +8,8 @@ import { itemFixtures } from './item';
 import { orderFixtures } from './order';
 import { userFixtures } from './user';
 import { productFixtures } from './product';
+import { Category } from 'src/module/category/application/domain/category.entity';
+import { categoryFixture } from './category';
 
 export const loadFixtures = async (app: INestApplication) => {
   await request(app.getHttpServer())
@@ -16,11 +18,16 @@ export const loadFixtures = async (app: INestApplication) => {
 
   await request(app.getHttpServer())
     .post('/loader')
+    .send({ fixtures: categoryFixture, entity: Category.name });
+
+  await request(app.getHttpServer())
+    .post('/loader')
     .send({ fixtures: productFixtures, entity: Product.name });
 
   await request(app.getHttpServer())
     .post('/loader')
     .send({ fixtures: orderFixtures, entity: Order.name });
+
   await request(app.getHttpServer())
     .post('/loader')
     .send({ fixtures: itemFixtures, entity: Item.name });

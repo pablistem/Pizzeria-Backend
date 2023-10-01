@@ -1,6 +1,13 @@
 import { Category } from '../../../../src/module/category/application/domain/category.entity';
 import { Base } from '../../../common/domain/base.entity';
-import { Column, Entity, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
 @Entity()
 export class Product extends Base {
@@ -16,7 +23,8 @@ export class Product extends Base {
   })
   image: string;
 
-  @OneToOne(() => Category)
+  @ManyToOne(() => Category, (category) => category.products, { cascade: true })
+  @JoinColumn()
   category: Category | undefined;
 
   @Column({ default: 0 })

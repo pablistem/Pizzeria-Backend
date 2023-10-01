@@ -12,10 +12,10 @@ export enum OrderStatus {
 
 @Entity()
 export class Order extends Base {
-  @Column()
+  @Column({ default: OrderStatus.pending })
   status: string;
 
-  @Column()
+  @Column({ nullable: true })
   total: number;
 
   @OneToMany(() => Item, (item) => item.order)

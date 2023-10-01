@@ -8,12 +8,16 @@ import {
 import { ProductRepository } from '../../infrastructure/product.repository';
 import { IProductRepository } from '../repository/product.repository.interface';
 import { Product } from '../../domain/product.entity';
+import { UserService } from 'src/module/user/application/service/user.service';
+import { RoleEnum } from 'src/module/user/domain/user.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @Inject(ProductRepository)
     private readonly productRepository: IProductRepository,
+    @Inject(UserService)
+    private readonly userService: UserService,
   ) {}
   async create(product: Product): Promise<HttpException | Product> {
     return await this.productRepository.save(product);
@@ -36,13 +40,20 @@ export class ProductService {
     }
   }
 
-  async remove(id: number) {
-    const productFound = await this.productRepository.findOne(id);
-    if (!productFound) {
-      throw new NotFoundException('Product not found');
+  async remove(userId: number, productId: number) {
+    const user = await this.userService.findUserById(userId);
+    if (user.role === RoleEnum.admin) {
+      try {
+        await this.productRepository.delete(productId);
+        return { message: 'Entity delete complete' };
+      } catch (err) {
+        throw new NotFoundException('Product not found');
+      }
+    } else {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
-    return await this.productRepository.delete(productFound);
   }
+
   async getAllProducts() {
     return this.productRepository.getAll();
   }

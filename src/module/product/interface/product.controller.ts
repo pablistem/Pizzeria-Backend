@@ -20,6 +20,7 @@ import { UpdateProductDto } from '../application/dto/update-product.dto';
 import { Product } from '../domain/product.entity';
 import { ProductMapper } from '../product.mapper';
 import { JwtGuard } from '../../../../src/common/guards/jwt.guard';
+import { UserRequest } from '../../../../src/common/interfaces/UserRequest';
 
 @ApiTags('Products')
 @Controller('product')
@@ -59,11 +60,15 @@ export class ProductController {
     const newProduct = this.productMapper.fromDtoToEntity(createProductDto);
     return await this.productService.create(newProduct);
   }
+
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @ApiParam({ name: 'id' })
   @Delete(':id')
-  deleteProduct(@Param('id', ParseIntPipe) productId: number) {
-    return this.productService.remove(productId);
+  deleteProduct(
+    @Param('id', ParseIntPipe) productId: number,
+    @Req() req: UserRequest,
+  ) {
+    return this.productService.remove(req.user.id, productId);
   }
 }

@@ -32,7 +32,6 @@ describe('Order', () => {
         .get('/order')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .expect(200);
-      console.log(body[0]);
       expect(body).toHaveLength(orderFixtures.length);
     });
 
@@ -120,7 +119,7 @@ describe('Order', () => {
         status: OrderStatus.canceled,
       };
       const { body } = await request(app.getHttpServer())
-        .put(`/order/2`)
+        .put(`/order/1`)
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .send(updatedOrderDto)
         .expect(200);

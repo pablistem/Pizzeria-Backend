@@ -16,7 +16,7 @@ export class OrderMapper {
 
   fromDtoToEntity(dto: UpdateOrderDto | CreateOrderDto | OrderDto): Order {
     const order = new Order();
-    Object.keys(order).forEach((key) => {
+    Object.keys(dto).forEach((key) => {
       order[key] = dto[key];
     });
     return order;

@@ -3,10 +3,11 @@ import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 
 import { AppModule } from '../../../../app.module';
-import { productFixture } from './product.fixture';
 import { UpdateProductDto } from '../../application/dto';
 import { loadFixtures } from 'src/common/fixtures/loader';
 import { tokens } from 'src/common/fixtures/user';
+import { productFixtures } from 'src/common/fixtures/product';
+import { category1 } from 'src/common/fixtures/category';
 
 describe('Products', () => {
   let app: INestApplication;
@@ -17,8 +18,8 @@ describe('Products', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
-
     await app.init();
+
     await loadFixtures(app);
   });
 
@@ -27,7 +28,20 @@ describe('Products', () => {
       const { body } = await request(app.getHttpServer())
         .get('/product')
         .expect(200);
-      expect(body).toHaveLength(2);
+      expect(body).toHaveLength(3);
+    });
+  });
+
+  describe('GET /product/:id', () => {
+    it('Should get product by ID', async () => {
+      const { body } = await request(app.getHttpServer())
+        .get('/product/1')
+        .expect(200);
+      expect(body).toHaveProperty('id', 1);
+    });
+
+    it('Should get not found product by ID', async () => {
+      await request(app.getHttpServer()).get('/product/999').expect(404);
     });
   });
 
@@ -36,7 +50,7 @@ describe('Products', () => {
       const newProduct = {
         title: 'someTitle',
         description: 'someDescription',
-        category: 'someCategory',
+        category: category1,
         price: 200,
         stock: 2323,
         image: 'someImage',
@@ -51,25 +65,12 @@ describe('Products', () => {
 
     it("Shouldn't create product as normal user", async () => {
       const newProduct = {
-        ...productFixture[0],
+        ...productFixtures[0],
       };
       await request(app.getHttpServer())
         .post('/product/create')
         .send(newProduct)
         .expect(401);
-    });
-  });
-
-  describe('GET /product/:id', () => {
-    it('Should get product by ID', async () => {
-      const { body } = await request(app.getHttpServer())
-        .get('/product/1')
-        .expect(200);
-      expect(body).toHaveProperty('id', 1);
-    });
-
-    it('Should get not found product by ID', async () => {
-      await request(app.getHttpServer()).get('/product/999').expect(404);
     });
   });
 
@@ -100,7 +101,7 @@ describe('Products', () => {
   describe('DELETE /product/:id', () => {
     it('Should delete product as admin', async () => {
       await request(app.getHttpServer())
-        .delete('/product/1')
+        .delete('/product/4')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .expect(200);
     });
