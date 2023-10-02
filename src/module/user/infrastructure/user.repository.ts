@@ -4,7 +4,6 @@ import { User } from '../domain/user.entity';
 import { Inject, Injectable } from '@nestjs/common/decorators';
 import { Auth } from 'src/module/auth/domain/auth.entity';
 import { ConfigService } from '@nestjs/config';
-import { ENVIRONMENTS } from '../../../../ormconfig';
 import { getUserTestDb } from './__test__/user.test.db';
 
 @Injectable()
@@ -36,7 +35,7 @@ export class UserRepository implements IUserRepository {
   async findOneById(id: number): Promise<User> {
     return this.repository.findOne({
       where: { id },
-      relations: { orders: true },
+      relations: { orders: { items: true } },
     });
   }
 

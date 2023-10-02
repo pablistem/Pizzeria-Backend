@@ -1,23 +1,6 @@
-import { RoleEnum } from '../../../user/domain/user.entity';
-import { OrderStatus } from '../../domain/order.entity';
-const order1 = {
-  id: undefined,
-  status: OrderStatus.pending,
-  total: 0,
-  user: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
-};
-const order2 = {
-  id: undefined,
-  status: OrderStatus.delivered,
-  total: 0,
-  user: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
-};
+import { RoleEnum, User } from 'src/module/user/domain/user.entity';
 
-const anonUser = {
+export const anonUser: User = {
   id: 1,
   email: 'anon@email.com',
   name: 'anon',
@@ -28,9 +11,11 @@ const anonUser = {
   sessions: undefined,
   createdAt: undefined,
   updatedAt: undefined,
+  phone: '',
+  orders: [],
 };
 
-const normalUser = {
+export const normalUser: User = {
   id: 2,
   email: 'normal@email.com',
   name: 'normal',
@@ -41,9 +26,11 @@ const normalUser = {
   sessions: undefined,
   createdAt: undefined,
   updatedAt: undefined,
+  phone: '',
+  orders: [],
 };
 
-const adminUser = {
+export const adminUser = {
   id: 3,
   email: 'admin@email.com',
   name: 'admin',
@@ -69,7 +56,5 @@ export const tokens = {
   normalUserToken,
   adminUserToken,
 };
+
 export const userFixtures = [anonUser, normalUser, adminUser];
-order1.user = anonUser;
-order2.user = normalUser;
-export const orderFixtures = [order1, order2];

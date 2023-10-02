@@ -12,16 +12,16 @@ export class ProductMapper {
   fromEntityToDto(product: Product): ProductDto {
     const dto = new ProductDto();
 
-        dto.id = product.id;
-        dto.title = product.title;
-        dto.description = product.description;
-        dto.image = product.image;
-        dto.price = product.price;
-        dto.stock = product.stock;
-        dto.category = product.category;
-        dto.options = product.options;
+    dto.id = product.id;
+    dto.title = product.title;
+    dto.description = product.description;
+    dto.image = product.image;
+    dto.price = product.price;
+    dto.stock = product.stock;
+    dto.category = product.category;
+    dto.options = product.options;
 
-        return dto;
+    return dto;
   }
 
   fromDtoToEntity(dto: UpdateProductDto | CreateProductDto): Product {

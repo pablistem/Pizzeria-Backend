@@ -4,10 +4,13 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from '../../../../app.module';
 
-import { orderFixtures, tokens, userFixtures } from './order.fixtures';
-import { User } from '../../../user/domain/user.entity';
 import { Order, OrderStatus } from '../../domain/order.entity';
 import { UpdateOrderDto } from '../../application/dto/update-order.dto';
+import { loadFixtures } from 'src/common/fixtures/loader';
+import { orderFixtures } from 'src/common/fixtures/order';
+import { tokens } from 'src/common/fixtures/user';
+import { CreateOrderDto } from '../../application/dto/create-order.dto';
+import { product3 } from 'src/common/fixtures/product';
 
 describe('Order', () => {
   let app: INestApplication;
@@ -15,18 +18,12 @@ describe('Order', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();    
+    }).compile();
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
     await app.init();
 
-    await request(app.getHttpServer())
-      .post('/loader')
-      .send({ fixtures: userFixtures, entity: User.name });
-
-    await request(app.getHttpServer())
-      .post('/loader')
-      .send({ fixtures: orderFixtures, entity: Order.name });
+    await loadFixtures(app);
   });
 
   describe('GET /order', () => {
@@ -43,7 +40,7 @@ describe('Order', () => {
         .get('/order')
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .expect(200);
-      expect(body).toHaveLength(1);
+      expect(body).toHaveLength(2);
     });
   });
 
@@ -81,9 +78,9 @@ describe('Order', () => {
 
   describe('POST /order', () => {
     it('Should create order as admin', async () => {
-      const newOrder = {
-        ...orderFixtures[0],
-      } as Order;
+      const newOrder: CreateOrderDto = {
+        items: [{ product: product3, quantity: 100 }],
+      };
       const { body } = await request(app.getHttpServer())
         .post('/order')
         .auth(tokens.adminUserToken, { type: 'bearer' })
@@ -122,7 +119,7 @@ describe('Order', () => {
         status: OrderStatus.canceled,
       };
       const { body } = await request(app.getHttpServer())
-        .put(`/order/2`)
+        .put(`/order/1`)
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .send(updatedOrderDto)
         .expect(200);

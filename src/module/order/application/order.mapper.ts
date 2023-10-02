@@ -6,22 +6,19 @@ import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
 export class OrderMapper {
-  fromEntityToDto(order: Order): OrderDto {
+  fromEntityToDto(item: OrderDto): OrderDto {
     const dto = new OrderDto();
-    dto.id = order.id;
-    dto.status = order.status;
-    dto.total = order.total;
+    Object.keys(dto).forEach((key) => {
+      dto[key] = item[key];
+    });
     return dto;
   }
 
-  fromDtoToEntity(dto: UpdateOrderDto | CreateOrderDto): Order {
+  fromDtoToEntity(dto: UpdateOrderDto | CreateOrderDto | OrderDto): Order {
     const order = new Order();
-    if ('id' in dto) {
-      order.id = dto.id;
-    }
-    order.status = dto.status;
-    order.total = dto.total;
-
+    Object.keys(dto).forEach((key) => {
+      order[key] = dto[key];
+    });
     return order;
   }
 }

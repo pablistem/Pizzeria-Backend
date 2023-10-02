@@ -29,9 +29,7 @@ export class UserController {
   @Get('reset')
   async loadTestDb() {
     if (this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST) {
-      await this.userRepository
-        .loadTestData()
-        .then(() => console.log('Data is deployment'));
+      await this.userRepository.loadTestData();
     }
     return 'ok';
   }
