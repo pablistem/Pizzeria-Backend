@@ -1,7 +1,5 @@
 import { OptionService } from './service/option.service';
-//import create option dto
-//import update option dto
-import { Option } from './domain/option.entity';
+import { CreateOptionDto, UpdateOptionDto } from './dto/option.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { UserRequest } from 'src/common/interfaces/UserRequest';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -35,8 +33,8 @@ export class OptionController {
   @UseGuards(JwtGuard)
   @Post('create')
   //   aply create option dto and type of return
-  async create(@Body() createOptionDto: any) {
-    return await this.optionService.create(createOptionDto);
+  async create(@Body() data: CreateOptionDto) {
+    return await this.optionService.create(data);
   }
 
   @ApiBearerAuth()
@@ -44,11 +42,11 @@ export class OptionController {
   @Post('update/:id')
   async updateOption(
     // aply update option dto and type of return
-    @Body() updateOptionDto: any,
+    @Body() changes: any,
     @Param('id', ParseIntPipe) optionId: number,
   ) {
-    updateOptionDto.id = optionId;
-    return await this.optionService.updateOption(updateOptionDto, optionId);
+    changes.id = optionId;
+    return await this.optionService.updateOption(changes, optionId);
   }
 
   @ApiBearerAuth()

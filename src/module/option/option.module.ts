@@ -1,19 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import product service
-// import product controller
-// import product repository
-// import product entity
 import { Option } from './domain/option.entity';
+import { OptionController } from './option.controller';
+import { OptionService } from './service/option.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Option])],
-  controllers: [
-    // product controller
-  ],
-  providers: [
-    // product service
-    // product repository
-  ],
+  controllers: [OptionController],
+  providers: [OptionService],
 })
 export class OptionModule {}
