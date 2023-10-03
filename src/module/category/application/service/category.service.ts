@@ -18,7 +18,6 @@ export class CategoryService {
   async create(category: Category, userId: number): Promise<Category> {
     const admin = await this.validateUserAdmin(userId);
     if (admin) {
-      console.log(admin);
       const categoryFound = await this.categoryRepository.findOneByName(
         category.name,
       );
@@ -59,10 +58,6 @@ export class CategoryService {
       const categoryFound = await this.categoryRepository.getCategoryById(id);
       if (categoryFound) {
         await this.categoryRepository.delete(categoryFound);
-        throw new HttpException(
-          `${categoryFound.name} delete success`,
-          HttpStatus.NOT_FOUND,
-        );
       } else {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
@@ -71,8 +66,18 @@ export class CategoryService {
     }
   }
 
-  async getOne(id: number): Promise<Category> {
-    return await this.categoryRepository.getCategoryById(id);
+  async getOne(id: number, userId: number): Promise<Category> {
+    const admin = await this.validateUserAdmin(userId);
+    if (admin) {
+      const category = await this.categoryRepository.getCategoryById(id);
+      if (category) {
+        return category;
+      } else {
+        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      }
+    } else {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
   }
 
   async getAll(): Promise<Category[]> {

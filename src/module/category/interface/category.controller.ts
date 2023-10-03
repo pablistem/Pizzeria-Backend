@@ -39,7 +39,7 @@ export class CategoryController {
     return await this.categoryService.delete(id, req.user.id);
   }
 
-  @Put('id')
+  @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() categoryUpdate: UpdateCategoryDto,
@@ -50,9 +50,13 @@ export class CategoryController {
   }
 
   @Get(':id')
-  async getOne(@Param('id', ParseIntPipe) id: number): Promise<Category> {
-    return await this.categoryService.getOne(id);
+  async getOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() req: UserRequest,
+  ): Promise<Category> {
+    return await this.categoryService.getOne(id, req.user.id);
   }
+
   @Get()
   async getAll(): Promise<Category[]> {
     return await this.categoryService.getAll();
