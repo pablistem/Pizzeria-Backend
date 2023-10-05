@@ -10,6 +10,8 @@ import { IOptionRepository } from '../repository/option.repository.entity';
 import { OptionRepository } from '../infrastucture/option.respositoy';
 import { RoleEnum } from 'src/module/user/domain/user.entity';
 import { UserService } from 'src/module/user/application/service/user.service';
+import { ICreateOpntion, IUpdateOption } from '../interfaces/option.service';
+import { UpdateItemDto } from 'src/module/item/application/dto/update-item.dto';
 
 @Injectable()
 export class OptionService {
@@ -20,7 +22,7 @@ export class OptionService {
     private readonly userService: UserService,
   ) {}
 
-  async create(option: Option): Promise<HttpException | Option> {
+  async create(option: ICreateOpntion): Promise<HttpException | Option> {
     return await this.optionRepository.save(option);
   }
 
@@ -36,7 +38,10 @@ export class OptionService {
     return this.optionRepository.getAll();
   }
 
-  async updateOption(updateOptionDto: Option, id: number): Promise<Option> {
+  async updateOption(
+    updateOptionDto: IUpdateOption,
+    id: number,
+  ): Promise<Option> {
     const optionFound = await this.optionRepository.findOne(id);
     if (!optionFound) {
       throw new NotFoundException('Option not found');

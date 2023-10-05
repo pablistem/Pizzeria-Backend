@@ -5,22 +5,27 @@ export class CreateOptionDto {
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  readonly id: number;
+  id: number;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  readonly variant: string;
+  variant: string;
 
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  readonly price: number;
+  price: number;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  readonly product: undefined;
+  product: number;
 }
 
-export class UpdateOptionDto extends PartialType(CreateOptionDto) {}
+export class UpdateOptionDto extends PartialType(CreateOptionDto) {
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty()
+  id: number;
+}

@@ -32,7 +32,6 @@ export class OptionController {
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @Post('create')
-  //   aply create option dto and type of return
   async create(@Body() data: CreateOptionDto) {
     return await this.optionService.create(data);
   }
@@ -41,11 +40,9 @@ export class OptionController {
   @UseGuards(JwtGuard)
   @Post('update/:id')
   async updateOption(
-    // aply update option dto and type of return
-    @Body() changes: any,
+    @Body() changes: UpdateOptionDto,
     @Param('id', ParseIntPipe) optionId: number,
   ) {
-    changes.id = optionId;
     return await this.optionService.updateOption(changes, optionId);
   }
 

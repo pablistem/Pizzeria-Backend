@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Option } from '../domain/option.entity';
 import { IOptionRepository } from '../repository/option.repository.entity';
+import { ICreateOpntion, IUpdateOption } from '../interfaces/option.service';
 
 @Injectable()
 export class OptionRepository implements IOptionRepository {
@@ -10,14 +11,14 @@ export class OptionRepository implements IOptionRepository {
     this.repository = this.dataSource.getRepository(Option);
   }
 
-  async save(option: Option): Promise<Option> {
+  async save(option: ICreateOpntion): Promise<Option> {
     const createOption = this.repository.create(option);
     return await this.repository.save(createOption);
   }
 
   async findOne(id: number): Promise<Option> {
     return this.repository.findOne({
-      where: { id },
+      where: { id: id },
     });
   }
 
@@ -33,7 +34,7 @@ export class OptionRepository implements IOptionRepository {
     return this.repository.find();
   }
 
-  update(option: Option): Promise<Option> {
+  update(option: IUpdateOption): Promise<Option> {
     return this.repository.save(option);
   }
 }

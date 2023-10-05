@@ -1,5 +1,5 @@
 import { getUserTestDb } from '../../../../user/infrastructure/__test__/user.test.db';
-import { Order } from '../../../domain/item.entity';
+import { Order } from '../../../../order/domain/order.entity';
 
 export const getUsersWithOrders = async () => {
   const [adminTestUser, testUser, anonTestUser] = await getUserTestDb();
