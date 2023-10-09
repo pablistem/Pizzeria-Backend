@@ -12,7 +12,7 @@ export class Category {
   @PrimaryGeneratedColumn()
   id: number | undefined;
 
-  @Column({ unique: true })
+  @Column({ unique: true, length: 50 })
   name: string | undefined;
 
   @OneToMany(() => Product, (products) => products.category)
