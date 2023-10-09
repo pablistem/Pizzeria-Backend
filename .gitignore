@@ -39,6 +39,7 @@ lerna-debug.log*
 .env
 .env.*
 !.env.dist
+.automated_tests
 
 data/tests.db
 data/tests

@@ -31,7 +31,7 @@ export class CategoryRepository implements ICategoryRepository {
     return await this.repository.findOne({ where: { id } });
   }
 
-  async finOneByName(name: string): Promise<Category> {
+  async findOneByName(name: string): Promise<Category> {
     return await this.repository.findOne({ where: { name } });
   }
 }
