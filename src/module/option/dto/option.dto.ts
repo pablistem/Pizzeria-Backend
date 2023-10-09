@@ -1,5 +1,6 @@
 import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 import { PartialType, ApiProperty } from '@nestjs/swagger';
+import { Product } from 'src/module/product/domain/product.entity';
 
 export class CreateOptionDto {
   @IsNumber()
@@ -20,7 +21,7 @@ export class CreateOptionDto {
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  product: number;
+  product: Product;
 }
 
 export class UpdateOptionDto extends PartialType(CreateOptionDto) {

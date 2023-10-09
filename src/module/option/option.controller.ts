@@ -1,7 +1,6 @@
 import { OptionService } from './service/option.service';
 import { CreateOptionDto, UpdateOptionDto } from './dto/option.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
-import { UserRequest } from 'src/common/interfaces/UserRequest';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   Body,
@@ -10,7 +9,6 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 
@@ -48,11 +46,8 @@ export class OptionController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Post('delete/:id')
-  async remove(
-    @Param('id', ParseIntPipe) optionId: number,
-    @Req() req: UserRequest,
-  ) {
-    return await this.optionService.remove(req.user.id, optionId);
+  @Post('remove/:id')
+  async removeOption(@Param('id', ParseIntPipe) optionId: number) {
+    return await this.optionService.removeOption(optionId);
   }
 }

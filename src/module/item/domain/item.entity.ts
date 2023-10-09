@@ -1,8 +1,7 @@
 import { Order } from '../../../../src/module/order/domain/order.entity';
 import { Base } from '../../../common/domain/base.entity';
-import { Entity, Column, ManyToOne, JoinColumn, ManyToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Product } from '../../../../src/module/product/domain/product.entity';
-import { Option } from '../../../../src/module/option/domain/option.entity';
 
 export enum OrderStatus {
   pending = 'pending',

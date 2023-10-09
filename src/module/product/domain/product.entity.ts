@@ -1,5 +1,5 @@
 import { Base } from '../../../common/domain/base.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import { Option } from 'src/module/option/domain/option.entity';
 
 @Entity()
@@ -25,6 +25,7 @@ export class Product extends Base {
   @Column({ default: 0 })
   stock: number | undefined;
 
-  @OneToMany(() => Option, (option) => option.id)
-  options: Option[] | undefined;
+  @OneToMany(() => Option, (option) => option.product)
+  @JoinColumn()
+  options: Option[];
 }

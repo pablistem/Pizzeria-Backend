@@ -1,6 +1,5 @@
 import {
   HttpException,
-  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -8,21 +7,16 @@ import {
 import { Option } from '../domain/option.entity';
 import { IOptionRepository } from '../repository/option.repository.entity';
 import { OptionRepository } from '../infrastucture/option.respositoy';
-import { RoleEnum } from 'src/module/user/domain/user.entity';
-import { UserService } from 'src/module/user/application/service/user.service';
-import { ICreateOpntion, IUpdateOption } from '../interfaces/option.service';
-import { UpdateItemDto } from 'src/module/item/application/dto/update-item.dto';
+import { ICreateOption, IUpdateOption } from '../interfaces/option.service';
 
 @Injectable()
 export class OptionService {
   constructor(
     @Inject(OptionRepository)
     private readonly optionRepository: IOptionRepository,
-    @Inject(UserService)
-    private readonly userService: UserService,
   ) {}
 
-  async create(option: ICreateOpntion): Promise<HttpException | Option> {
+  async create(option: ICreateOption): Promise<HttpException | Option> {
     return await this.optionRepository.save(option);
   }
 
@@ -50,17 +44,12 @@ export class OptionService {
     }
   }
 
-  async remove(userId: number, optionId: number) {
-    const user = await this.userService.findUserById(userId);
-    if (user.role === RoleEnum.admin) {
-      try {
-        await this.optionRepository.delete(optionId);
-        return { message: 'Entity delete complete' };
-      } catch (err) {
-        throw new NotFoundException('Option not found');
-      }
+  async removeOption(id: number) {
+    const optionFound = await this.optionRepository.findOne(id);
+    if (optionFound) {
+      return await this.optionRepository.delete(id);
     } else {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      return new NotFoundException('Option not Found!');
     }
   }
 }

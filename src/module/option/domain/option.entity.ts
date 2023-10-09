@@ -1,9 +1,18 @@
 import { Base } from '../../../common/domain/base.entity';
-import { Column, Entity, ManyToOne, JoinTable } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Product } from 'src/module/product/domain/product.entity';
 
 @Entity()
 export class Option extends Base {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column()
   variant: string;
 
@@ -11,6 +20,6 @@ export class Option extends Base {
   price: number;
 
   @ManyToOne(() => Product, (product) => product.options)
-  @JoinTable({ name: 'product' })
-  product: Product | undefined;
+  @JoinColumn({ name: 'product' })
+  product: Product;
 }

@@ -1,4 +1,5 @@
 import {
+  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
@@ -7,8 +8,10 @@ import {
 export class Base {
   @PrimaryGeneratedColumn()
   id: number | undefined;
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   @CreateDateColumn()
   createdAt: Date | undefined;
+  @Column({ default: null })
   @UpdateDateColumn()
   updatedAt: Date | undefined;
 }

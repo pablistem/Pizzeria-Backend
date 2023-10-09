@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Option } from '../domain/option.entity';
 import { IOptionRepository } from '../repository/option.repository.entity';
-import { ICreateOpntion, IUpdateOption } from '../interfaces/option.service';
+import { ICreateOption, IUpdateOption } from '../interfaces/option.service';
 
 @Injectable()
 export class OptionRepository implements IOptionRepository {
@@ -11,7 +11,7 @@ export class OptionRepository implements IOptionRepository {
     this.repository = this.dataSource.getRepository(Option);
   }
 
-  async save(option: ICreateOpntion): Promise<Option> {
+  async save(option: ICreateOption): Promise<Option> {
     const createOption = this.repository.create(option);
     return await this.repository.save(createOption);
   }
