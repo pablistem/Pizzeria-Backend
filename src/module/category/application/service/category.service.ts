@@ -4,7 +4,6 @@ import {
   ICategoryRepository,
 } from '../repository/category.repository.interface';
 import { Category } from '../domain/category.entity';
-import { CategoryRepository } from '../../infrastructure/category.repository';
 
 @Injectable()
 export class CategoryService {
