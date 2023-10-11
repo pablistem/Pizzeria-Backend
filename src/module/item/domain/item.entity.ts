@@ -1,7 +1,8 @@
 import { Order } from '../../../../src/module/order/domain/order.entity';
 import { Base } from '../../../common/domain/base.entity';
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Product } from '../../../../src/module/product/domain/product.entity';
+import { Option } from 'src/module/option/domain/option.entity';
 
 export enum OrderStatus {
   pending = 'pending',
@@ -28,4 +29,8 @@ export class Item extends Base {
   @ManyToOne(() => Product, { nullable: false })
   @JoinColumn({ name: 'productId' })
   product: Product;
+
+  @ManyToMany(() => Option)
+  @JoinTable()
+  options: Option[] | undefined;
 }

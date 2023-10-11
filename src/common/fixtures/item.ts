@@ -1,3 +1,4 @@
+import { option1, option2 } from './option';
 import { order1, order2 } from './order';
 import { product1, product2, product3 } from './product';
 
@@ -10,6 +11,7 @@ export const item1 = {
   subTotal: 0,
   createdAt: undefined,
   updatedAt: undefined,
+  options:[option1]
 };
 
 export const item2 = {
@@ -21,6 +23,7 @@ export const item2 = {
   subTotal: 0,
   createdAt: undefined,
   updatedAt: undefined,
+  options:[option2]
 };
 
 export const item3 = {

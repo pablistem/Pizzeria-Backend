@@ -12,7 +12,6 @@ export const order1: Order = {
   createdAt: undefined,
   updatedAt: undefined,
   total: 0,
-  options: [option1],
 };
 export const order2: Order = {
   id: 2,
@@ -22,7 +21,6 @@ export const order2: Order = {
   createdAt: undefined,
   updatedAt: undefined,
   total: 0,
-  options: [option2],
 };
 
 export const orderFixtures = [order1, order2];
