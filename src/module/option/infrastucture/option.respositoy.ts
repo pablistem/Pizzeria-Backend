@@ -11,9 +11,9 @@ export class OptionRepository implements IOptionRepository {
     this.repository = this.dataSource.getRepository(Option);
   }
 
-  async save(option: ICreateOption): Promise<Option> {
+  async save(option): Promise<Option> {
     const createOption = this.repository.create(option);
-    return await this.repository.save(createOption);
+    return option;
   }
 
   async findOne(id: number): Promise<Option> {

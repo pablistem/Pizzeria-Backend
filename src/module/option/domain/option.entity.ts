@@ -5,8 +5,11 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Product } from 'src/module/product/domain/product.entity';
+import { Order } from 'src/module/order/domain/order.entity';
 
 @Entity()
 export class Option extends Base {

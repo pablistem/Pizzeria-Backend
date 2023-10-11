@@ -24,9 +24,4 @@ export class CreateOptionDto {
   product: Product;
 }
 
-export class UpdateOptionDto extends PartialType(CreateOptionDto) {
-  @IsNumber()
-  @IsNotEmpty()
-  @ApiProperty()
-  id: number;
-}
+export class UpdateOptionDto extends PartialType(CreateOptionDto) {}

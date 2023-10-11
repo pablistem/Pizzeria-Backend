@@ -16,7 +16,7 @@ export class OptionService {
     private readonly optionRepository: IOptionRepository,
   ) {}
 
-  async create(option: ICreateOption): Promise<HttpException | Option> {
+  async create(option): Promise<HttpException | Option> {
     return await this.optionRepository.save(option);
   }
 

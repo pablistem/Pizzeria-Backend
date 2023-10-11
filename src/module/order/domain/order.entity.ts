@@ -1,7 +1,15 @@
 import { Item } from 'src/module/item/domain/item.entity';
 import { Base } from '../../../common/domain/base.entity';
 import { User } from '../../../module/user/domain/user.entity';
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+import { Option } from 'src/module/option/domain/option.entity';
 
 export enum OrderStatus {
   pending = 'pending',
@@ -23,4 +31,8 @@ export class Order extends Base {
 
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
+
+  @ManyToMany(() => Option)
+  @JoinTable()
+  options: Option[] | undefined;
 }

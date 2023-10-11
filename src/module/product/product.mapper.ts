@@ -19,7 +19,6 @@ export class ProductMapper {
     dto.price = product.price;
     dto.stock = product.stock;
     dto.category = product.category;
-    dto.options = product.options;
 
     return dto;
   }
@@ -35,7 +34,6 @@ export class ProductMapper {
     product.price = dto.price;
     product.stock = dto.stock;
     product.category = dto.category;
-    product.options = dto.options;
     return product;
   }
 }

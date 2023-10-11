@@ -11,6 +11,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ICreateOption, IUpdateOption } from './interfaces/option.service';
 
 @ApiTags('Options')
 @Controller('option')
@@ -30,7 +31,7 @@ export class OptionController {
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @Post('create')
-  async create(@Body() data: CreateOptionDto) {
+  async create(@Body() data) {
     return await this.optionService.create(data);
   }
 
@@ -38,7 +39,7 @@ export class OptionController {
   @UseGuards(JwtGuard)
   @Post('update/:id')
   async updateOption(
-    @Body() changes: UpdateOptionDto,
+    @Body() changes: IUpdateOption,
     @Param('id', ParseIntPipe) optionId: number,
   ) {
     return await this.optionService.updateOption(changes, optionId);

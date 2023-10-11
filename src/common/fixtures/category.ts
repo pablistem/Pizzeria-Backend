@@ -1,4 +1,5 @@
 import { Category } from '../../../src/module/category/application/domain/category.entity';
+
 export const category1: Category = {
   id: 1,
   name: 'category1',

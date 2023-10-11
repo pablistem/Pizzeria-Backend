@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-// import { Category } from '../../../../../src/module/category/application/domain/category.entity';
-import { Option } from '../../../../../src/module/option/domain/option.entity';
+import { Category } from '../../../../../src/module/category/application/domain/category.entity';
+import { Options } from 'argon2';
 
 export class ProductDto {
   @ApiProperty()
@@ -27,7 +27,7 @@ export class ProductDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  category: string;
+  category: Category;
 
   @ApiProperty()
   @IsNumber()
@@ -38,5 +38,4 @@ export class ProductDto {
   @IsNumber()
   @IsNotEmpty()
   stock: number;
-  options: Option[] | [];
 }
