@@ -1,4 +1,4 @@
-import { Item } from 'src/module/item/domain/item.entity';
+import { Item } from '../../item/domain/item.entity';
 import { Base } from '../../../common/domain/base.entity';
 import { User } from '../../../module/user/domain/user.entity';
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';

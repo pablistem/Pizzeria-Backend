@@ -1,4 +1,4 @@
-import { Option } from 'src/module/option/domain/option.entity';
+import { Option } from '../../module/option/domain/option.entity';
 
 export const option1: Option = {
   id: 1,
@@ -17,3 +17,5 @@ export const option2: Option = {
   createdAt: undefined,
   updatedAt: undefined,
 };
+
+export const optionFixtures = [option1, option2];
