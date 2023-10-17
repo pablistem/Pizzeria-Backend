@@ -10,11 +10,17 @@ import { userFixtures } from './user';
 import { productFixtures } from './product';
 import { Category } from 'src/module/category/application/domain/category.entity';
 import { categoryFixture } from './category';
+import { optionsFixtures } from './option';
+import { Option } from 'src/module/option/domain/option.entity';
 
 export const loadFixtures = async (app: INestApplication) => {
   await request(app.getHttpServer())
     .post('/loader')
     .send({ fixtures: userFixtures, entity: User.name });
+
+    await request(app.getHttpServer())
+    .post('/loader')
+    .send({fixtures: optionsFixtures, entity: Option.name})
 
   await request(app.getHttpServer())
     .post('/loader')

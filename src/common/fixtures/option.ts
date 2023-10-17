@@ -18,3 +18,5 @@ export const option2: Option = {
   createdAt: undefined,
   updatedAt: undefined,
 };
+
+export const optionsFixtures = [option1, option2]
