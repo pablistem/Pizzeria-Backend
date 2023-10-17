@@ -50,7 +50,7 @@ const automatedTests: DataSourceOptions = {
   synchronize: true,
   dropSchema: false,
   namingStrategy: new SnakeNamingStrategy(),
-  // verbose: console.log,
+  verbose: console.log,
 };
 
 export const dataSourceOptions: DataSourceOptions = (() => {

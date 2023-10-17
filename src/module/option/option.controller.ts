@@ -5,10 +5,13 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 
@@ -29,14 +32,14 @@ export class OptionController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Post('create')
+  @Post('')
   async create(@Body() data: CreateOptionDto) {
     return await this.optionService.create(data);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Post('update/:id')
+  @Put(':id')
   async updateOption(
     @Body() changes: UpdateOptionDto,
     @Param('id', ParseIntPipe) optionId: number,
@@ -46,7 +49,7 @@ export class OptionController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Post('remove/:id')
+  @Delete(':id')
   async removeOption(@Param('id', ParseIntPipe) optionId: number) {
     return await this.optionService.removeOption(optionId);
   }

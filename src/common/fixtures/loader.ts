@@ -4,12 +4,15 @@ import { Item } from 'src/module/item/domain/item.entity';
 import { Order } from 'src/module/order/domain/order.entity';
 import { Product } from 'src/module/product/domain/product.entity';
 import { User } from 'src/module/user/domain/user.entity';
+import { Category } from 'src/module/category/application/domain/category.entity';
+import { Option } from 'src/module/option/domain/option.entity';
+
 import { itemFixtures } from './item';
 import { orderFixtures } from './order';
 import { userFixtures } from './user';
 import { productFixtures } from './product';
-import { Category } from 'src/module/category/application/domain/category.entity';
 import { categoryFixture } from './category';
+import { optionFixtures } from './option';
 
 export const loadFixtures = async (app: INestApplication) => {
   await request(app.getHttpServer())
@@ -23,6 +26,10 @@ export const loadFixtures = async (app: INestApplication) => {
   await request(app.getHttpServer())
     .post('/loader')
     .send({ fixtures: productFixtures, entity: Product.name });
+
+  await request(app.getHttpServer())
+    .post('/loader')
+    .send({ fixtures: optionFixtures, entity: Option.name });
 
   await request(app.getHttpServer())
     .post('/loader')

@@ -1,6 +1,6 @@
-import { Base } from '../../../common/domain/base.entity';
 import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
-import { Option } from 'src/module/option/domain/option.entity';
+import { Base } from '../../../common/domain/base.entity';
+import { Option } from '../../option/domain/option.entity';
 
 @Entity()
 export class Product extends Base {

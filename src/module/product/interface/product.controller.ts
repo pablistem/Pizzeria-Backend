@@ -52,7 +52,7 @@ export class ProductController {
   }
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Post('create')
+  @Post('')
   async create(
     @Body() createProductDto: CreateProductDto,
     @Req() req: Express.Request,

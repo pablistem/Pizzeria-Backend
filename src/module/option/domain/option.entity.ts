@@ -6,7 +6,7 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Product } from 'src/module/product/domain/product.entity';
+import { Product } from '../../product/domain/product.entity';
 
 @Entity()
 export class Option extends Base {

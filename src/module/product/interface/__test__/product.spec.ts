@@ -87,7 +87,7 @@ describe('Products', () => {
       expect(body).toHaveProperty('price', 999);
     });
 
-    it("shouldn't modify product being normal user", async () => {
+    it("Shouldn't modify product being normal user", async () => {
       const updateProductDto: UpdateProductDto = {
         price: 999,
       };
