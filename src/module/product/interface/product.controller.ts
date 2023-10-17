@@ -55,10 +55,10 @@ export class ProductController {
   @Post('')
   async create(
     @Body() createProductDto: CreateProductDto,
-    @Req() req: Express.Request,
+    @Req() req: UserRequest,
   ): Promise<Product | HttpException> {
     const newProduct = this.productMapper.fromDtoToEntity(createProductDto);
-    return await this.productService.create(newProduct);
+    return await this.productService.create(newProduct, req.user.id);
   }
 
   @ApiBearerAuth()
