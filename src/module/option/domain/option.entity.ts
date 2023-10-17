@@ -24,5 +24,5 @@ export class Option extends Base {
 
   @ManyToOne(() => Product, (product) => product.options)
   @JoinColumn({ name: 'product' })
-  product: Product;
+  product: Product | undefined;
 }
