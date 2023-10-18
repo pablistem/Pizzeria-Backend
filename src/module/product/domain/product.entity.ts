@@ -34,6 +34,6 @@ export class Product extends Base {
   @Column({ default: 0 })
   stock: number | undefined;
 
-  @OneToMany(() => Option, (option) => option.id)
+  @OneToMany(() => Option, (option) => option.product)
   options: Option[] | undefined;
 }
