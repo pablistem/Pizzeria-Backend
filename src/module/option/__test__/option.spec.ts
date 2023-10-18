@@ -41,7 +41,7 @@ describe('Option', () => {
     });
   });
 
-  describe('POST /option/create', () => {
+  describe('POST /option', () => {
     it('not allowed to create an option', async () => {
       const newOption = {
         variant: 'option_3',
@@ -50,7 +50,7 @@ describe('Option', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/option/create')
+        .post('/option')
         .send(newOption)
         .expect(401);
     });
@@ -63,21 +63,21 @@ describe('Option', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/option/create')
+        .post('/option')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newOption)
         .expect(201);
     });
   });
 
-  describe('PATCH /option/update/:id', () => {
+  describe('PATCH /option/:id', () => {
     it('Should update the price of one option', async () => {
       const updateOption: UpdateOptionDto = {
         id: 2,
         price: 200,
       };
       await request(app.getHttpServer())
-        .patch('/option/update/2')
+        .patch('/option/2')
         .send(updateOption)
         .expect(401);
     });
@@ -88,7 +88,7 @@ describe('Option', () => {
         price: 200,
       };
       const { body } = await request(app.getHttpServer())
-        .patch('/option/update/2')
+        .patch('/option/2')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(updateOption)
         .expect(200);
