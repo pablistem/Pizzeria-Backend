@@ -19,8 +19,16 @@ export class ProductService {
     @Inject(UserService)
     private readonly userService: UserService,
   ) {}
-  async create(product: Product): Promise<HttpException | Product> {
-    return await this.productRepository.save(product);
+  async create(product: Product, userId:number): Promise<HttpException | Product> {
+    const admin = await this.userService.validateUserAdmin(userId)
+    console.log(admin)
+    if (admin) {
+      console.log(product)
+      return await this.productRepository.save(product);
+
+    } else {
+      throw new HttpException('User have not access', HttpStatus.UNAUTHORIZED)
+    }
   }
 
   async getOne(id: number): Promise<Product> {

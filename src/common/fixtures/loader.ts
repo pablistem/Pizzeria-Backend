@@ -29,13 +29,13 @@ export const loadFixtures = async (app: INestApplication) => {
 
   await request(app.getHttpServer())
     .post('/loader')
+    .send({ fixtures: optionFixtures, entity: Option.name });
+
+  await request(app.getHttpServer())
+    .post('/loader')
     .send({ fixtures: orderFixtures, entity: Order.name });
 
   await request(app.getHttpServer())
     .post('/loader')
     .send({ fixtures: itemFixtures, entity: Item.name });
-
-  await request(app.getHttpServer())
-    .post('/loader')
-    .send({ fixtures: optionFixtures, entity: Option.name });
 };

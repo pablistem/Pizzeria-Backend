@@ -9,8 +9,8 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Put,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 

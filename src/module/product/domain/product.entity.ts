@@ -1,5 +1,13 @@
-import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
+import { Category } from '../../../../src/module/category/application/domain/category.entity';
 import { Base } from '../../../common/domain/base.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { Option } from '../../option/domain/option.entity';
 
 @Entity()
@@ -16,8 +24,9 @@ export class Product extends Base {
   })
   image: string;
 
-  @Column({ default: 'Not implemented' })
-  category: string;
+  @ManyToOne(() => Category, (category) => category.products, { cascade: true })
+  @JoinColumn()
+  category: Category | undefined;
 
   @Column({ default: 0 })
   price: number;
@@ -25,7 +34,6 @@ export class Product extends Base {
   @Column({ default: 0 })
   stock: number | undefined;
 
-  @OneToMany(() => Option, (option) => option.product)
-  @JoinColumn()
-  options: Option[];
+  @OneToMany(() => Option, (option) => option.id)
+  options: Option[] | undefined;
 }

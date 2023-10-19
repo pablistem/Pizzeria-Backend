@@ -8,5 +8,5 @@ export interface ICategoryRepository {
   getAll(): Promise<Category[]>;
   delete(category: Category): Promise<void>;
   getCategoryById(id: number): Promise<Category>;
-  finOneByName(name: string): Promise<Category>;
+  findOneByName(name: string): Promise<Category>;
 }

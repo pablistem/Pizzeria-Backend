@@ -45,7 +45,7 @@ describe('Products', () => {
     });
   });
 
-  describe('POST /product/create', () => {
+  describe('POST /product', () => {
     it('Should create product as admin', async () => {
       const newProduct = {
         title: 'someTitle',
@@ -57,7 +57,7 @@ describe('Products', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/product/create')
+        .post('/product')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newProduct)
         .expect(201);
@@ -68,7 +68,7 @@ describe('Products', () => {
         ...productFixtures[0],
       };
       await request(app.getHttpServer())
-        .post('/product/create')
+        .post('/product')
         .send(newProduct)
         .expect(401);
     });
@@ -87,7 +87,7 @@ describe('Products', () => {
       expect(body).toHaveProperty('price', 999);
     });
 
-    it("shouldn't modify product being normal user", async () => {
+    it("Shouldn't modify product being normal user", async () => {
       const updateProductDto: UpdateProductDto = {
         price: 999,
       };
