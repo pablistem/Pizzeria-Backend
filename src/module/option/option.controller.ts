@@ -9,12 +9,12 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Patch,
+  Put,
   Post,
   UseGuards,
 } from '@nestjs/common';
 
-@ApiTags('Options')
+@ApiTags('Option')
 @Controller('option')
 export class OptionController {
   constructor(private readonly optionService: OptionService) {}
@@ -31,14 +31,14 @@ export class OptionController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Post('create')
+  @Post('')
   async create(@Body() data: CreateOptionDto) {
     return await this.optionService.create(data);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Patch('update/:id')
+  @Put(':id')
   async updateOption(
     @Body() changes: UpdateOptionDto,
     @Param('id', ParseIntPipe) optionId: number,
@@ -48,7 +48,7 @@ export class OptionController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Delete('remove/:id')
+  @Delete(':id')
   async removeOption(@Param('id', ParseIntPipe) optionId: number) {
     return await this.optionService.removeOption(optionId);
   }

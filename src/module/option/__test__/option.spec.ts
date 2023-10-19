@@ -41,8 +41,8 @@ describe('Option', () => {
     });
   });
 
-  describe('POST /option/create', () => {
-    it('not allowed to create an option', async () => {
+  describe('POST /option', () => {
+    it('Not allowed to create an option', async () => {
       const newOption = {
         variant: 'option_3',
         price: 100,
@@ -50,7 +50,7 @@ describe('Option', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/option/create')
+        .post('/option')
         .send(newOption)
         .expect(401);
     });
@@ -63,23 +63,35 @@ describe('Option', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/option/create')
+        .post('/option')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newOption)
         .expect(201);
     });
   });
 
-  describe('PATCH /option/update/:id', () => {
-    it('Should update the price of one option', async () => {
+  describe('PUT /option/:id', () => {
+    it('Not allowed to update the option', async () => {
       const updateOption: UpdateOptionDto = {
         id: 2,
         price: 200,
       };
       await request(app.getHttpServer())
-        .patch('/option/update/2')
+        .put('/option/2')
         .send(updateOption)
         .expect(401);
+    });
+
+    it('Should get a not found response', async () => {
+      const updateOption: UpdateOptionDto = {
+        id: 5,
+        price: 200,
+      };
+      await request(app.getHttpServer())
+        .put('/option/5')
+        .auth(tokens.adminUserToken, { type: 'bearer' })
+        .send(updateOption)
+        .expect(404);
     });
 
     it('Should update the price of one option', async () => {
@@ -88,11 +100,31 @@ describe('Option', () => {
         price: 200,
       };
       const { body } = await request(app.getHttpServer())
-        .patch('/option/update/2')
+        .put('/option/2')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(updateOption)
         .expect(200);
       expect(body).toHaveProperty('price', 200);
+    });
+  });
+
+  describe('DELETE /option/:id', () => {
+    it('Not allowed to delete the option', async () => {
+      await request(app.getHttpServer()).delete('/option/2').expect(401);
+    });
+
+    it('Should get not found response', async () => {
+      await request(app.getHttpServer())
+        .delete('/option/5')
+        .auth(tokens.adminUserToken, { type: 'bearer' })
+        .expect(404);
+    });
+
+    it('Should delete one option', async () => {
+      await request(app.getHttpServer())
+        .delete('/option/2')
+        .auth(tokens.adminUserToken, { type: 'bearer' })
+        .expect(201);
     });
   });
 
