@@ -31,7 +31,6 @@ describe('Products', () => {
         .expect(200);
 
       const body: Product[] = response.body;
-      console.log(JSON.stringify(body, null, 2))
       expect(body).toHaveLength(3);
     });
   });

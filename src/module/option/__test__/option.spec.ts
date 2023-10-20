@@ -77,7 +77,7 @@ describe('Option', () => {
         price: 200,
       };
       await request(app.getHttpServer())
-        .patch('/option/2')
+        .put('/option/2')
         .send(updateOption)
         .expect(401);
     });
@@ -88,7 +88,7 @@ describe('Option', () => {
         price: 200,
       };
       const { body } = await request(app.getHttpServer())
-        .patch('/option/2')
+        .put('/option/2')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(updateOption)
         .expect(200);
