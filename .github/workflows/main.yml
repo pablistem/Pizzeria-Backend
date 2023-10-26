@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     env:
+      NODE_ENV: automated_tests
       DB_HOST: ${{secrets.DB_HOST}}
       DB_PORT: ${{secrets.DB_PORT}}
       DB_USERNAME: ${{secrets.DB_USERNAME}}
