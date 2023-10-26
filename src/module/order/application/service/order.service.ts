@@ -7,11 +7,16 @@ import { Order, OrderStatus } from '../../domain/order.entity';
 import { UserService } from '../../../../module/user/application/service/user.service';
 import { RoleEnum } from '../../../../module/user/domain/user.entity';
 import { CannotUpdateOrderException } from '../errors/CannotUpdateOrder';
+import { Item } from 'src/module/item/domain/item.entity';
+import { ProductService } from 'src/module/product/application/service/product.service';
+import { ItemService } from 'src/module/item/application/service/item.service';
 @Injectable()
 export class OrderService {
   constructor(
     @Inject(ORDER_REPOSITORY) private orderRepository: IOrderRepository,
     @Inject(UserService) private userService: UserService,
+    @Inject(ProductService) private productService: ProductService,
+    @Inject(ItemService) private itemService: ItemService,
   ) {}
 
   async delete(userId: number, orderId: number): Promise<void> {
@@ -46,6 +51,15 @@ export class OrderService {
   async create(userId: number, order: Order): Promise<Order> {
     const user = await this.userService.findUserById(userId);
     order.user = user;
+    const savedItems = order.items.map(async (item) => {
+      const newItem = new Item();
+      const product = await this.productService.getOne(item.product.id);
+      const subTotal = product.price * item.quantity;
+      newItem.subTotal = subTotal;
+      return await this.itemService.save(newItem);
+    });
+    const newOrder = new Order();
+    newOrder.items = savedItems;
     return await this.orderRepository.create(order);
   }
 

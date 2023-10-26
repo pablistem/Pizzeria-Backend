@@ -15,6 +15,7 @@ export class Order extends Base {
   @Column({ default: OrderStatus.pending })
   status: string;
 
+  /* El total que incluye el subtotal de items */
   @Column({ nullable: true })
   total: number;
 

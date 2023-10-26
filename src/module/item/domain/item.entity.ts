@@ -1,6 +1,6 @@
 import { Order } from '../../../../src/module/order/domain/order.entity';
 import { Base } from '../../../common/domain/base.entity';
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, ManyToMany } from 'typeorm';
 import { Product } from '../../../../src/module/product/domain/product.entity';
 
 export enum OrderStatus {
@@ -18,6 +18,7 @@ export class Item extends Base {
   @Column()
   discount: number;
 
+  /* Precio del producto por unidad  */
   @Column()
   subTotal: number;
 

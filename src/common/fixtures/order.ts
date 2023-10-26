@@ -7,7 +7,7 @@ export const order1: Order = {
   id: 1,
   status: OrderStatus.pending,
   user: normalUser,
-  items: [item1, item2],
+  items: [],
   createdAt: undefined,
   updatedAt: undefined,
   total: 0,
