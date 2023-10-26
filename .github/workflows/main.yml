@@ -14,7 +14,7 @@ jobs:
       DB_USERNAME: ${{secrets.DB_USERNAME}}
       DB_PASSWORD: ${{secrets.DB_PASSWORD}}
       DB_NAME: ${{secrets.DB_NAME}}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     strategy:
       matrix:
