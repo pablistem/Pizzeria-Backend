@@ -10,6 +10,7 @@ import { CannotUpdateOrderException } from '../errors/CannotUpdateOrder';
 import { Item } from 'src/module/item/domain/item.entity';
 import { ProductService } from 'src/module/product/application/service/product.service';
 import { ItemService } from 'src/module/item/application/service/item.service';
+import { resolve } from 'path';
 @Injectable()
 export class OrderService {
   constructor(
@@ -51,16 +52,39 @@ export class OrderService {
   async create(userId: number, order: Order): Promise<Order> {
     const user = await this.userService.findUserById(userId);
     order.user = user;
-    const savedItems = order.items.map(async (item) => {
-      const newItem = new Item();
-      const product = await this.productService.getOne(item.product.id);
-      const subTotal = product.price * item.quantity;
-      newItem.subTotal = subTotal;
-      return await this.itemService.save(newItem);
-    });
     const newOrder = new Order();
-    newOrder.items = savedItems;
+
+    this.findProductsByOrder(order.items)
+      .then((result) => {
+        newOrder.items = result.items;
+        newOrder.total = result.total;
+      })
+      .catch((err) => {
+        throw err;
+      });
+
+    newOrder.user = user;
     return await this.orderRepository.create(order);
+  }
+
+  async findProductsByOrder(
+    items: Item[],
+  ): Promise<{ items: Item[]; total: number }> {
+    let totalOrder = 0;
+    const savedItems: Item[] = await Promise.all(
+      items.map(async (item) => {
+        const newItem = new Item();
+        const product = await this.productService.getOne(item.product.id);
+        const subtotal = product.price * item.quantity;
+        newItem.subTotal = subtotal;
+        newItem.quantity = item.quantity;
+        newItem.discount = item.discount;
+        newItem.product = product;
+        totalOrder += subtotal;
+        return newItem;
+      }),
+    );
+    return { items: savedItems, total: totalOrder };
   }
 
   async update(userId: number, orderId: number, updatedOrder: Order) {

@@ -117,7 +117,7 @@ describe('Option', () => {
       await request(app.getHttpServer())
         .delete('/option/5')
         .auth(tokens.adminUserToken, { type: 'bearer' })
-        .expect(404);
+        .expect(404); //returned 200 code for fix
     });
 
     it('Should delete one option', async () => {
