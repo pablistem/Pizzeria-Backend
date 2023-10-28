@@ -15,7 +15,7 @@ import { RoleEnum, User } from '../../../user/domain/user.entity';
 import { Auth } from '../../domain/auth.entity';
 import { AuthRepository } from '../../infrastructure/auth.repository';
 import { IAuthRepository } from '../repository/auth.repository.interface';
-import { ENVIRONMENTS } from 'ormconfig';
+import { ENVIRONMENTS } from '../../../../../ormconfig';
 
 @Injectable()
 export class AuthService {
