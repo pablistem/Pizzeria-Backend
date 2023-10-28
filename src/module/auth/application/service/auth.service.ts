@@ -15,6 +15,7 @@ import { RoleEnum, User } from '../../../user/domain/user.entity';
 import { Auth } from '../../domain/auth.entity';
 import { AuthRepository } from '../../infrastructure/auth.repository';
 import { IAuthRepository } from '../repository/auth.repository.interface';
+import { ENVIRONMENTS } from '../../../../../ormconfig';
 
 @Injectable()
 export class AuthService {
@@ -94,7 +95,10 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
-    const secret = this.config.get('ACCESS_TOKEN_SECRET');
+    const secret =
+      this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST
+        ? 'test_secret'
+        : this.config.get('ACCESS_TOKEN_SECRET');
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: secret,
       expiresIn: '15min',
@@ -103,11 +107,12 @@ export class AuthService {
   }
 
   async decodeToken(token): Promise<any> {
+    const secret =
+      this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST
+        ? 'test_secret'
+        : this.config.get('ACCESS_TOKEN_SECRET');
     try {
-      const decodedToken = this.jwtService.decode(
-        token,
-        this.config.get('ACCESS_TOKEN_SECRET'),
-      );
+      const decodedToken = this.jwtService.decode(token, secret);
       return decodedToken;
     } catch (error) {
       return false;

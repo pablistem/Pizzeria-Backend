@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '../application/service/user.service';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -6,7 +6,6 @@ import { JwtGuard } from '../../../common/guards/jwt.guard';
 import { UserRepository } from '../infrastructure/user.repository';
 import { ENVIRONMENTS } from '../../../../ormconfig';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../domain/user.entity';
 import { Request } from 'express';
 
 @ApiTags('User')

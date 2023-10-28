@@ -3,9 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { ENVIRONMENTS } from '../../../ormconfig';
 import { UserService } from '../../../src/module/user/application/service/user.service';
 import { User } from '../../../src/module/user/domain/user.entity';
+import { ENVIRONMENTS } from '../../../ormconfig';
 
 export class AdminGuard extends AuthGuard('admin') {
   constructor() {
