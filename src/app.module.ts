@@ -10,6 +10,7 @@ import { OrderModule } from './module/order/order.module';
 import { CommonModule } from './common/common.module';
 import { ItemModule } from './module/item/item.module';
 import { CategoryModule } from './module/category/category.module';
+import { OptionModule } from './module/option/option.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CategoryModule } from './module/category/category.module';
     }),
     UserModule,
     AuthModule,
+    OptionModule,
     ProductModule,
     OrderModule,
     CommonModule,

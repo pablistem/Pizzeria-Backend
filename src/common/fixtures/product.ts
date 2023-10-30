@@ -1,5 +1,6 @@
 import { Product } from 'src/module/product/domain/product.entity';
 import { category1, category2, category3 } from './category';
+import { option1, option2 } from './option';
 
 export const product1: Product = {
   id: 1,
@@ -9,7 +10,7 @@ export const product1: Product = {
   category: category1,
   price: 200,
   stock: 20,
-  options: 'options',
+  options: [option1, option2],
   createdAt: undefined,
   updatedAt: undefined,
 };
@@ -22,7 +23,7 @@ export const product2: Product = {
   category: category2,
   price: 10,
   stock: 10,
-  options: 'options',
+  options: undefined,
   createdAt: undefined,
   updatedAt: undefined,
 };
@@ -35,7 +36,7 @@ export const product3: Product = {
   category: category3,
   price: 10,
   stock: 10,
-  options: 'options',
+  options: undefined,
   createdAt: undefined,
   updatedAt: undefined,
 };

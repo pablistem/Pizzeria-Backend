@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Category } from '../../../../../src/module/category/application/domain/category.entity';
+import { Option } from '../../../../../src/module/option/domain/option.entity';
 
 export class ProductDto {
   @ApiProperty()
@@ -37,5 +38,6 @@ export class ProductDto {
   @IsNumber()
   @IsNotEmpty()
   stock: number;
-  options: string;
+  
+  options: Option[] | [];
 }

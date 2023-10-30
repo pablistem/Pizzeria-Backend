@@ -8,6 +8,7 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
+import { Option } from '../../option/domain/option.entity';
 
 @Entity()
 export class Product extends Base {
@@ -33,6 +34,6 @@ export class Product extends Base {
   @Column({ default: 0 })
   stock: number | undefined;
 
-  @Column({ default: 'Not implemented' })
-  options: string | undefined;
+  @OneToMany(() => Option, (option) => option.product)
+  options: Option[] | undefined;
 }

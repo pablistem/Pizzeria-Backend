@@ -34,6 +34,10 @@ export class ProductRepository implements IProductRepository {
   }
 
   async getAll(): Promise<Product[]> {
-    return await this.repository.find();
+    return await this.repository
+    .createQueryBuilder('product')
+    .leftJoinAndSelect('product.options', 'options')
+    .leftJoinAndSelect('product.category', 'category')
+    .getMany();
   }
 }

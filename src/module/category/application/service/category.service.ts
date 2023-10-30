@@ -16,7 +16,7 @@ export class CategoryService {
   ) {}
 
   async create(category: Category, userId: number): Promise<Category> {
-    const admin = await this.validateUserAdmin(userId);
+    const admin = await this.userService.validateUserAdmin(userId);
     if (admin) {
       const categoryFound = await this.categoryRepository.findOneByName(
         category.name,
@@ -38,7 +38,7 @@ export class CategoryService {
     category: Category,
     userId: number,
   ): Promise<Category> {
-    const admin = await this.validateUserAdmin(userId);
+    const admin = await this.userService.validateUserAdmin(userId);
     if (admin) {
       const categoryFound = await this.categoryRepository.getCategoryById(id);
       if (categoryFound) {
@@ -53,7 +53,7 @@ export class CategoryService {
   }
 
   async delete(id: number, userId: number): Promise<void> {
-    const admin = await this.validateUserAdmin(userId);
+    const admin = await this.userService.validateUserAdmin(userId)
     if (admin) {
       const categoryFound = await this.categoryRepository.getCategoryById(id);
       if (categoryFound) {
@@ -67,7 +67,7 @@ export class CategoryService {
   }
 
   async getOne(id: number, userId: number): Promise<Category> {
-    const admin = await this.validateUserAdmin(userId);
+    const admin = await this.userService.validateUserAdmin(userId);
     if (admin) {
       const category = await this.categoryRepository.getCategoryById(id);
       if (category) {
@@ -84,12 +84,4 @@ export class CategoryService {
     return this.categoryRepository.getAll();
   }
 
-  async validateUserAdmin(userId: number): Promise<boolean> {
-    const user = await this.userService.findUserById(userId);
-    if (user.role === RoleEnum.admin) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 }

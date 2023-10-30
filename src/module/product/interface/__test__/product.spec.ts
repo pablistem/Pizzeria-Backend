@@ -5,9 +5,10 @@ import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../../../../app.module';
 import { UpdateProductDto } from '../../application/dto';
 import { loadFixtures } from 'src/common/fixtures/loader';
-import { tokens } from 'src/common/fixtures/user';
-import { productFixtures } from 'src/common/fixtures/product';
-import { category1 } from 'src/common/fixtures/category';
+import { tokens } from './../../../../../src/common/fixtures/user';
+import { productFixtures } from '../../../../../src/common/fixtures/product';
+import { category1 } from '../../../../../src/common/fixtures/category';
+import { Product } from '../../domain/product.entity';
 
 describe('Products', () => {
   let app: INestApplication;
@@ -25,9 +26,11 @@ describe('Products', () => {
 
   describe('GET /product', () => {
     it('Should get all products', async () => {
-      const { body } = await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .get('/product')
         .expect(200);
+
+      const body: Product[] = response.body;
       expect(body).toHaveLength(3);
     });
   });
@@ -45,7 +48,7 @@ describe('Products', () => {
     });
   });
 
-  describe('POST /product/create', () => {
+  describe('POST /product', () => {
     it('Should create product as admin', async () => {
       const newProduct = {
         title: 'someTitle',
@@ -57,7 +60,7 @@ describe('Products', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/product/create')
+        .post('/product')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newProduct)
         .expect(201);
@@ -68,7 +71,7 @@ describe('Products', () => {
         ...productFixtures[0],
       };
       await request(app.getHttpServer())
-        .post('/product/create')
+        .post('/product')
         .send(newProduct)
         .expect(401);
     });
@@ -87,7 +90,7 @@ describe('Products', () => {
       expect(body).toHaveProperty('price', 999);
     });
 
-    it("shouldn't modify product being normal user", async () => {
+    it("Shouldn't modify product being normal user", async () => {
       const updateProductDto: UpdateProductDto = {
         price: 999,
       };

@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { IUserRepository } from '../repository/user.repository.interface';
-import { User } from '../../domain/user.entity';
+import { RoleEnum, User } from '../../domain/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../../infrastructure/user.repository';
 import { Auth } from '../../../../../src/module/auth/domain/auth.entity';
@@ -46,5 +46,10 @@ export class UserService {
 
   async findUserById(id: number): Promise<User> {
     return this.userRepository.findOneById(id);
+  }
+
+  async validateUserAdmin(userId: number): Promise<boolean> {
+    const user = await this.findUserById(userId);
+    return user.role === RoleEnum.admin
   }
 }
