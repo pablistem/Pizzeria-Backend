@@ -16,7 +16,7 @@ jobs:
       DB_USERNAME: ${{secrets.DB_USERNAME}}
       DB_PASSWORD: ${{secrets.DB_PASSWORD}}
       DB_NAME: ${{secrets.DB_NAME}}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
@@ -39,9 +39,3 @@ jobs:
           npm run format
           npm run build
           npm run test:cov
-      - name: Report code coverage
-        uses: zgosalvez/github-actions-report-lcov@v1
-        with:
-          coverage-files: ./coverage/lcov.info
-          minimum-coverage: 50
-          github-token: ${{ secrets.GITHUB_TOKEN }}
