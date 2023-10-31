@@ -1,7 +1,7 @@
 import { Item } from '../../item/domain/item.entity';
 import { Base } from '../../../common/domain/base.entity';
 import { User } from '../../../module/user/domain/user.entity';
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 
 export enum OrderStatus {
   pending = 'pending',
@@ -15,7 +15,7 @@ export class Order extends Base {
   @Column({ default: OrderStatus.pending })
   status: string;
 
-  /* El total que incluye el subtotal de items */
+  /* It shows the total  */
   @Column({ nullable: true })
   total: number;
 

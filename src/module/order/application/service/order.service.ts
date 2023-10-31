@@ -10,7 +10,7 @@ import { CannotUpdateOrderException } from '../errors/CannotUpdateOrder';
 import { Item } from 'src/module/item/domain/item.entity';
 import { ProductService } from 'src/module/product/application/service/product.service';
 import { ItemService } from 'src/module/item/application/service/item.service';
-import { resolve } from 'path';
+
 @Injectable()
 export class OrderService {
   constructor(

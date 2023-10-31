@@ -10,8 +10,4 @@ export class ItemService {
   constructor(
     @Inject(ITEM_REPOSITORY) private itemRepository: IItemRepository,
   ) {}
-
-  async save(newItem: CreateItemDto) {
-    return await this.itemRepository.create(newItem);
-  }
 }

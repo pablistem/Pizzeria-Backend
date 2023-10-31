@@ -14,6 +14,6 @@ import { ItemRepository } from './infrastructure/persistence/item.repository';
     ItemService,
     { provide: ITEM_REPOSITORY, useClass: ItemRepository },
   ],
-  exports: [ItemService],
+  exports: [ItemService, ITEM_REPOSITORY],
 })
 export class ItemModule {}
