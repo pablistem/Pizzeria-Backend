@@ -32,4 +32,8 @@ export class OrderRepository implements IOrderRepository {
   async delete(orderId: number): Promise<void> {
     await this.repository.delete(orderId);
   }
+
+  async save(order: Order): Promise<Order> {
+    return await this.repository.save(order);
+  }
 }
