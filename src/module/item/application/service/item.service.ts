@@ -1,12 +1,17 @@
 import { Injectable, Inject } from '@nestjs/common';
 import {
   ITEM_REPOSITORY,
-  IItemRepository,
 } from '../repository/item.repository.interface';
+import { Item } from '../../domain/item.entity';
+import { ItemRepository } from '../../infrastructure/persistence/item.repository';
 
 @Injectable()
 export class ItemService {
   constructor(
-    @Inject(ITEM_REPOSITORY) private itemRepository: IItemRepository,
+    @Inject(ITEM_REPOSITORY) private itemRepository: ItemRepository,
   ) {}
+
+  async save(item:Item):Promise<Item>{
+    return await this.itemRepository.create(item)
+  }
 }
