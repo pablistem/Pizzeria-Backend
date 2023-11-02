@@ -46,10 +46,10 @@ export class OptionService {
 
   async removeOption(id: number) {
     const optionFound = await this.optionRepository.findOne(id);
-    if (optionFound) {
-      return await this.optionRepository.delete(id);
+    if (!optionFound) {
+      throw new NotFoundException('Option not Found!');
     } else {
-      return new NotFoundException('Option not Found!');
+      return await this.optionRepository.delete(id);
     }
   }
 }

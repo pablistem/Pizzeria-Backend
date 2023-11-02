@@ -19,7 +19,7 @@ export class Option extends Base {
   @Column()
   price: number;
 
-  @ManyToOne(() => Product, (product) => product.options)
+  @ManyToOne(() => Product, (product) => product.options, { cascade: true })
   @JoinColumn({ name: 'product' })
   product: Product;
 }

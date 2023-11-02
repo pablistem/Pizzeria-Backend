@@ -55,6 +55,18 @@ describe('Option', () => {
         .expect(401);
     });
 
+    it('Should get a Bad Request response', async () => {
+      const newOption = {
+        variant: 'option_3',
+      };
+
+      await request(app.getHttpServer())
+        .post('/option')
+        .auth(tokens.adminUserToken, { type: 'bearer' })
+        .send(newOption)
+        .expect(400);
+    });
+
     it('Should create an option', async () => {
       const newOption = {
         variant: 'option_3',
@@ -117,7 +129,7 @@ describe('Option', () => {
       await request(app.getHttpServer())
         .delete('/option/5')
         .auth(tokens.adminUserToken, { type: 'bearer' })
-        .expect(404); //returned 200 code for fix
+        .expect(404);
     });
 
     it('Should delete one option', async () => {
