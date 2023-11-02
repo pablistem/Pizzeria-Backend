@@ -10,7 +10,7 @@ import { loadFixtures } from 'src/common/fixtures/loader';
 import { orderFixtures } from 'src/common/fixtures/order';
 import { tokens } from 'src/common/fixtures/user';
 import { CreateOrderDto } from '../../application/dto/create-order.dto';
-import { product3 } from 'src/common/fixtures/product';
+import { product2, product3 } from 'src/common/fixtures/product';
 
 describe('Order', () => {
   let app: INestApplication;
@@ -89,9 +89,9 @@ describe('Order', () => {
       expect(body).toHaveProperty('id', 3);
     });
     it('Should create order as normal user', async () => {
-      const newOrder = {
-        ...orderFixtures[1],
-      } as Order;
+      const newOrder: CreateOrderDto = {
+        items: [{ product: product2, quantity: 50 }],
+      };
       const { body } = await request(app.getHttpServer())
         .post('/order')
         .auth(tokens.normalUserToken, { type: 'bearer' })

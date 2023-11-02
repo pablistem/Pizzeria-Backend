@@ -1,7 +1,7 @@
 import { OrderStatus } from 'src/module/item/domain/item.entity';
 import { Order } from 'src/module/order/domain/order.entity';
 import { normalUser } from './user';
-import { item1, item2 } from './item';
+import { item1, item2, item3 } from './item';
 
 export const order1: Order = {
   id: 1,
@@ -16,7 +16,7 @@ export const order2: Order = {
   id: 2,
   status: OrderStatus.delivered,
   user: normalUser,
-  items: [],
+  items: [item3],
   createdAt: undefined,
   updatedAt: undefined,
   total: 0,

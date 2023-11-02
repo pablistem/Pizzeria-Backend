@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IOrderRepository } from '../../application/repository/order.repository.interface';
 import { Order } from '../../domain/order.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
 @Injectable()
 export class OrderRepository implements IOrderRepository {
   repository: Repository<Order>;
@@ -29,8 +29,8 @@ export class OrderRepository implements IOrderRepository {
     const updatedOrder = await this.repository.save(order);
     return updatedOrder;
   }
-  async delete(orderId: number): Promise<void> {
-    await this.repository.delete(orderId);
+  async delete(orderId: number): Promise<DeleteResult> {
+    return await this.repository.delete(orderId);
   }
 
   async save(order: Order): Promise<Order> {

@@ -30,4 +30,7 @@ export class ItemRepository implements IItemRepository {
   async delete(itemId: number): Promise<void> {
     await this.repository.delete(itemId);
   }
+  async deleteRelation(items : Array<Item>){
+    return await this.repository.remove(items)
+  }
 }

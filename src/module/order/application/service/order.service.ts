@@ -6,10 +6,11 @@ import {
 import { Order, OrderStatus } from '../../domain/order.entity';
 import { UserService } from '../../../../module/user/application/service/user.service';
 import { RoleEnum } from '../../../../module/user/domain/user.entity';
-import { CannotUpdateOrderException } from '../errors/CannotUpdateOrder';
+import { CannotAccessOrderException, CannotUpdateOrderException } from '../errors/CannotUpdateOrder';
 import { Item } from 'src/module/item/domain/item.entity';
 import { ProductService } from 'src/module/product/application/service/product.service';
 import { ItemService } from 'src/module/item/application/service/item.service';
+import { DeleteResult } from 'typeorm';
 @Injectable()
 export class OrderService {
   constructor(
@@ -19,7 +20,21 @@ export class OrderService {
     @Inject(ItemService) private itemService: ItemService,
   ) {}
 
-  async delete(userId: number, orderId: number): Promise<void> {
+  async delete(userId: number, orderId: number): Promise<DeleteResult> {
+    const user = await this.userService.findUserById(userId);
+    if (user.role === RoleEnum.admin) {
+      const orderToDelete = await this.findById(userId, orderId)
+      if (!orderToDelete) {
+        throw new NotFoundException();
+      }
+      await this.itemService.deleteRelation(orderToDelete.items)
+      return await this.orderRepository.delete(orderId);
+    }
+    const order = user.orders.find((order) => order.id === orderId);
+    if (!order) {
+      throw new CannotAccessOrderException()
+    }
+    await this.itemService.deleteRelation(order.items)
     return await this.orderRepository.delete(orderId);
   }
 
@@ -50,15 +65,16 @@ export class OrderService {
   async create(userId: number, order: Order): Promise<Order> {
     const user = await this.userService.findUserById(userId);
     const newOrder = new Order();
-    newOrder.user = user;
+
     const savedOrder = await this.orderRepository.create(newOrder);
     savedOrder.items = await this.saveItems(order.items, savedOrder);
     const total = savedOrder.items.reduce((acc, item) => {
       return acc + item.subTotal;
     }, 0);
     savedOrder.total = total;
-    const createOrder = await this.orderRepository.save(savedOrder)
-    return createOrder
+    savedOrder.user = user
+    const createOrder = await this.orderRepository.save(savedOrder);
+    return createOrder;
   }
 
   async update(userId: number, orderId: number, updatedOrder: Order) {
@@ -68,7 +84,7 @@ export class OrderService {
     }
     const order = user.orders.find((order) => order.id === orderId);
     if (!order) {
-      throw new NotFoundException();
+      throw new CannotAccessOrderException()
     }
     if (order.status !== OrderStatus.pending) {
       throw new CannotUpdateOrderException();
@@ -76,19 +92,19 @@ export class OrderService {
     return await this.orderRepository.update(orderId, updatedOrder);
   }
 
-  async saveItems(items: Item[], savedOrder:Order): Promise<Item[]> {
+  async saveItems(items: Item[], savedOrder: Order): Promise<Item[]> {
     const savedItems = items.map(async (item: Item) => {
       const newItem = new Item();
       const product = await this.productService.getOne(item.product.id);
       const subtotal = product.price * item.quantity;
-      newItem.product = product
-      newItem.order = savedOrder
+      newItem.product = product;
+      newItem.order = savedOrder;
       newItem.subTotal = subtotal;
       newItem.quantity = item.quantity;
-      const savedItem =  await this.itemService.save(newItem);
-      return savedItem
+      const savedItem = await this.itemService.save(newItem);
+      return savedItem;
     });
     const result = await Promise.all(savedItems);
-    return result
+    return result;
   }
 }
