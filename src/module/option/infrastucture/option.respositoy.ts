@@ -25,7 +25,7 @@ export class OptionRepository implements IOptionRepository {
   async delete(optionId: number): Promise<void> {
     const optionFound = await this.repository.findOne({
       where: { id: optionId },
-      relations: [Option.name.toLocaleLowerCase()],
+      relations: ['product'],
     });
     await this.repository.remove(optionFound);
   }

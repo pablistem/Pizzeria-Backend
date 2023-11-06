@@ -30,13 +30,13 @@ describe('Option', () => {
   });
 
   describe('GET /option/:id', () => {
-    it('Should get a option by ID', async () => {
+    it('It should get an option by id', async () => {
       const { body } = await request(app.getHttpServer())
         .get('/option/1')
         .expect(200);
       expect(body).toHaveProperty('id', 1);
     });
-    it('Should get a not found response', async () => {
+    it(`It should get a "Not Found" response`, async () => {
       await request(app.getHttpServer()).get('/option/5').expect(404);
     });
   });
@@ -55,7 +55,7 @@ describe('Option', () => {
         .expect(401);
     });
 
-    it('Should get a Bad Request response', async () => {
+    it(`Should get a "Bad Request" response`, async () => {
       const newOption = {
         variant: 'option_3',
       };
@@ -94,7 +94,7 @@ describe('Option', () => {
         .expect(401);
     });
 
-    it('Should get a not found response', async () => {
+    it(`Should get a "Not Found" response`, async () => {
       const updateOption: UpdateOptionDto = {
         id: 5,
         price: 200,
@@ -125,7 +125,7 @@ describe('Option', () => {
       await request(app.getHttpServer()).delete('/option/2').expect(401);
     });
 
-    it('Should get not found response', async () => {
+    it(`Should get "Not Found" response`, async () => {
       await request(app.getHttpServer())
         .delete('/option/5')
         .auth(tokens.adminUserToken, { type: 'bearer' })
@@ -136,7 +136,7 @@ describe('Option', () => {
       await request(app.getHttpServer())
         .delete('/option/2')
         .auth(tokens.adminUserToken, { type: 'bearer' })
-        .expect(201);
+        .expect(200);
     });
   });
 

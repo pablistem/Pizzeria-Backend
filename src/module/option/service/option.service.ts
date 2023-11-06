@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   Inject,
   Injectable,
@@ -17,7 +18,11 @@ export class OptionService {
   ) {}
 
   async create(option: ICreateOption): Promise<HttpException | Option> {
-    return await this.optionRepository.save(option);
+    try {
+      return await this.optionRepository.save(option);
+    } catch (error) {
+      throw new BadRequestException('All the fields must be filled out');
+    }
   }
 
   async getOne(id: number): Promise<Option> {
@@ -49,7 +54,7 @@ export class OptionService {
     if (!optionFound) {
       throw new NotFoundException('Option not Found!');
     } else {
-      return await this.optionRepository.delete(id);
+      return await this.optionRepository.delete(optionFound.id);
     }
   }
 }
