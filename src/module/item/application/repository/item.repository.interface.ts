@@ -8,4 +8,5 @@ export interface IItemRepository {
   findOne(id: number): Promise<Item>;
   create(item: Item): Promise<Item>;
   update(id: number, item: Item): Promise<Item>;
+  deleteRelation(items : Array<Item>)
 }
