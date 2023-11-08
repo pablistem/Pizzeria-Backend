@@ -15,7 +15,7 @@ export class Item extends Base {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column({ nullable: true })
   discount: number;
 
   @Column()
