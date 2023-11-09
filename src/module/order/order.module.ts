@@ -13,9 +13,17 @@ import { ItemService } from '../item/application/service/item.service';
 import { ProductRepository } from '../product/infrastructure/product.repository';
 import { ITEM_REPOSITORY } from '../item/application/repository/item.repository.interface';
 import { ItemRepository } from '../item/infrastructure/persistence/item.repository';
+import { ProductModule } from '../product/product.module';
+import { ItemModule } from '../item/item.module';
 
 @Module({
-  imports: [UserModule, TypeOrmModule.forFeature([Order]), AuthModule],
+  imports: [
+    UserModule,
+    TypeOrmModule.forFeature([Order]),
+    AuthModule,
+    ProductModule,
+    ItemModule,
+  ],
   controllers: [OrderController],
   providers: [
     OrderMapper,

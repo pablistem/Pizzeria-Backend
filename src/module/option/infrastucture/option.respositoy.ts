@@ -19,6 +19,7 @@ export class OptionRepository implements IOptionRepository {
   async findOne(id: number): Promise<Option> {
     return this.repository.findOne({
       where: { id: id },
+      relations: ['product'],
     });
   }
 

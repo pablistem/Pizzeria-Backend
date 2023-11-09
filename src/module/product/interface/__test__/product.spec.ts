@@ -5,9 +5,10 @@ import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../../../../app.module';
 import { UpdateProductDto } from '../../application/dto';
 import { loadFixtures } from 'src/common/fixtures/loader';
-import { tokens } from 'src/common/fixtures/user';
-import { productFixtures } from 'src/common/fixtures/product';
-import { category1 } from 'src/common/fixtures/category';
+import { tokens } from './../../../../../src/common/fixtures/user';
+import { productFixtures } from '../../../../../src/common/fixtures/product';
+import { category1 } from '../../../../../src/common/fixtures/category';
+import { Product } from '../../domain/product.entity';
 
 describe('Products', () => {
   let app: INestApplication;
@@ -25,9 +26,11 @@ describe('Products', () => {
 
   describe('GET /product', () => {
     it('Should get all products', async () => {
-      const { body } = await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .get('/product')
         .expect(200);
+
+      const body: Product[] = response.body;
       expect(body).toHaveLength(3);
     });
   });

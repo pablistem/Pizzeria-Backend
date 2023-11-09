@@ -50,10 +50,11 @@ export class UserService {
 
   async validateUserAdmin(userId: number): Promise<boolean> {
     const user = await this.findUserById(userId);
-    if (user.role === RoleEnum.admin) {
-      return true;
-    } else {
-      return false;
-    }
+    return user.role === RoleEnum.admin;
+  }
+
+  async editUser(userId: number) {
+    const user = await this.editUser(userId);
+    return user;
   }
 }

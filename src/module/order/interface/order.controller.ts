@@ -77,7 +77,10 @@ export class OrderController {
   }
 
   @Delete(':id')
-  async delete(@Req() req: UserRequest, @Param('id', ParseIntPipe) id: number) {
+  async delete(
+    @Req() req: UserRequest,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<void> {
     await this.orderService.delete(req.user.id, id);
   }
 }

@@ -21,9 +21,7 @@ export class ProductService {
   ) {}
   async create(product: Product, userId:number): Promise<HttpException | Product> {
     const admin = await this.userService.validateUserAdmin(userId)
-    console.log(admin)
     if (admin) {
-      console.log(product)
       return await this.productRepository.save(product);
 
     } else {

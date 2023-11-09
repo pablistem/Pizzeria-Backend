@@ -19,7 +19,7 @@ export class Order extends Base {
   @Column({ nullable: true })
   total: number;
 
-  @OneToMany(() => Item, (item) => item.order)
+  @OneToMany(() => Item, (item) => item.order, { cascade: true })
   items: Item[];
 
   @ManyToOne(() => User, (user) => user.orders)
