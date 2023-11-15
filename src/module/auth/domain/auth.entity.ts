@@ -1,5 +1,5 @@
 import { User } from '../../../module/user/domain/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Auth {
@@ -9,7 +9,8 @@ export class Auth {
   @Column()
   refreshToken: string;
 
-  @OneToOne(() => User, (user) => user.sessions, { cascade: true })
+  @ManyToOne(() => User, (user) => user.sessions, { cascade: true })
+  @JoinColumn()
   user: User;
 
   constructor(refreshToken: string, user: User) {
