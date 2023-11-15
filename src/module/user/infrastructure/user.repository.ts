@@ -27,10 +27,11 @@ export class UserRepository implements IUserRepository {
   }
 
   async findOneById(id: number): Promise<User> {
-    return this.repository.findOne({
+    const user = await this.repository.findOne({
       where: { id },
-      relations: { orders: { items: true } },
+      relations: { orders: { items: true }, sessions: true },
     });
+    return user
   }
 
   async loadTestData() {
