@@ -71,9 +71,7 @@ export class AuthService {
         await this.authRepository.saveRefreshToken(session);
         await this.setCookies(res, refreshToken);
         const accessToken = this.getAccessToken(userFound);
-        console.log(await this.userService.getUserByEmail(userFound.email))
         return accessToken;
-
       } else {
         throw new HttpException(
           'Error: Please ensure all registration fields are filled correctly.',
@@ -89,7 +87,7 @@ export class AuthService {
   }
 
   async logOut(id: number) {
-    const user = await this.userService.findUserById(id)
+    const user:User = await this.userService.findUserById(id)
     this.authRepository.removeRefreshToken(user.sessions.refreshToken);
   }
 
