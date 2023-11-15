@@ -40,10 +40,6 @@ export class UserService {
     return saveUser;
   }
 
-  async saveSession(session: Auth) {
-    this.userRepository.saveSession(session);
-  }
-
   async findUserById(id: number): Promise<User> {
     return this.userRepository.findOneById(id);
   }

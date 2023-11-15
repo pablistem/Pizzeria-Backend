@@ -30,7 +30,7 @@ export class User extends Base {
   @JoinColumn()
   orders: Order[] | undefined;
 
-  @OneToOne(() => Auth)
+  @OneToOne(() => Auth, auth => auth.user)
   @JoinColumn()
   sessions: Auth | undefined;
 

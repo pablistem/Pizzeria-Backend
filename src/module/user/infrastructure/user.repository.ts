@@ -17,19 +17,13 @@ export class UserRepository implements IUserRepository {
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
-    return await this.repository.findOne({ where: { email } });
+    return await this.repository.findOne({ where: { email },
+    relations: { sessions: true} });
   }
 
   async saveUser(user: User): Promise<User> {
     const savedUser = await this.repository.save(user);
     return savedUser;
-  }
-
-  async saveSession(session: Auth) {
-    const userFound = await this.repository.findOne({
-      where: { id: session.id },
-    });
-    userFound.sessions = session;
   }
 
   async findOneById(id: number): Promise<User> {
