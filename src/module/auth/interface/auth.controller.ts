@@ -37,7 +37,7 @@ export class AuthController {
   @UseGuards(JwtGuard)
   @Get('logout')
   async logout(@Req() req: UserRequest) {
-    this.authService.logOut(req.user.id);
+    const userOut = await this.authService.logOut(req.user.id);
     return HttpStatus.ACCEPTED;
   }
 
