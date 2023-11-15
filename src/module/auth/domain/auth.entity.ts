@@ -7,16 +7,13 @@ export class Auth {
   id: number;
 
   @Column()
-  idUser: number | undefined;
-
-  @Column()
   refreshToken: string;
 
-  @OneToOne(() => User, (user) => user.sessions)
+  @OneToOne(() => User, (user) => user.sessions, { cascade: true })
   user: User;
 
-  constructor(refreshToken: string, idUser?: number) {
-    this.idUser = idUser;
+  constructor(refreshToken: string, user: User) {
+    this.user = user;
     this.refreshToken = refreshToken;
   }
 }
