@@ -59,35 +59,42 @@ export class AuthService {
     }
   }
 
+  async verifyMatch(hash: string, password: string): Promise<Boolean> {
+    return await argon2.verify(hash, password);
+  }
+
+
   async login(res: Response, loginDto: LoginDto) {
     let userFound: User | null;
+    try {
       userFound = await this.userService.getUserByEmail(loginDto.email);
+    } catch (err) {}
 
-    if (userFound) {
-      const match = await argon2.verify(userFound.hash, loginDto.password);
-      if (match) {
-        const refreshToken = await this.getRefreshToken(userFound);
-        const session = new Auth(refreshToken, userFound);
-        await this.authRepository.saveRefreshToken(session);
-        await this.setCookies(res, refreshToken);
-        const accessToken = this.getAccessToken(userFound);
-        return accessToken;
-      } else {
+      if (userFound) {
+        const match = await this.verifyMatch(userFound.hash, loginDto.password);
+        if (match){
+          const refreshToken = await this.getRefreshToken(userFound);
+          const session = new Auth(refreshToken, userFound);
+          await this.authRepository.saveRefreshToken(session);
+          await this.setCookies(res, refreshToken);
+          const accessToken = this.getAccessToken(userFound);
+          return { accessToken: accessToken };
+        }else {
+          throw new HttpException(
+            'Error: Please ensure all registration fields are filled correctly.',
+            HttpStatus.UNAUTHORIZED,
+          );
+        }
+      }else {
         throw new HttpException(
           'Error: Please ensure all registration fields are filled correctly.',
           HttpStatus.UNAUTHORIZED,
         );
       }
-    } else {
-      throw new HttpException(
-        'Error: Please ensure all registration fields are filled correctly.',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-  }
+    } 
 
   async logOut(id: number) {
-    const user:User = await this.userService.findUserById(id)
+    const user: User = await this.userService.findUserById(id);
     this.authRepository.removeRefreshToken(user.sessions.refreshToken);
   }
 
@@ -112,7 +119,7 @@ export class AuthService {
     const secret =
       this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST
         ? 'test_secret'
-        : this.ACCESS_TOKEN_SECRET
+        : this.ACCESS_TOKEN_SECRET;
     try {
       const decodedToken = this.jwtService.decode(token, secret);
       return decodedToken;
