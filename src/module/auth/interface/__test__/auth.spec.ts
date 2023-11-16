@@ -5,6 +5,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { AppModule } from '../../../../app.module';
 import { CreateUserDto } from '../../../user/application/dto/create-user.dto';
 import { AuthService } from '../../application/service/auth.service';
+import { loadFixtures } from '../../../../../src/common/fixtures/loader';
 
 describe('AuthController', () => {
   let app: INestApplication;
@@ -16,11 +17,11 @@ describe('AuthController', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
-
     authService = app.get<AuthService>(AuthService);
+
     await app.init();
 
-    await request(app.getHttpServer()).get('/user/reset');
+    await loadFixtures(app);
   });
 
   it('should be register an user (201)', async () => {
@@ -53,30 +54,34 @@ describe('AuthController', () => {
 
   it('Should return a user-type token after logging in.', async () => {
     const userLogin: CreateUserDto = {
-      email: 'testUser@email.com',
-      password: 'user_password',
+      email: 'TEST@email.com',
+      password: 'TEST_PASSWORD',
     };
 
     const response = await request(app.getHttpServer())
       .post('/auth/login')
       .send(userLogin);
-    const authResponse: { user: number; token: string } = response.body;
-    const token = await authService.decodeToken(authResponse.token);
+    const authResponse: { accessToken: string } = response.body;
+    const token = await authService.decodeToken(authResponse.accessToken);
     expect(token).toMatchObject({ role: 'user' });
   });
 
   it('Should return a admin-type token after logging in.', async () => {
     const userLogin: CreateUserDto = {
-      email: 'adminUser@email.com',
-      password: 'admin_password',
+      email: 'admin@email.com',
+      password: '12345678',
     };
+
+    const verifyMatchMock = jest.spyOn(authService, 'verifyMatch').mockResolvedValue(true);
 
     const response = await request(app.getHttpServer())
       .post('/auth/login')
       .send(userLogin);
-    const authResponse: { user: number; token: string } = response.body;
-    const token = await authService.decodeToken(authResponse.token);
+    const { accessToken } = response.body;
+    const token = await authService.decodeToken(accessToken);
     expect(token).toMatchObject({ role: 'admin' });
+    expect(verifyMatchMock).toBeCalledTimes(1);
+    verifyMatchMock.mockRestore();
   });
 
   it('should be unauthorized try login with false email (401)', async () => {
