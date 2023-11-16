@@ -148,21 +148,21 @@ export class AuthService {
     return accessToken;
   }
 
-  async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
-    await this.authRepository.removeRefreshToken(refreshToken);
+  // async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
+  //   await this.authRepository.removeRefreshToken(refreshToken);
 
-    let userToRefresh: any;
+  //   let userToRefresh: any;
 
-    const verify = await this.jwtService.verify(
-      refreshToken,
-      this.REFRESH_TOKEN_SECRET,
-    );
+  //   const verify = await this.jwtService.verify(
+  //     refreshToken,
+  //     this.REFRESH_TOKEN_SECRET,
+  //   );
 
-    if (verify) {
-      const user = await this.userService.getUserByEmail(userToRefresh.email);
-      const accessToken = this.getAccessToken(user);
+  //   if (verify) {
+  //     const user = await this.userService.getUserByEmail(userToRefresh.email);
+  //     const accessToken = this.getAccessToken(user);
 
-      return { accessToken };
-    }
-  }
+  //     return { accessToken };
+  //   }
+  // }
 }
