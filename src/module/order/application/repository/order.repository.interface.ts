@@ -1,4 +1,3 @@
-import { DeleteResult } from 'typeorm';
 import { Order } from '../../domain/order.entity';
 
 export const ORDER_REPOSITORY = 'ORDER_REPOSITORY';

@@ -47,10 +47,7 @@ export class AuthController {
       throw new HttpException('Access denied', 403);
     }
     const httpOnlyToken: string = cookie?.split('=')[1];
-    const newAccessToken = await this.authService.refreshToken(
-      httpOnlyToken,
-      res,
-    );
+    const newAccessToken = await this.authService.refreshToken(httpOnlyToken);
 
     res.status(200);
     res.json({ access_token: newAccessToken });
