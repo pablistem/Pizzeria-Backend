@@ -6,6 +6,7 @@ import { AppModule } from '../../../../app.module';
 import { CreateUserDto } from '../../../user/application/dto/create-user.dto';
 import { AuthService } from '../../application/service/auth.service';
 import { loadFixtures } from '../../../../../src/common/fixtures/loader';
+import { tokens } from '../../../../../src/common/fixtures/user';
 
 describe('AuthController', () => {
   let app: INestApplication;
@@ -24,7 +25,7 @@ describe('AuthController', () => {
     await loadFixtures(app);
   });
 
-  it('should be register an user (201)', async () => {
+  it('Should be register an user (201)', async () => {
     const userRegister: CreateUserDto = {
       name: 'TEST_NAME',
       lastName: 'TEST_LASTNAME',
@@ -86,7 +87,7 @@ describe('AuthController', () => {
     verifyMatchMock.mockRestore();
   });
 
-  it('should be unauthorized try login with false email (401)', async () => {
+  it('Should be unauthorized try login with false email (401)', async () => {
     const userLogin: CreateUserDto = {
       email: 'TEST_false@email.com',
       password: 'TEST_PASSWORD',
@@ -98,7 +99,7 @@ describe('AuthController', () => {
       .expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('should be unauthorized try login with false password (401)', async () => {
+  it('Should be unauthorized try login with false password (401)', async () => {
     const userLogin: CreateUserDto = {
       email: 'TEST@email.com',
       password: 'TEST_PASSWORD_FALSE',
@@ -108,6 +109,13 @@ describe('AuthController', () => {
       .post('/auth/login')
       .send(userLogin)
       .expect(HttpStatus.UNAUTHORIZED);
+  });
+
+  it('Should logout user', async () => {
+    await request(app.getHttpServer())
+      .get('/auth/logout')
+      .auth(tokens.adminUserToken, { type: 'bearer' })
+      .expect(HttpStatus.OK);
   });
 
   afterAll(async () => {
