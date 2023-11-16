@@ -32,7 +32,7 @@ export class OrderRepository implements IOrderRepository {
     const updatedOrder = await this.repository.save(order);
     return updatedOrder;
   }
-  
+
   async delete(orderId: number): Promise<void> {
     await this.repository.delete(orderId);
   }

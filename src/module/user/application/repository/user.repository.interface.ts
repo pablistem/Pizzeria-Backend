@@ -1,4 +1,3 @@
-import { Auth } from 'src/module/auth/domain/auth.entity';
 import { User } from '../../domain/user.entity';
 
 export interface IUserRepository {

@@ -1,5 +1,4 @@
 import {
-  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,

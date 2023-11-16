@@ -1,5 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IItemRepository, ITEM_REPOSITORY } from '../repository/item.repository.interface';
+import {
+  IItemRepository,
+  ITEM_REPOSITORY,
+} from '../repository/item.repository.interface';
 import { Item } from '../../domain/item.entity';
 
 @Injectable()
@@ -16,8 +19,7 @@ export class ItemService {
     await this.itemRepository.delete(itemId);
   }
 
-  async deleteRelation(items: Array<Item>){
-    await this.itemRepository.deleteRelation(items)
+  async deleteRelation(items: Array<Item>) {
+    await this.itemRepository.deleteRelation(items);
   }
-
 }

@@ -9,5 +9,5 @@ export interface IOrderRepository {
   findOne(id: number): Promise<Order>;
   create(order: Order): Promise<Order>;
   update(id: number, order: Order): Promise<Order>;
-  save(order:Order): Promise<Order>
+  save(order: Order): Promise<Order>;
 }

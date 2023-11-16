@@ -59,10 +59,9 @@ export class AuthService {
     }
   }
 
-  async verifyMatch(hash: string, password: string): Promise<Boolean> {
+  async verifyMatch(hash: string, password: string): Promise<boolean> {
     return await argon2.verify(hash, password);
   }
-
 
   async login(res: Response, loginDto: LoginDto) {
     let userFound: User | null;
@@ -70,28 +69,29 @@ export class AuthService {
       userFound = await this.userService.getUserByEmail(loginDto.email);
     } catch (err) {}
 
-      if (userFound) {
-        const match = await this.verifyMatch(userFound.hash, loginDto.password);
-        if (match){
-          const refreshToken = await this.getRefreshToken(userFound);
-          const session = new Auth(refreshToken, userFound);
-          await this.authRepository.saveRefreshToken(session);
-          await this.setCookies(res, refreshToken);
-          const accessToken = this.getAccessToken(userFound);
-          return { accessToken: accessToken };
-        }else {
-          throw new HttpException(
-            'Error: Please ensure all registration fields are filled correctly.',
-            HttpStatus.UNAUTHORIZED,
-          );
-        }
-      }else {
+    if (userFound) {
+      const match = await this.verifyMatch(userFound.hash, loginDto.password);
+      if (match) {
+        const refreshToken = await this.getRefreshToken(userFound);
+        const session = new Auth(refreshToken, userFound);
+        await this.authRepository.saveRefreshToken(session);
+        await this.setCookies(res, refreshToken);
+        const accessToken = this.getAccessToken(userFound);
+        res.statusCode = 201;
+        return { accessToken: accessToken };
+      } else {
         throw new HttpException(
           'Error: Please ensure all registration fields are filled correctly.',
           HttpStatus.UNAUTHORIZED,
         );
       }
-    } 
+    } else {
+      throw new HttpException(
+        'Error: Please ensure all registration fields are filled correctly.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+  }
 
   async logOut(id: number) {
     const user: User = await this.userService.findUserById(id);

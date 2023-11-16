@@ -14,6 +14,6 @@ import { ProductMapper } from './product.mapper';
   imports: [TypeOrmModule.forFeature([Product]), UserModule, AuthModule],
   controllers: [ProductController],
   providers: [ProductService, ProductRepository, AdminStrategy, ProductMapper],
-  exports: [ProductService]
+  exports: [ProductService],
 })
 export class ProductModule {}

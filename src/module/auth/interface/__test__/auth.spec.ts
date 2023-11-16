@@ -72,7 +72,9 @@ describe('AuthController', () => {
       password: '12345678',
     };
 
-    const verifyMatchMock = jest.spyOn(authService, 'verifyMatch').mockResolvedValue(true);
+    const verifyMatchMock = jest
+      .spyOn(authService, 'verifyMatch')
+      .mockResolvedValue(true);
 
     const response = await request(app.getHttpServer())
       .post('/auth/login')

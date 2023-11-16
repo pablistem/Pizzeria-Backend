@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  HttpStatus,
   Get,
   UseGuards,
   Req,
@@ -30,15 +29,14 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     const response = await this.authService.login(res, loginDto);
-    res.json(response)
-    res.send()
+    res.json(response);
+    res.send();
   }
 
   @UseGuards(JwtGuard)
   @Get('logout')
   async logout(@Req() req: UserRequest) {
-    const userOut = await this.authService.logOut(req.user.id);
-    return HttpStatus.ACCEPTED;
+    return await this.authService.logOut(req.user.id);
   }
 
   @UseGuards(JwtGuard)

@@ -19,7 +19,7 @@ export class ProductService {
     @Inject(UserService)
     private readonly userService: UserService,
   ) {}
-  
+
   public productsList: Product[] = [];
 
   async create(
