@@ -9,7 +9,6 @@ import { IUserRepository } from '../repository/user.repository.interface';
 import { RoleEnum, User } from '../../domain/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../../infrastructure/user.repository';
-import { Auth } from '../../../../../src/module/auth/domain/auth.entity';
 
 @Injectable()
 export class UserService {
@@ -40,16 +39,12 @@ export class UserService {
     return saveUser;
   }
 
-  async saveSession(session: Auth) {
-    this.userRepository.saveSession(session);
-  }
-
   async findUserById(id: number): Promise<User> {
     return this.userRepository.findOneById(id);
   }
 
   async validateUserAdmin(userId: number): Promise<boolean> {
     const user = await this.findUserById(userId);
-    return user.role === RoleEnum.admin
+    return user.role === RoleEnum.admin;
   }
 }

@@ -1,13 +1,6 @@
 import { Category } from '../../../../src/module/category/application/domain/category.entity';
 import { Base } from '../../../common/domain/base.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Option } from '../../option/domain/option.entity';
 
 @Entity()

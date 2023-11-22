@@ -12,7 +12,13 @@ import { ProductModule } from '../product/product.module';
 import { ItemModule } from '../item/item.module';
 
 @Module({
-  imports: [UserModule, TypeOrmModule.forFeature([Order]), AuthModule, ProductModule, ItemModule],
+  imports: [
+    UserModule,
+    TypeOrmModule.forFeature([Order]),
+    AuthModule,
+    ProductModule,
+    ItemModule,
+  ],
   controllers: [OrderController],
   providers: [
     OrderMapper,

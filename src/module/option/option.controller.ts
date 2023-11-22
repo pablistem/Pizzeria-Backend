@@ -9,7 +9,6 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Patch,
   Post,
   Put,
   UseGuards,

@@ -5,7 +5,6 @@ import {
 } from '../repository/category.repository.interface';
 import { Category } from '../domain/category.entity';
 import { UserService } from '../../../../../src/module/user/application/service/user.service';
-import { RoleEnum } from '../../../../../src/module/user/domain/user.entity';
 
 @Injectable()
 export class CategoryService {
@@ -53,7 +52,7 @@ export class CategoryService {
   }
 
   async delete(id: number, userId: number): Promise<void> {
-    const admin = await this.userService.validateUserAdmin(userId)
+    const admin = await this.userService.validateUserAdmin(userId);
     if (admin) {
       const categoryFound = await this.categoryRepository.getCategoryById(id);
       if (categoryFound) {
@@ -83,5 +82,4 @@ export class CategoryService {
   async getAll(): Promise<Category[]> {
     return this.categoryRepository.getAll();
   }
-
 }

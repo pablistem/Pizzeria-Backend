@@ -6,8 +6,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as argon2 from 'argon2';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 import { CreateAuthDto, LoginDto } from '../dto/index';
 import { UserService } from '../../../user/application/service/user.service';
@@ -26,6 +27,11 @@ export class AuthService {
     private jwtService: JwtService,
     private config: ConfigService,
   ) {}
+
+  private COOKIE_NAME = this.config.get('HTTPONLY_COOKIE_NAME');
+  private ACCESS_TOKEN_SECRET = this.config.get('ACCESS_TOKEN_SECRET');
+  private REFRESH_TOKEN_SECRET = this.config.get('REFRESH_TOKEN_SECRET');
+
   async signUp(createAuthDto: CreateAuthDto) {
     try {
       const user = await this.userService.getUserByEmail(createAuthDto.email);
@@ -53,24 +59,26 @@ export class AuthService {
     }
   }
 
-  async login(loginDto: LoginDto) {
+  async verifyMatch(hash: string, password: string): Promise<boolean> {
+    return await argon2.verify(hash, password);
+  }
+
+  async login(res: Response, loginDto: LoginDto) {
     let userFound: User | null;
     try {
       userFound = await this.userService.getUserByEmail(loginDto.email);
     } catch (err) {}
 
     if (userFound) {
-      const match = await argon2.verify(userFound.hash, loginDto.password);
+      const match = await this.verifyMatch(userFound.hash, loginDto.password);
       if (match) {
-        const accessToken = await this.getRefreshToken(userFound);
-        const session = new Auth(accessToken, userFound.id);
-        const newSession = await this.authRepository.saveRefreshToken(session);
-        userFound.sessions = newSession;
-        const loginResponse = {
-          user: userFound.id,
-          token: accessToken,
-        };
-        return loginResponse;
+        const refreshToken = await this.getRefreshToken(userFound);
+        const session = new Auth(refreshToken, userFound);
+        await this.authRepository.saveRefreshToken(session);
+        await this.setCookies(res, refreshToken);
+        const accessToken = this.getAccessToken(userFound);
+        res.statusCode = 201;
+        return { accessToken: accessToken };
       } else {
         throw new HttpException(
           'Error: Please ensure all registration fields are filled correctly.',
@@ -86,7 +94,8 @@ export class AuthService {
   }
 
   async logOut(id: number) {
-    this.authRepository.removeRefreshToken(id);
+    const user: User = await this.userService.findUserById(id);
+    this.authRepository.removeRefreshToken(user.sessions.refreshToken);
   }
 
   async getRefreshToken(user: User) {
@@ -98,10 +107,10 @@ export class AuthService {
     const secret =
       this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST
         ? 'test_secret'
-        : this.config.get('ACCESS_TOKEN_SECRET');
+        : this.REFRESH_TOKEN_SECRET;
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: secret,
-      expiresIn: '15min',
+      expiresIn: 60 * 60 * 24 * 14,
     });
     return accessToken;
   }
@@ -110,7 +119,7 @@ export class AuthService {
     const secret =
       this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST
         ? 'test_secret'
-        : this.config.get('ACCESS_TOKEN_SECRET');
+        : this.ACCESS_TOKEN_SECRET;
     try {
       const decodedToken = this.jwtService.decode(token, secret);
       return decodedToken;
@@ -118,4 +127,42 @@ export class AuthService {
       return false;
     }
   }
+
+  private async setCookies(res: Response, refreshToken: string): Promise<void> {
+    const setConfig = {
+      httpOnly: true,
+      secure: true,
+      path: '/auth/session',
+      expires: new Date(new Date().getTime() + 60 * 60 * 24 * 14 * 1000),
+    };
+    res.cookie(this.COOKIE_NAME, refreshToken, setConfig);
+  }
+
+  private getAccessToken(user: User): string {
+    const payload = { id: user.id, email: user.email, role: user.role };
+    const options: JwtSignOptions = {
+      secret: this.ACCESS_TOKEN_SECRET,
+      expiresIn: 60 * 15,
+    };
+    const accessToken = this.jwtService.sign(payload, options);
+    return accessToken;
+  }
+
+  // async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
+  //   await this.authRepository.removeRefreshToken(refreshToken);
+
+  //   let userToRefresh: any;
+
+  //   const verify = await this.jwtService.verify(
+  //     refreshToken,
+  //     this.REFRESH_TOKEN_SECRET,
+  //   );
+
+  //   if (verify) {
+  //     const user = await this.userService.getUserByEmail(userToRefresh.email);
+  //     const accessToken = this.getAccessToken(user);
+
+  //     return { accessToken };
+  //   }
+  // }
 }

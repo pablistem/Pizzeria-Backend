@@ -1,5 +1,11 @@
 import { User } from '../../../module/user/domain/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Auth {
@@ -7,16 +13,14 @@ export class Auth {
   id: number;
 
   @Column()
-  idUser: number | undefined;
-
-  @Column()
   refreshToken: string;
 
-  @OneToOne(() => User, (user) => user.sessions)
+  @ManyToOne(() => User, (user) => user.sessions, { cascade: true })
+  @JoinColumn()
   user: User;
 
-  constructor(refreshToken: string, idUser?: number) {
-    this.idUser = idUser;
+  constructor(refreshToken: string, user: User) {
+    this.user = user;
     this.refreshToken = refreshToken;
   }
 }

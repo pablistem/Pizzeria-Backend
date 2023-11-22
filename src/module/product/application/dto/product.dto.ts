@@ -38,6 +38,6 @@ export class ProductDto {
   @IsNumber()
   @IsNotEmpty()
   stock: number;
-  
+
   options: Option[] | [];
 }
