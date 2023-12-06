@@ -2,6 +2,7 @@ import { Base } from '../../../common/domain/base.entity';
 import { Auth } from '../../auth/domain/auth.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Order } from '../../../module/order/domain/order.entity';
+import { Profile } from 'src/module/profile/domain/profile.entity';
 
 export enum RoleEnum {
   admin = 'admin',
@@ -23,9 +24,6 @@ export class User extends Base {
   @Column()
   role: string | undefined;
 
-  @Column({ default: '' })
-  phone: string | undefined;
-
   @OneToMany(() => Order, (order) => order.user)
   @JoinColumn()
   orders: Order[] | undefined;
@@ -34,6 +32,10 @@ export class User extends Base {
   @JoinColumn()
   sessions: Auth | undefined;
 
+  @OneToOne(() => Profile, (profile) => profile.id)
+  @JoinColumn()
+  profile: Profile | undefined;
+
   constructor(
     email: string,
     name: string,
@@ -41,7 +43,6 @@ export class User extends Base {
     hash?: string | undefined,
     verified?: boolean | undefined,
     role?: string | undefined,
-    phone?: string,
     createdAt?: Date | undefined,
     updatedAt?: Date | undefined,
     sessions?: undefined,
@@ -53,7 +54,6 @@ export class User extends Base {
     this.hash = hash;
     this.verified = verified;
     this.role = role;
-    this.phone = phone;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.sessions = sessions;

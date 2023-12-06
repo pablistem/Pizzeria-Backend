@@ -11,6 +11,7 @@ import { CommonModule } from './common/common.module';
 import { ItemModule } from './module/item/item.module';
 import { CategoryModule } from './module/category/category.module';
 import { OptionModule } from './module/option/option.module';
+import { ProfileModule } from './module/profile/profile.module';
 
 @Module({
   imports: [
@@ -31,10 +32,12 @@ import { OptionModule } from './module/option/option.module';
     AuthModule,
     OptionModule,
     ProductModule,
+    ProfileModule,
     OrderModule,
     CommonModule,
     ItemModule,
     CategoryModule,
   ],
+  controllers: [],
 })
 export class AppModule {}

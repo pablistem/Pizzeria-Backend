@@ -31,7 +31,7 @@ export class OptionController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Post('')
+  @Post()
   async create(@Body() data: CreateOptionDto) {
     return await this.optionService.create(data);
   }
