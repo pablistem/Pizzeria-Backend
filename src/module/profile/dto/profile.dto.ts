@@ -1,6 +1,5 @@
 import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { User } from 'src/module/user/domain/user.entity';
 
 export class CreateProfileDto {
   @ApiProperty()
@@ -21,7 +20,7 @@ export class CreateProfileDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  user: User;
+  user: number;
 }
 
 export class UpdateProfileDto extends PartialType(CreateProfileDto) {

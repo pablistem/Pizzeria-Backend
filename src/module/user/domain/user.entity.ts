@@ -32,9 +32,9 @@ export class User extends Base {
   @JoinColumn()
   sessions: Auth | undefined;
 
-  @OneToOne(() => Profile, (profile) => profile.id)
+  @OneToOne(() => Profile, (profile) => profile.id, { cascade: true })
   @JoinColumn()
-  profile: Profile | undefined;
+  profileId: number;
 
   constructor(
     email: string,

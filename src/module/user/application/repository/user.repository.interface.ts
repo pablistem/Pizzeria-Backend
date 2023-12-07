@@ -6,5 +6,5 @@ export interface IUserRepository {
   saveUser(user: User): Promise<User | null>;
   saveSession(session: Auth): Promise<void>;
   findOneById(id: number): Promise<User>;
-  editUser(id: number): Promise<User>;
+  // editUser(id: number): Promise<User>;
 }

@@ -18,7 +18,7 @@ export class Profile {
   @Column({ default: '' })
   address: string;
 
-  @OneToOne(() => User, (user) => user.profile, { cascade: true })
+  @OneToOne(() => User, (user) => user.profileId)
   @JoinColumn()
-  user: User | undefined;
+  user: number;
 }

@@ -5,13 +5,13 @@ export const anonUser: User = {
   email: 'anon@email.com',
   name: 'anon',
   lastName: 'anon',
+  profileId: 1,
   hash: '',
   verified: true,
   role: RoleEnum.user,
   sessions: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  phone: '',
   orders: [],
 };
 
@@ -20,13 +20,13 @@ export const normalUser: User = {
   email: 'normal@email.com',
   name: 'normal',
   lastName: 'normal',
+  profileId: 2,
   hash: '',
   verified: true,
   role: RoleEnum.user,
   sessions: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  phone: '',
   orders: [],
 };
 
@@ -35,6 +35,7 @@ export const adminUser = {
   email: 'admin@email.com',
   name: 'admin',
   lastName: 'admin',
+  profileId: 3,
   hash: '',
   verified: true,
   role: RoleEnum.admin,
