@@ -7,6 +7,7 @@ import { CreateUserDto } from '../../../user/application/dto/create-user.dto';
 import { AuthService } from '../../application/service/auth.service';
 import { loadFixtures } from '../../../../../src/common/fixtures/loader';
 import { tokens } from '../../../../../src/common/fixtures/user';
+import { refreshTokenUser } from './../../../../../src/common/fixtures/auth';
 
 describe('AuthController', () => {
   let app: INestApplication;
@@ -120,5 +121,14 @@ describe('AuthController', () => {
 
   afterAll(async () => {
     await app.close();
+  });
+
+  it('Should refresh token', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/auth/session')
+      .auth(tokens.normalUserToken, { type: 'bearer' })
+      .set('Cookie', `pizza=${refreshTokenUser}`);
+
+    console.log(res.body, res.header['set-cookie']);
   });
 });
