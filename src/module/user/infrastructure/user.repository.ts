@@ -3,7 +3,7 @@ import { IUserRepository } from '../application/repository/user.repository.inter
 import { User } from '../domain/user.entity';
 import { Inject, Injectable } from '@nestjs/common/decorators';
 import { ConfigService } from '@nestjs/config';
-import { getUserTestDb } from './__test__/user.test.db';
+// import { getUserTestDb } from './__test__/user.test.db';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -35,8 +35,8 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  async loadTestData() {
-    const testUsers = await getUserTestDb();
-    await this.repository.save(testUsers);
-  }
+  // async loadTestData() {
+  //   const testUsers = await getUserTestDb();
+  //   await this.repository.save(testUsers);
+  // }
 }
