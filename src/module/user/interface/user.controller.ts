@@ -7,6 +7,7 @@ import { UserRepository } from '../infrastructure/user.repository';
 import { ENVIRONMENTS } from '../../../../ormconfig';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
+import { ProfileService } from 'src/module/profile/profile.service';
 
 @ApiTags('User')
 // @UseGuards(JwtGuard)
@@ -14,6 +15,7 @@ import { Request } from 'express';
 export class UserController {
   constructor(
     private readonly userService: UserService,
+    private readonly profileService: ProfileService,
     private readonly userRepository: UserRepository,
     private readonly config: ConfigService,
   ) {}

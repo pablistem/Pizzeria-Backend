@@ -27,11 +27,11 @@ export class ProfileRepository implements IProfileRepository {
     return this.repository.save(profile);
   }
 
-  async delete(id: number): Promise<void> {
+  async remove(id: number): Promise<void> {
     const profileFound = await this.repository.findOne({
       where: { id: id },
       relations: ['user'],
     });
-    await this.repository.delete(profileFound);
+    await this.repository.remove(profileFound);
   }
 }

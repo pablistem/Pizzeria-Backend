@@ -14,3 +14,5 @@ export const profile2: Profile = {
   address: 'Calle Avellaneda',
   userId: adminUser,
 };
+
+export const profileFixtures = [profile1, profile2];

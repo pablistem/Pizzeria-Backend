@@ -23,7 +23,7 @@ export class ProfileController {
   @UseGuards(JwtGuard)
   @Get(':id')
   async getProfile(@Param('id', ParseIntPipe) profileId: number) {
-    await this.profileService.getOne(profileId);
+    return await this.profileService.getOne(profileId);
   }
 
   @ApiBearerAuth()
@@ -45,7 +45,7 @@ export class ProfileController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @Delete('id')
+  @Delete(':id')
   async delete(@Param('id', ParseIntPipe) profileId: number) {
     return await this.profileService.remove(profileId);
   }

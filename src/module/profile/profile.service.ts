@@ -17,19 +17,19 @@ export class ProfileService {
     private readonly profileRepository: IProfileRepository,
   ) {}
 
-  async getOne(id: number): Promise<Profile> {
-    try {
-      return await this.profileRepository.findOne(id);
-    } catch (error) {
-      throw new NotFoundException(error);
-    }
-  }
-
   async create(profile: ICreateProfile): Promise<HttpException | Profile> {
     try {
       return await this.profileRepository.save(profile);
     } catch (error) {
       throw new BadRequestException('All the fields should be filled out');
+    }
+  }
+
+  async getOne(id: number): Promise<Profile> {
+    try {
+      return await this.profileRepository.findOne(id);
+    } catch (error) {
+      throw new NotFoundException('Profile not found');
     }
   }
 
@@ -46,7 +46,7 @@ export class ProfileService {
     if (!profileFound) {
       throw new NotFoundException('profile not found');
     } else {
-      return await this.profileRepository.delete(profileFound.id);
+      return await this.profileRepository.remove(profileFound.id);
     }
   }
 }

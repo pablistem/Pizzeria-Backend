@@ -1,4 +1,3 @@
-import { User } from 'src/module/user/domain/user.entity';
 import {
   Entity,
   Column,
@@ -6,6 +5,7 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from 'src/module/user/domain/user.entity';
 
 @Entity()
 export class Profile {
