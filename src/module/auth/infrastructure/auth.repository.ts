@@ -17,7 +17,11 @@ export class AuthRepository implements IAuthRepository {
   async removeRefreshToken(token: string) {
     const session = await this.repository.findOne({
       where: { refreshToken: token },
+      relations: { user: true },
     });
+
+    if (!session) throw new Error('Session not found');
+
     await this.repository.remove(session);
   }
 }

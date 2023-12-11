@@ -20,6 +20,9 @@ import { ENVIRONMENTS } from '../../../../../ormconfig';
 
 @Injectable()
 export class AuthService {
+  private COOKIE_NAME = this.config.get('HTTPONLY_COOKIE_NAME');
+  private ACCESS_TOKEN_SECRET = this.config.get('ACCESS_TOKEN_SECRET');
+  private REFRESH_TOKEN_SECRET = this.config.get('REFRESH_TOKEN_SECRET');
   constructor(
     @Inject(AuthRepository)
     private readonly authRepository: IAuthRepository,
@@ -27,10 +30,6 @@ export class AuthService {
     private jwtService: JwtService,
     private config: ConfigService,
   ) {}
-
-  private COOKIE_NAME = this.config.get('HTTPONLY_COOKIE_NAME');
-  private ACCESS_TOKEN_SECRET = this.config.get('ACCESS_TOKEN_SECRET');
-  private REFRESH_TOKEN_SECRET = this.config.get('REFRESH_TOKEN_SECRET');
 
   async signUp(createAuthDto: CreateAuthDto) {
     try {
@@ -148,21 +147,23 @@ export class AuthService {
     return accessToken;
   }
 
-  // async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
-  //   await this.authRepository.removeRefreshToken(refreshToken);
+  async refreshToken(refreshToken: string): Promise<string> {
+    try {
+      await this.authRepository.removeRefreshToken(refreshToken);
 
-  //   let userToRefresh: any;
+      const verify = this.jwtService.verify(refreshToken, {
+        secret: this.REFRESH_TOKEN_SECRET,
+      });
 
-  //   const verify = await this.jwtService.verify(
-  //     refreshToken,
-  //     this.REFRESH_TOKEN_SECRET,
-  //   );
-
-  //   if (verify) {
-  //     const user = await this.userService.getUserByEmail(userToRefresh.email);
-  //     const accessToken = this.getAccessToken(user);
-
-  //     return { accessToken };
-  //   }
-  // }
+      if (verify) {
+        const user = await this.userService.getUserByEmail(verify.email);
+        const accessToken = await this.getRefreshToken(user);
+        const newAuth = new Auth(accessToken, user);
+        await this.authRepository.saveRefreshToken(newAuth);
+        return accessToken;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
