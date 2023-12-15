@@ -147,23 +147,21 @@ export class AuthService {
     return accessToken;
   }
 
-  async refreshToken(refreshToken: string): Promise<string> {
-    try {
+  async refreshToken(refreshToken: string, res: Response): Promise<string> {
+    const verify = this.jwtService.verify(refreshToken, {
+      secret: this.REFRESH_TOKEN_SECRET,
+    });
+
+    if (verify) {
+      const user = await this.userService.getUserByEmail(verify.email);
+      const accessToken = this.getAccessToken(user);
+      const newRefreshToken = await this.getRefreshToken(user);
+      await this.setCookies(res, newRefreshToken);
+      const newAuth = new Auth(newRefreshToken, user);
+
+      await this.authRepository.saveRefreshToken(newAuth);
       await this.authRepository.removeRefreshToken(refreshToken);
-
-      const verify = this.jwtService.verify(refreshToken, {
-        secret: this.REFRESH_TOKEN_SECRET,
-      });
-
-      if (verify) {
-        const user = await this.userService.getUserByEmail(verify.email);
-        const accessToken = await this.getRefreshToken(user);
-        const newAuth = new Auth(accessToken, user);
-        await this.authRepository.saveRefreshToken(newAuth);
-        return accessToken;
-      }
-    } catch (error) {
-      throw error;
+      return accessToken;
     }
   }
 }

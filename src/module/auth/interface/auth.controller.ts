@@ -39,17 +39,16 @@ export class AuthController {
     return await this.authService.logOut(req.user.id);
   }
 
-  @UseGuards(JwtGuard)
-  @Post('session')
+  @Get('session')
   async refreshSession(@Req() req: Request, @Res() res: Response) {
     const cookie = req.headers.cookie;
     if (cookie === undefined) {
       throw new HttpException('Access denied', 403);
     }
-    const httpOnlyToken: string = cookie?.split('=')[1].split(';')[0];
-    const newAccessToken = await this.authService.refreshToken(httpOnlyToken);
+    const httpOnlyToken: string = cookie?.split('=')[1]
+    const newSession = await this.authService.refreshToken(httpOnlyToken, res);
 
-    res.status(200);
-    res.json(newAccessToken);
+    res.setHeader('Content-Type', 'application/json')
+    res.json({accessToken:newSession})
   }
 }
