@@ -13,6 +13,7 @@ export const anonUser: User = {
   updatedAt: undefined,
   phone: '',
   orders: [],
+  profile: undefined,
 };
 
 export const normalUser: User = {
@@ -28,6 +29,7 @@ export const normalUser: User = {
   updatedAt: undefined,
   phone: '',
   orders: [],
+  profile: undefined,
 };
 
 export const adminUser = {
@@ -41,6 +43,7 @@ export const adminUser = {
   sessions: undefined,
   createdAt: undefined,
   updatedAt: undefined,
+  profile: undefined,
 };
 const anonUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbm9uQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.CtgSSoHXymS8XjDSIc02wDJFQNX_95wmwRlfjEtHKkE';
