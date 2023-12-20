@@ -45,10 +45,11 @@ export class AuthController {
     if (cookie === undefined) {
       throw new HttpException('Access denied', 403);
     }
-    const httpOnlyToken: string = cookie?.split('=')[1]
+    const httpOnlyToken: string = cookie?.split('=')[1];
+
     const newSession = await this.authService.refreshToken(httpOnlyToken, res);
 
-    res.setHeader('Content-Type', 'application/json')
-    res.json({accessToken:newSession})
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ accessToken: newSession });
   }
 }

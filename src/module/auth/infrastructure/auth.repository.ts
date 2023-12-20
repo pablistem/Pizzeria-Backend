@@ -15,7 +15,6 @@ export class AuthRepository implements IAuthRepository {
   }
 
   async removeRefreshToken(token: string) {
-    console.log(token)
     const session = await this.repository.findOne({
       where: { refreshToken: token },
     });
