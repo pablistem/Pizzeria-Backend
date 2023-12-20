@@ -148,20 +148,27 @@ export class AuthService {
   }
 
   async refreshToken(refreshToken: string, res: Response): Promise<string> {
-    const verify = this.jwtService.verify(refreshToken, {
-      secret: this.REFRESH_TOKEN_SECRET,
-    });
+    const secret =
+      this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST
+        ? 'test_secret'
+        : this.REFRESH_TOKEN_SECRET;
 
-    if (verify) {
+    try {
+      const verify = this.jwtService.verify(refreshToken, {
+        secret,
+      });
       const user = await this.userService.getUserByEmail(verify.email);
+
       const accessToken = this.getAccessToken(user);
       const newRefreshToken = await this.getRefreshToken(user);
-      await this.setCookies(res, newRefreshToken);
       const newAuth = new Auth(newRefreshToken, user);
 
+      await this.setCookies(res, newRefreshToken);
       await this.authRepository.saveRefreshToken(newAuth);
       await this.authRepository.removeRefreshToken(refreshToken);
       return accessToken;
+    } catch (error) {
+      throw new HttpException('invalid token', 403)
     }
   }
 }
