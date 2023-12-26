@@ -7,6 +7,7 @@ import { CreateUserDto } from '../../../user/application/dto/create-user.dto';
 import { AuthService } from '../../application/service/auth.service';
 import { loadFixtures } from '../../../../../src/common/fixtures/loader';
 import { tokens } from '../../../../../src/common/fixtures/user';
+import { refreshTokenUser } from './../../../../../src/common/fixtures/auth';
 
 describe('AuthController', () => {
   let app: INestApplication;
@@ -120,5 +121,29 @@ describe('AuthController', () => {
 
   afterAll(async () => {
     await app.close();
+  });
+
+  it('Should refresh token and cookie', async () => {
+    const { body, header, error } = await request(app.getHttpServer())
+      .get('/auth/session')
+      .set('Cookie', `pizza=${refreshTokenUser}`);
+
+    expect(body.accessToken).toBeDefined()
+    expect(header['set-cookie']).toBeDefined()
+  });
+
+  it('Should get 403 when cookie is not defined', async () => {
+    const res = await request(app.getHttpServer()).get('/auth/session');
+    expect(res.statusCode).toEqual(403);
+    expect(res.error).toBeDefined();
+  });
+
+  it('Should get error sending an invalid token', async () => {
+    const invalidToken = 'none' + refreshTokenUser;
+    const res = await request(app.getHttpServer())
+      .get('/auth/session')
+      .set('Cookie', `pizza=${invalidToken}`);
+    expect(res.statusCode).toEqual(403);
+    expect(res.error).toBeDefined();
   });
 });

@@ -13,6 +13,8 @@ import { userFixtures } from './user';
 import { productFixtures } from './product';
 import { categoryFixture } from './category';
 import { optionFixtures } from './option';
+import { authFixture } from './auth';
+import { Auth } from 'src/module/auth/domain/auth.entity';
 
 export const loadFixtures = async (app: INestApplication) => {
   await request(app.getHttpServer())
@@ -38,4 +40,8 @@ export const loadFixtures = async (app: INestApplication) => {
   await request(app.getHttpServer())
     .post('/loader')
     .send({ fixtures: itemFixtures, entity: Item.name });
+
+  await request(app.getHttpServer())
+    .post('/loader')
+    .send({ fixtures: authFixture, entity: Auth.name });
 };
