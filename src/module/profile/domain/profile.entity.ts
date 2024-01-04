@@ -12,13 +12,16 @@ export class Profile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: '' })
+  @Column({ name: 'full_name', default: '', type: 'text', unique: true })
+  fullName: string;
+
+  @Column({ name: 'phone', default: '', type: 'int', unique: true })
   phone: number;
 
-  @Column({ default: '' })
+  @Column({ name: 'address', default: '', type: 'varchar', unique: true })
   address: string;
 
   @OneToOne(() => User, (user) => user.profileId)
-  @JoinColumn()
-  userId: User;
+  @JoinColumn({ name: 'user_id' })
+  userId: User | number;
 }

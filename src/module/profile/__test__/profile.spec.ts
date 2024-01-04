@@ -31,7 +31,7 @@ describe('Profile', () => {
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .expect(404);
     });
-    it('Get profile', async () => {
+    it('Get normal user profile', async () => {
       const { body } = await request(app.getHttpServer())
         .get('/profile/1')
         .auth(tokens.normalUserToken, { type: 'bearer' })
@@ -77,6 +77,17 @@ describe('Profile', () => {
         .send(changes)
         .expect(401);
     });
+    it('Profile not found', async () => {
+      const changes: UpdateProfileDto = {
+        id: 1,
+        phone: 261000006,
+      };
+      await request(app.getHttpServer())
+        .put('/profile/3')
+        .auth(tokens.normalUserToken, { type: 'bearer' })
+        .send(changes)
+        .expect(404);
+    });
     it('Profile updated successfully', async () => {
       const changes: UpdateProfileDto = {
         id: 1,
@@ -86,7 +97,7 @@ describe('Profile', () => {
         .put('/profile/1')
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .send(changes)
-        .expect(201);
+        .expect(200);
     });
   });
 
@@ -100,7 +111,7 @@ describe('Profile', () => {
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .expect(404);
     });
-    it('Profile not found', async () => {
+    it('Profile removed sucessfully', async () => {
       await request(app.getHttpServer())
         .delete('/profile/1')
         .auth(tokens.normalUserToken, { type: 'bearer' })

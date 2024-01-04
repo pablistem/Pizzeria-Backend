@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
+
 import { AppModule } from '../../../../src/app.module';
 import { tokens } from '../../../../src/common/fixtures/user';
 import { loadFixtures } from '../../../../src/common/fixtures/loader';

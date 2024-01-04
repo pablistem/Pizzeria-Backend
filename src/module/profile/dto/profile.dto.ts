@@ -10,6 +10,11 @@ export class CreateProfileDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsString()
+  fullName: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   @IsNumber()
   phone: number;
 
