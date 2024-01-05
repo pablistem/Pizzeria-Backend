@@ -4,7 +4,6 @@ import { UserService } from '../application/service/user.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../../../common/guards/jwt.guard';
 import { UserRepository } from '../infrastructure/user.repository';
-import { ENVIRONMENTS } from '../../../../ormconfig';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 
@@ -22,13 +21,5 @@ export class UserController {
   @Get('me')
   async getMe(@Req() req: Request) {
     return req.user;
-  }
-
-  @Get('reset')
-  async loadTestDb() {
-    if (this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST) {
-      await this.userRepository.loadTestData();
-    }
-    return 'ok';
   }
 }

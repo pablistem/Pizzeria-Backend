@@ -43,7 +43,8 @@ export const adminUser = {
   sessions: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  profile: undefined,
+  phone: '',
+  orders: [],
 };
 const anonUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbm9uQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.CtgSSoHXymS8XjDSIc02wDJFQNX_95wmwRlfjEtHKkE';
