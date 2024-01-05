@@ -124,12 +124,12 @@ describe('AuthController', () => {
   });
 
   it('Should refresh token and cookie', async () => {
-    const { body, header, error } = await request(app.getHttpServer())
+    const { body, header } = await request(app.getHttpServer())
       .get('/auth/session')
       .set('Cookie', `pizza=${refreshTokenUser}`);
 
-    expect(body.accessToken).toBeDefined()
-    expect(header['set-cookie']).toBeDefined()
+    expect(body.accessToken).toBeDefined();
+    expect(header['set-cookie']).toBeDefined();
   });
 
   it('Should get 403 when cookie is not defined', async () => {

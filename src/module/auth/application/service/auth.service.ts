@@ -168,7 +168,7 @@ export class AuthService {
       await this.authRepository.removeRefreshToken(refreshToken);
       return accessToken;
     } catch (error) {
-      throw new HttpException('invalid token', 403)
+      throw new HttpException('invalid token', 403);
     }
   }
 }
