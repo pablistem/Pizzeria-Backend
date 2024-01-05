@@ -1,24 +1,16 @@
-import { OrderStatus } from 'src/module/item/domain/item.entity';
-import { Order } from 'src/module/order/domain/order.entity';
+import { OrderStatus } from '../../../src/module/item/domain/item.entity';
 import { normalUser } from './user';
-import { item1, item2, item3 } from './item';
 
-export const order1: Order = {
+export const order1 = {
   id: 1,
   status: OrderStatus.pending,
-  user: normalUser,
-  items: [item1, item2],
-  createdAt: undefined,
-  updatedAt: undefined,
+  user: normalUser.id,
   total: 0,
 };
-export const order2: Order = {
+export const order2 = {
   id: 2,
   status: OrderStatus.delivered,
-  user: normalUser,
-  items: [item3],
-  createdAt: undefined,
-  updatedAt: undefined,
+  user: normalUser.id,
   total: 0,
 };
 
