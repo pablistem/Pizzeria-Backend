@@ -45,6 +45,7 @@ export const adminUser = {
   updatedAt: undefined,
   phone: '',
   orders: [],
+  profile: undefined
 };
 const anonUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbm9uQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.CtgSSoHXymS8XjDSIc02wDJFQNX_95wmwRlfjEtHKkE';
