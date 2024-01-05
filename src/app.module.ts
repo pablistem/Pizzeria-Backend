@@ -11,6 +11,7 @@ import { CommonModule } from './common/common.module';
 import { ItemModule } from './module/item/item.module';
 import { CategoryModule } from './module/category/category.module';
 import { OptionModule } from './module/option/option.module';
+import { TestModule } from './module/test/test.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { OptionModule } from './module/option/option.module';
     CommonModule,
     ItemModule,
     CategoryModule,
+    TestModule,
   ],
 })
 export class AppModule {}
