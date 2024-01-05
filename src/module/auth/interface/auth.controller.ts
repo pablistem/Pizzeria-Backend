@@ -6,10 +6,9 @@ import {
   UseGuards,
   Req,
   Res,
-  HttpException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 import { AuthService } from '../application/service/auth.service';
 import { LoginDto, CreateAuthDto } from '../application/dto';
