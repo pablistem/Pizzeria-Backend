@@ -10,7 +10,7 @@ import { loadFixtures } from 'src/common/fixtures/loader';
 import { orderFixtures } from 'src/common/fixtures/order';
 import { tokens } from 'src/common/fixtures/user';
 import { CreateOrderDto } from '../../application/dto/create-order.dto';
-import { product2, product3 } from 'src/common/fixtures/product';
+import { product1, product2 } from 'src/common/fixtures/product';
 
 describe('Order', () => {
   let app: INestApplication;
@@ -79,7 +79,7 @@ describe('Order', () => {
   describe('POST /order', () => {
     it('Should create order as admin', async () => {
       const newOrder: CreateOrderDto = {
-        items: [{ product: product3, quantity: 100 }],
+        items: [{ product: product1.id, quantity: 100 }],
       };
       const { body } = await request(app.getHttpServer())
         .post('/order')
@@ -90,7 +90,7 @@ describe('Order', () => {
     });
     it('Should create order as normal user', async () => {
       const newOrder: CreateOrderDto = {
-        items: [{ product: product2, quantity: 50 }],
+        items: [{ product: product2.id, quantity: 50 }],
       };
       const { body } = await request(app.getHttpServer())
         .post('/order')
