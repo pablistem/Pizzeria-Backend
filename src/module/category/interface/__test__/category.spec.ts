@@ -57,7 +57,7 @@ describe('Category', () => {
 
     it('Should not create category as user ', async () => {
       const newCategory: createCategoryDto = { name: 'newCategory' };
-      const { body } = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/category/create')
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .send(newCategory)
@@ -65,7 +65,7 @@ describe('Category', () => {
     });
     it('Should not create category with duplicate name', async () => {
       const newCategory: createCategoryDto = { name: 'newCategory' };
-      const { body } = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/category/create')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newCategory)

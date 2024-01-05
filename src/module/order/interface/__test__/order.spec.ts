@@ -4,7 +4,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from '../../../../app.module';
 
-import { Order, OrderStatus } from '../../domain/order.entity';
+import { OrderStatus } from '../../domain/order.entity';
 import { UpdateOrderDto } from '../../application/dto/update-order.dto';
 import { loadFixtures } from 'src/common/fixtures/loader';
 import { orderFixtures } from 'src/common/fixtures/order';

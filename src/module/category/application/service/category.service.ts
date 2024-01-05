@@ -5,7 +5,6 @@ import {
 } from '../repository/category.repository.interface';
 import { Category } from '../domain/category.entity';
 import { UserService } from '../../../../../src/module/user/application/service/user.service';
-import { RoleEnum } from '../../../../../src/module/user/domain/user.entity';
 
 @Injectable()
 export class CategoryService {

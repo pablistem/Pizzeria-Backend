@@ -1,22 +1,19 @@
+import { Base } from './../../../../src/common/domain/base.entity';
 import { User } from '../../../module/user/domain/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
-export class Auth {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  idUser: number | undefined;
-
+export class Auth extends Base {
   @Column()
   refreshToken: string;
 
-  @OneToOne(() => User, (user) => user.sessions)
+  @ManyToOne(() => User, (user) => user.sessions)
+  @JoinColumn()
   user: User;
 
-  constructor(refreshToken: string, idUser?: number) {
-    this.idUser = idUser;
+  constructor(refreshToken: string, user: User) {
+    super();
+    this.user = user;
     this.refreshToken = refreshToken;
   }
 }

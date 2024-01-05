@@ -10,13 +10,15 @@ export class AuthRepository implements IAuthRepository {
     this.repository = this.dataSource.getRepository(Auth);
   }
   async saveRefreshToken(session: Auth): Promise<Auth> {
-    const savedToken = this.repository.create(session);
-    const newSession = await this.repository.save(savedToken);
+    const newSession = await this.repository.save(session);
     return newSession;
   }
 
-  async removeRefreshToken(id: number) {
-    const session = await this.repository.findOne({ where: { id } });
+  async removeRefreshToken(token: string) {
+    const session = await this.repository.findOne({
+      where: { refreshToken: token },
+    });
+
     await this.repository.remove(session);
   }
 }

@@ -19,13 +19,20 @@ export class ProductService {
     @Inject(UserService)
     private readonly userService: UserService,
   ) {}
-  async create(product: Product, userId:number): Promise<HttpException | Product> {
-    const admin = await this.userService.validateUserAdmin(userId)
-    if (admin) {
-      return await this.productRepository.save(product);
 
+  public productsList: Product[] = [];
+
+  async create(
+    product: Product,
+    userId: number,
+  ): Promise<HttpException | Product> {
+    const admin = await this.userService.validateUserAdmin(userId);
+    if (admin) {
+      const productSaved = await this.productRepository.save(product);
+      this.refreshList();
+      return productSaved;
     } else {
-      throw new HttpException('User have not access', HttpStatus.UNAUTHORIZED)
+      throw new HttpException('User have not access', HttpStatus.UNAUTHORIZED);
     }
   }
 
@@ -62,5 +69,17 @@ export class ProductService {
 
   async getAllProducts() {
     return this.productRepository.getAll();
+  }
+
+  updateList = async () => {
+    this.productsList = await this.getAllProducts();
+  };
+
+  async onApplicationBootstrap() {
+    await this.updateList();
+  }
+
+  async refreshList() {
+    await this.getAllProducts();
   }
 }

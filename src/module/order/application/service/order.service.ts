@@ -6,7 +6,6 @@ import {
 import { Order, OrderStatus } from '../../domain/order.entity';
 import { UserService } from '../../../../module/user/application/service/user.service';
 import { RoleEnum } from '../../../../module/user/domain/user.entity';
-
 import {
   CannotAccessOrderException,
   CannotUpdateOrderException,
@@ -14,7 +13,7 @@ import {
 import { Item } from 'src/module/item/domain/item.entity';
 import { ProductService } from 'src/module/product/application/service/product.service';
 import { ItemService } from 'src/module/item/application/service/item.service';
-import { DeleteResult } from 'typeorm';
+
 @Injectable()
 export class OrderService {
   constructor(
@@ -24,7 +23,7 @@ export class OrderService {
     @Inject(ItemService) private itemService: ItemService,
   ) {}
 
-  async delete(userId: number, orderId: number): Promise<DeleteResult> {
+  async delete(userId: number, orderId: number): Promise<void> {
     const user = await this.userService.findUserById(userId);
     if (user.role === RoleEnum.admin) {
       const orderToDelete = await this.findById(userId, orderId);
@@ -32,14 +31,14 @@ export class OrderService {
         throw new NotFoundException();
       }
       await this.itemService.deleteRelation(orderToDelete.items);
-      return await this.orderRepository.delete(orderId);
+      await this.orderRepository.delete(orderId);
     }
     const order = user.orders.find((order) => order.id === orderId);
     if (!order) {
       throw new CannotAccessOrderException();
     }
     await this.itemService.deleteRelation(order.items);
-    return await this.orderRepository.delete(orderId);
+    await this.orderRepository.delete(orderId);
   }
 
   async findAll(userId: number): Promise<Order[]> {

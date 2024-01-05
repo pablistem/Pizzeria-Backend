@@ -5,6 +5,9 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { AppModule } from '../../../../app.module';
 import { CreateUserDto } from '../../../user/application/dto/create-user.dto';
 import { AuthService } from '../../application/service/auth.service';
+import { loadFixtures } from '../../../../../src/common/fixtures/loader';
+import { tokens } from '../../../../../src/common/fixtures/user';
+import { refreshTokenUser } from './../../../../../src/common/fixtures/auth';
 
 describe('AuthController', () => {
   let app: INestApplication;
@@ -16,14 +19,14 @@ describe('AuthController', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
-
     authService = app.get<AuthService>(AuthService);
+
     await app.init();
 
-    await request(app.getHttpServer()).get('/user/reset');
+    await loadFixtures(app);
   });
 
-  it('should be register an user (201)', async () => {
+  it('Should be register an user (201)', async () => {
     const userRegister: CreateUserDto = {
       name: 'TEST_NAME',
       lastName: 'TEST_LASTNAME',
@@ -53,33 +56,39 @@ describe('AuthController', () => {
 
   it('Should return a user-type token after logging in.', async () => {
     const userLogin: CreateUserDto = {
-      email: 'testUser@email.com',
-      password: 'user_password',
+      email: 'TEST@email.com',
+      password: 'TEST_PASSWORD',
     };
 
     const response = await request(app.getHttpServer())
       .post('/auth/login')
       .send(userLogin);
-    const authResponse: { user: number; token: string } = response.body;
-    const token = await authService.decodeToken(authResponse.token);
+    const authResponse: { accessToken: string } = response.body;
+    const token = await authService.decodeToken(authResponse.accessToken);
     expect(token).toMatchObject({ role: 'user' });
   });
 
   it('Should return a admin-type token after logging in.', async () => {
     const userLogin: CreateUserDto = {
-      email: 'adminUser@email.com',
-      password: 'admin_password',
+      email: 'admin@email.com',
+      password: '12345678',
     };
+
+    const verifyMatchMock = jest
+      .spyOn(authService, 'verifyMatch')
+      .mockResolvedValue(true);
 
     const response = await request(app.getHttpServer())
       .post('/auth/login')
       .send(userLogin);
-    const authResponse: { user: number; token: string } = response.body;
-    const token = await authService.decodeToken(authResponse.token);
+    const { accessToken } = response.body;
+    const token = await authService.decodeToken(accessToken);
     expect(token).toMatchObject({ role: 'admin' });
+    expect(verifyMatchMock).toBeCalledTimes(1);
+    verifyMatchMock.mockRestore();
   });
 
-  it('should be unauthorized try login with false email (401)', async () => {
+  it('Should be unauthorized try login with false email (401)', async () => {
     const userLogin: CreateUserDto = {
       email: 'TEST_false@email.com',
       password: 'TEST_PASSWORD',
@@ -91,7 +100,7 @@ describe('AuthController', () => {
       .expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('should be unauthorized try login with false password (401)', async () => {
+  it('Should be unauthorized try login with false password (401)', async () => {
     const userLogin: CreateUserDto = {
       email: 'TEST@email.com',
       password: 'TEST_PASSWORD_FALSE',
@@ -103,7 +112,38 @@ describe('AuthController', () => {
       .expect(HttpStatus.UNAUTHORIZED);
   });
 
+  it('Should logout user', async () => {
+    await request(app.getHttpServer())
+      .get('/auth/logout')
+      .auth(tokens.adminUserToken, { type: 'bearer' })
+      .expect(HttpStatus.OK);
+  });
+
   afterAll(async () => {
     await app.close();
+  });
+
+  it('Should refresh token and cookie', async () => {
+    const { body, header, error } = await request(app.getHttpServer())
+      .get('/auth/session')
+      .set('Cookie', `pizza=${refreshTokenUser}`);
+
+    expect(body.accessToken).toBeDefined()
+    expect(header['set-cookie']).toBeDefined()
+  });
+
+  it('Should get 403 when cookie is not defined', async () => {
+    const res = await request(app.getHttpServer()).get('/auth/session');
+    expect(res.statusCode).toEqual(403);
+    expect(res.error).toBeDefined();
+  });
+
+  it('Should get error sending an invalid token', async () => {
+    const invalidToken = 'none' + refreshTokenUser;
+    const res = await request(app.getHttpServer())
+      .get('/auth/session')
+      .set('Cookie', `pizza=${invalidToken}`);
+    expect(res.statusCode).toEqual(403);
+    expect(res.error).toBeDefined();
   });
 });

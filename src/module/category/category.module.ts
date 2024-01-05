@@ -7,7 +7,6 @@ import { AuthModule } from '../auth/auth.module';
 import { CATEGORY_REPOSITORY } from './application/repository/category.repository.interface';
 import { CategoryService } from './application/service/category.service';
 import { CategoryMapper } from './application/category.mapper';
-import { UserService } from '../user/application/service/user.service';
 import { UserModule } from '../user/user.module';
 
 @Module({
