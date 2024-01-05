@@ -1,16 +1,15 @@
-import { Category } from '../../../src/module/category/application/domain/category.entity';
-export const category1: Category = {
+export const category1 = {
   id: 1,
   name: 'category1',
   products: [],
 };
-export const category2: Category = {
+export const category2 = {
   id: 2,
   name: 'category2',
   products: [],
 };
 
-export const category3: Category = {
+export const category3 = {
   id: 3,
   name: 'category3',
   products: [],
