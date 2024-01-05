@@ -1,6 +1,6 @@
-import { RoleEnum, User } from 'src/module/user/domain/user.entity';
+import { RoleEnum } from 'src/module/user/domain/user.entity';
 
-export const anonUser: User = {
+export const anonUser = {
   id: 1,
   email: 'anon@email.com',
   name: 'anon',
@@ -8,14 +8,10 @@ export const anonUser: User = {
   hash: '',
   verified: true,
   role: RoleEnum.user,
-  sessions: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
   phone: '',
-  orders: [],
 };
 
-export const normalUser: User = {
+export const normalUser = {
   id: 2,
   email: 'normal@email.com',
   name: 'normal',
@@ -23,11 +19,7 @@ export const normalUser: User = {
   hash: '',
   verified: true,
   role: RoleEnum.user,
-  sessions: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
   phone: '',
-  orders: [],
 };
 
 export const adminUser = {
@@ -38,11 +30,7 @@ export const adminUser = {
   hash: '',
   verified: true,
   role: RoleEnum.admin,
-  sessions: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
   phone: '',
-  orders: [],
 };
 const anonUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbm9uQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.CtgSSoHXymS8XjDSIc02wDJFQNX_95wmwRlfjEtHKkE';
