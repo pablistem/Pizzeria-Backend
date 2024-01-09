@@ -92,9 +92,18 @@ export class AuthService {
     }
   }
 
-  async logOut(id: number) {
+  private async removeCookie(res: Response): Promise<void> {
+    res.clearCookie(this.COOKIE_NAME, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
+  }
+
+  async logOut(id: number, res: Response) {
     const user: User = await this.userService.findUserById(id);
     this.authRepository.removeRefreshToken(user.sessions.refreshToken);
+    this.removeCookie(res);
   }
 
   async getRefreshToken(user: User) {
@@ -168,7 +177,7 @@ export class AuthService {
       await this.authRepository.removeRefreshToken(refreshToken);
       return accessToken;
     } catch (error) {
-      throw new HttpException('invalid token', 403)
+      throw new HttpException('invalid token', 403);
     }
   }
 }
