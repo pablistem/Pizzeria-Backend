@@ -86,7 +86,7 @@ describe('Order', () => {
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newOrder)
         .expect(201);
-      expect(body).toHaveProperty('id', 3);
+      expect(body).toHaveProperty('id', 4);
     });
     it('Should create order as normal user', async () => {
       const newOrder: CreateOrderDto = {
@@ -97,7 +97,7 @@ describe('Order', () => {
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .send(newOrder)
         .expect(201);
-      expect(body).toHaveProperty('id', 4);
+      expect(body).toHaveProperty('id', 5);
     });
   });
 
@@ -136,7 +136,7 @@ describe('Order', () => {
     });
     it('Should delete order as normal user', async () => {
       await request(app.getHttpServer())
-        .delete(`/order/4`)
+        .delete(`/order/5`)
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .expect(200);
     });
