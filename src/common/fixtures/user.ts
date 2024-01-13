@@ -1,6 +1,7 @@
 import { RoleEnum } from 'src/module/user/domain/user.entity';
+import { UserFixture } from './types.fixture';
 
-export const anonUser = {
+export const anonUser: UserFixture = {
   id: 1,
   email: 'anon@email.com',
   name: 'anon',
@@ -8,10 +9,10 @@ export const anonUser = {
   hash: '',
   verified: true,
   role: RoleEnum.user,
-  phone: '',
+  phone: '4321',
 };
 
-export const normalUser = {
+export const normalUser: UserFixture = {
   id: 2,
   email: 'normal@email.com',
   name: 'normal',
@@ -19,10 +20,10 @@ export const normalUser = {
   hash: '',
   verified: true,
   role: RoleEnum.user,
-  phone: '',
+  phone: '1234',
 };
 
-export const adminUser = {
+export const adminUser: UserFixture = {
   id: 3,
   email: 'admin@email.com',
   name: 'admin',

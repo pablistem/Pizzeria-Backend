@@ -1,6 +1,7 @@
 import { product1, product3 } from './product';
+import { OptionFixture } from './types.fixture';
 
-export const option1 = {
+export const option1: OptionFixture = {
   id: 1,
   variant: 'option_1',
   price: 10,
