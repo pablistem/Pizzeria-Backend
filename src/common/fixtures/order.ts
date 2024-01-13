@@ -1,5 +1,4 @@
 import { OrderStatus } from '../../../src/module/item/domain/item.entity';
-import { item1, item2, item3 } from './item';
 import { OrderFixture } from './types.fixture';
 import { adminUser, normalUser } from './user';
 
