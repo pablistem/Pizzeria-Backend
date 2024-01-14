@@ -10,7 +10,7 @@ import { loadFixtures } from 'src/common/fixtures/loader';
 import { orderFixtures } from 'src/common/fixtures/order';
 import { tokens } from 'src/common/fixtures/user';
 import { CreateOrderDto } from '../../application/dto/create-order.dto';
-import { product2, product3 } from 'src/common/fixtures/product';
+import { product1, product2 } from 'src/common/fixtures/product';
 
 describe('Order', () => {
   let app: INestApplication;
@@ -79,25 +79,25 @@ describe('Order', () => {
   describe('POST /order', () => {
     it('Should create order as admin', async () => {
       const newOrder: CreateOrderDto = {
-        items: [{ product: product3, quantity: 100 }],
+        items: [{ product: product1.id, quantity: 100 }],
       };
       const { body } = await request(app.getHttpServer())
         .post('/order')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newOrder)
         .expect(201);
-      expect(body).toHaveProperty('id', 3);
+      expect(body).toHaveProperty('id', 4);
     });
     it('Should create order as normal user', async () => {
       const newOrder: CreateOrderDto = {
-        items: [{ product: product2, quantity: 50 }],
+        items: [{ product: product2.id, quantity: 50 }],
       };
       const { body } = await request(app.getHttpServer())
         .post('/order')
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .send(newOrder)
         .expect(201);
-      expect(body).toHaveProperty('id', 4);
+      expect(body).toHaveProperty('id', 5);
     });
   });
 
@@ -136,7 +136,7 @@ describe('Order', () => {
     });
     it('Should delete order as normal user', async () => {
       await request(app.getHttpServer())
-        .delete(`/order/4`)
+        .delete(`/order/5`)
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .expect(200);
     });
