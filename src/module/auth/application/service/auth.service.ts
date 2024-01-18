@@ -92,9 +92,19 @@ export class AuthService {
     }
   }
 
-  async logOut(id: number) {
+  private async removeCookie(res: Response): Promise<void> {
+    res.clearCookie(this.COOKIE_NAME, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/auth/logout',
+    });
+  }
+
+  async logOut(id: number, res: Response) {
     const user: User = await this.userService.findUserById(id);
     this.authRepository.removeRefreshToken(user.sessions.refreshToken);
+    this.removeCookie(res);
   }
 
   async getRefreshToken(user: User) {
