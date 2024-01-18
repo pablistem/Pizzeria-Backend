@@ -104,7 +104,7 @@ export class AuthService {
   async logOut(id: number, res: Response) {
     const user: User = await this.userService.findUserById(id);
     this.authRepository.removeRefreshToken(user.sessions.refreshToken);
-    this.removeCookie(res);
+    await this.removeCookie(res);
   }
 
   async getRefreshToken(user: User) {

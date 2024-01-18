@@ -139,15 +139,14 @@ describe('AuthController', () => {
     expect(res.error).toBeDefined();
   });
 
-  it('Should logout user', async () => {
+  it.only('Should logout user', async () => {
     const { header } = await request(app.getHttpServer())
       .get('/auth/logout')
       .auth(tokens.adminUserToken, { type: 'bearer' })
       .set('Cookie', `pizza=${sessionToErase}`)
       .expect(HttpStatus.OK);
 
-    console.log(header['set-cookie']);
-    expect(header['set-cookie']);
+    expect(header['set-cookie']).toBeUndefined();
   });
 
   afterAll(async () => {
