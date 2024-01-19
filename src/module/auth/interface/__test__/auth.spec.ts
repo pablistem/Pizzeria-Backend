@@ -140,12 +140,17 @@ describe('AuthController', () => {
   });
 
   it.only('Should logout user', async () => {
-    const { header } = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get('/auth/logout')
       .auth(tokens.adminUserToken, { type: 'bearer' })
       .set('Cookie', `pizza=${sessionToErase}`)
       .expect(HttpStatus.OK);
 
+    const { body, header } = await request(app.getHttpServer())
+      .get('/auth/session')
+      .expect(HttpStatus.FORBIDDEN);
+
+    expect(body.accessToken).toBeUndefined();
     expect(header['set-cookie']).toBeUndefined();
   });
 
