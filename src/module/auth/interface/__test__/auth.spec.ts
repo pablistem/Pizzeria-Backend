@@ -139,7 +139,7 @@ describe('AuthController', () => {
     expect(res.error).toBeDefined();
   });
 
-  it.only('Should logout user', async () => {
+  it('Should logout user', async () => {
     await request(app.getHttpServer())
       .get('/auth/logout')
       .auth(tokens.adminUserToken, { type: 'bearer' })
