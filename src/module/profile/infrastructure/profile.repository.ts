@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { IProfileRepository } from '../application/repository/profile.repository.interface';
 import { Profile } from '../domain/profile.entity';
-import { ICreateProfile, IUpdateProfile } from '../interface/profile.entity';
+import { CreateProfileDto } from '../application/dto/create-profile.dto';
+import { UpdateProfileDto } from '../application/dto/update-profile.dto';
 
 @Injectable()
 export class ProfileRepository implements IProfileRepository {
@@ -24,12 +25,12 @@ export class ProfileRepository implements IProfileRepository {
     });
   }
 
-  async createProfile(newProfile: ICreateProfile): Promise<void> {
+  async createProfile(newProfile: Profile): Promise<void> {
     const profileNew = this.repository.create(newProfile);
     this.repository.save(profileNew);
   }
 
-  async updateProfile(changes: IUpdateProfile): Promise<Profile | null> {
+  async updateProfile(changes: Profile): Promise<Profile | null> {
     return this.repository.save(changes);
   }
 }

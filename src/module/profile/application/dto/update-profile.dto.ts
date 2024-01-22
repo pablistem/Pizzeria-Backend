@@ -26,4 +26,9 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsNumber()
   age?: number;
-};
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  user?: number;
+}

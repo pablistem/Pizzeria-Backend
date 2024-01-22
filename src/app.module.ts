@@ -38,7 +38,7 @@ import { ProfileModule } from './module/profile/profile.module';
     ItemModule,
     CategoryModule,
     TestModule,
-    ProfileModule
+    ProfileModule,
   ],
 })
 export class AppModule {}

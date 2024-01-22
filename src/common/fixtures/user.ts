@@ -11,7 +11,6 @@ export const anonUser: UserFixture = {
   verified: true,
   role: RoleEnum.user,
   phone: '4321',
-  profile: anonProfile.id
 };
 
 export const normalUser: UserFixture = {
@@ -23,7 +22,6 @@ export const normalUser: UserFixture = {
   verified: true,
   role: RoleEnum.user,
   phone: '1234',
-  profile: normalProfile.id
 };
 
 export const adminUser: UserFixture = {
@@ -35,7 +33,6 @@ export const adminUser: UserFixture = {
   verified: true,
   role: RoleEnum.admin,
   phone: '',
-  profile: adminProfile.id
 };
 const anonUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbm9uQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.CtgSSoHXymS8XjDSIc02wDJFQNX_95wmwRlfjEtHKkE';
