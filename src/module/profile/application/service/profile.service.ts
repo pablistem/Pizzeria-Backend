@@ -27,12 +27,7 @@ export class ProfileService {
 
   async getProfile(id: number, userId: number): Promise<Profile> {
     const profileFound = await this.profileRepository.findOne(id);
-    console.log(profileFound);
-
     const userFound = await this.userService.findUserById(userId);
-
-    /* delete profileFound.user.hash
-    delete profileFound.user.verified */
 
     if (!profileFound) {
       throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
@@ -43,6 +38,8 @@ export class ProfileService {
     }
 
     if (userFound.id === id) {
+      delete profileFound.user.hash;
+      delete profileFound.user.verified;
       return profileFound;
     } else {
       throw new HttpException('User Id not match', HttpStatus.UNAUTHORIZED);
