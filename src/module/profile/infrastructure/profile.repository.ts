@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { IProfileRepository } from '../application/repository/profile.repository.interface';
 import { Profile } from '../domain/profile.entity';
-import { CreateProfileDto } from '../application/dto/create-profile.dto';
-import { UpdateProfileDto } from '../application/dto/update-profile.dto';
 
 @Injectable()
 export class ProfileRepository implements IProfileRepository {
@@ -14,7 +12,10 @@ export class ProfileRepository implements IProfileRepository {
   }
 
   async findAll(): Promise<Profile[]> {
-    return this.repository.find();
+    return this.repository
+      .createQueryBuilder('profile')
+      .leftJoinAndSelect('profile.user', 'user')
+      .getMany();
   }
 
   async findOne(id: number): Promise<Profile | null> {
@@ -22,6 +23,7 @@ export class ProfileRepository implements IProfileRepository {
       where: {
         id: id,
       },
+      relations: { user: true },
     });
   }
 

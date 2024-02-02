@@ -34,6 +34,17 @@ export const adminUser: UserFixture = {
   role: RoleEnum.admin,
   phone: '',
 };
+
+export const userByProfile: UserFixture = {
+  id: 4,
+  email: 'userByProfile@email.com',
+  name: 'user',
+  lastName: 'profile',
+  hash: '',
+  verified: true,
+  role: RoleEnum.user,
+  phone: '',
+};
 const anonUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbm9uQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.CtgSSoHXymS8XjDSIc02wDJFQNX_95wmwRlfjEtHKkE';
 
@@ -43,10 +54,14 @@ const normalUserToken =
 const adminUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4ifQ.lDuufJZtGEbvlZmjPBFE_Gfbw_e4034KNDZ305s_SMg';
 
+const userByProfileToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ1c2VyQnlQcm9maWxlQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.Y1ulgnFF3VfsT7Z7ja125iu57UTsaB4CgygpJcsalrk';
+
 export const tokens = {
   anonUserToken,
   normalUserToken,
   adminUserToken,
+  userByProfileToken,
 };
 
-export const userFixtures = [anonUser, normalUser, adminUser];
+export const userFixtures = [anonUser, normalUser, adminUser, userByProfile];

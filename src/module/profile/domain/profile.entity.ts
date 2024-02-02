@@ -1,6 +1,6 @@
 import { Base } from 'src/common/domain/base.entity';
 import { User } from 'src/module/user/domain/user.entity';
-import { Entity, Column, OneToOne } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Profile extends Base {
@@ -19,8 +19,7 @@ export class Profile extends Base {
   @Column()
   age: number;
 
-  @OneToOne(() => User, {
-    cascade: true,
-  })
+  @OneToOne(() => User, (user) => user.profile)
+  @JoinColumn()
   user: User;
 }

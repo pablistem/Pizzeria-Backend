@@ -5,10 +5,10 @@ import { order1, order2 } from './order';
 import { product1, product2, product3 } from './product';
 import { adminProfile, anonProfile, normalProfile } from './profile';
 import { FixturesTree } from './types.fixture';
-import { adminUser, anonUser, normalUser } from './user';
+import { adminUser, anonUser, normalUser, userByProfile } from './user';
 
 export const fixturesTree: FixturesTree = {
-  User: [normalUser, adminUser, anonUser],
+  User: [normalUser, adminUser, anonUser, userByProfile],
   Category: [category1, category2, category3],
   Product: [product1, product2, product3],
   Option: [option1, option2],
