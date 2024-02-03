@@ -35,7 +35,7 @@ export class AddressService {
     const addressFound = await this.addressRepository.findOne(id);
     if (addressFound) {
       const address = new Address();
-      addressFound.addresses.splice(changes.address.length, 1)
+      addressFound.addresses.filter(address => address !== changes.address);
       address.addresses = addressFound.addresses;
       return await this.addressRepository.removeAddress(address);
     }

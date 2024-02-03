@@ -1,3 +1,4 @@
+import { address1, address2 } from './address';
 import { category1, category2, category3 } from './category';
 import { item1, item2, item3 } from './item';
 import { option1, option2 } from './option';
@@ -13,4 +14,5 @@ export const fixturesTree: FixturesTree = {
   Option: [option1, option2],
   Order: [order1, order2],
   Item: [item1, item2, item3],
+  Address: [address1, address2]
 };

@@ -12,6 +12,7 @@ import { ItemModule } from './module/item/item.module';
 import { CategoryModule } from './module/category/category.module';
 import { OptionModule } from './module/option/option.module';
 import { TestModule } from './module/test/test.module';
+import { AddressModule } from './module/address/address.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { TestModule } from './module/test/test.module';
     OptionModule,
     ProductModule,
     OrderModule,
+    AddressModule,
     CommonModule,
     ItemModule,
     CategoryModule,

@@ -1,4 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
+import { Address } from 'src/module/address/domain/address.entity';
 import { Auth } from 'src/module/auth/domain/auth.entity';
 import { Category } from 'src/module/category/application/domain/category.entity';
 import { Item } from 'src/module/item/domain/item.entity';
@@ -47,6 +48,11 @@ export class ProductFixture extends OmitType(Product, [
   category: number;
 }
 
+export class AddressFixture extends OmitType(Address, [
+  'updatedAt',
+  'createdAt',
+] as const) {}
+
 export class UserFixture extends OmitType(User, [
   'updatedAt',
   'createdAt',
@@ -61,4 +67,5 @@ interface FixturesTree {
   Option: OptionFixture[];
   Order: OrderFixture[];
   Item: ItemFixture[];
+  Address: AdddressFixture[];
 }

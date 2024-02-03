@@ -5,5 +5,5 @@ export class UpdateAddressDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsArray()
-  address: string
+  address: string;
 }
