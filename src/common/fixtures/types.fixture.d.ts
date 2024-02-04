@@ -67,5 +67,5 @@ interface FixturesTree {
   Option: OptionFixture[];
   Order: OrderFixture[];
   Item: ItemFixture[];
-  Address: AdddressFixture[];
+  Address: AddressFixture[];
 }

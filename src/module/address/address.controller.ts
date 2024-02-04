@@ -2,7 +2,7 @@ import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@
 import { AddressService } from './application/service/address.service';
 import { UpdateAddressDto } from './application/dto/address.dto';
 
-@Controller()
+@Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
   
@@ -16,16 +16,16 @@ export class AddressController {
     return await this.addressService.createAddress(data);
   }
 
-  @Put(':id')
-  async updateAddresses(
+  @Put('add/:id')
+  async addAddress(
     @Param('id', ParseIntPipe) id: number,
     @Body() changes: UpdateAddressDto,
   ) {
     return await this.addressService.updateAddress(id, changes);
   }
 
-  @Delete(':id')
-  async deleteAddresses(
+  @Put('remove/:id')
+  async removeAddress(
     @Param('id', ParseIntPipe) id: number,
     @Body() changes: UpdateAddressDto,
   ) {
