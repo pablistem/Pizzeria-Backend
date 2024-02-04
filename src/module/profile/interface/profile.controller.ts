@@ -16,23 +16,21 @@ import { CreateProfileDto } from '../application/dto/create-profile.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { UserRequest } from 'src/common/interfaces/UserRequest';
 
+@UseGuards(JwtGuard)
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
-  @UseGuards(JwtGuard)
   @Get()
   getProfiles(@Req() req: UserRequest): Promise<Profile[]> {
     return this.profileService.getProfiles(req.user.id);
   }
 
-  @UseGuards(JwtGuard)
   @Get(':id')
   getProfile(@Param('id', ParseIntPipe) id: number, @Req() req: UserRequest) {
     return this.profileService.getProfile(id, req.user.id);
   }
 
-  @UseGuards(JwtGuard)
   @Put(':id')
   updateProfile(
     @Param('id', ParseIntPipe) id: number,

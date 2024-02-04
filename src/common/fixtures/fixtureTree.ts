@@ -14,5 +14,5 @@ export const fixturesTree: FixturesTree = {
   Option: [option1, option2],
   Order: [order1, order2],
   Item: [item1, item2, item3],
-  Profile: [anonProfile, normalProfile, adminProfile],
+  Profile: [anonProfile, normalProfile],
 };

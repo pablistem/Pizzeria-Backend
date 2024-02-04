@@ -55,7 +55,7 @@ const adminUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4ifQ.lDuufJZtGEbvlZmjPBFE_Gfbw_e4034KNDZ305s_SMg';
 
 const userByProfileToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ1c2VyQnlQcm9maWxlQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.Y1ulgnFF3VfsT7Z7ja125iu57UTsaB4CgygpJcsalrk';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ1c2VyQnlQcm9maWxlQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIn0.UDkVfTFVQ1kk2ZXaME71a9BJTgRyUAeGMMA6_qRjah8';
 
 export const tokens = {
   anonUserToken,

@@ -31,7 +31,7 @@ describe('Profile', () => {
       expect(response.statusCode).toBe(200);
 
       const body: Profile[] = response.body;
-      expect(body).toHaveLength(3);
+      expect(body).toHaveLength(2);
       expect(body[0].user).toBeDefined();
     });
 
@@ -66,7 +66,7 @@ describe('Profile', () => {
 
     it('Should get a unauthorized', async () => {
       const response = await request(app.getHttpServer())
-        .get('/profile/3')
+        .get('/profile/1')
         .auth(tokens.normalUserToken, { type: 'bearer' });
       expect(response.statusCode).toBe(401);
     });
@@ -84,7 +84,8 @@ describe('Profile', () => {
       };
       const response = await request(app.getHttpServer())
         .post('/profile')
-        .send(newProfile);
+        .send(newProfile)
+        .auth(tokens.adminUserToken, { type: 'bearer' });
       expect(response.statusCode).toBe(201);
     });
   });
