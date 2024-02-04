@@ -17,9 +17,13 @@ export class AddressRepository implements IAddressRepository {
     })
   }
 
-  async create(data: Address): Promise<Address> {
+  async create(data: ICreateAddress): Promise<Address> {
     const newAddressesArray = this.repository.create(data);
     return await this.repository.save(newAddressesArray);
+  }
+
+  async update(changes: IUpdateAddress): Promise<Address> {
+    return await this.repository.save(changes);
   }
 
   async addAddress(data: Address): Promise<Address> {

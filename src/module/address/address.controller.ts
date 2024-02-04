@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
 import { AddressService } from './application/service/address.service';
-import { UpdateAddressDto } from './application/dto/address.dto';
+import { CreateAddressDto, UpdateAddressDto } from './application/dto/address.dto';
+import { AddAddressDto } from './application/dto/add-remove-address.dto';
 
 @Controller('address')
 export class AddressController {
@@ -12,22 +13,30 @@ export class AddressController {
   }
 
   @Post()
-  async createAddresses(@Body() data: any) {
+  async createAddress(@Body() data: CreateAddressDto) {
     return await this.addressService.createAddress(data);
   }
 
-  @Put('add/:id')
-  async addAddress(
+  @Put(':id')
+  async updateAddress(
     @Param('id', ParseIntPipe) id: number,
     @Body() changes: UpdateAddressDto,
   ) {
     return await this.addressService.updateAddress(id, changes);
   }
 
+  @Put('add/:id')
+  async addAddress(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() changes: AddAddressDto,
+  ) {
+    return await this.addressService.addAddress(id, changes);
+  }
+
   @Put('remove/:id')
   async removeAddress(
     @Param('id', ParseIntPipe) id: number,
-    @Body() changes: UpdateAddressDto,
+    @Body() changes: AddAddressDto,
   ) {
     return await this.addressService.removeAddress(id, changes)
   }

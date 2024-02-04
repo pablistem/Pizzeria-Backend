@@ -3,7 +3,8 @@ import { Test } from "@nestjs/testing";
 import * as request from 'supertest';
 import { AppModule } from "src/app.module";
 import { TestService } from "src/module/test/application/service/test.service";
-import { UpdateAddressDto } from "../../application/dto/address.dto";
+import { CreateAddressDto, UpdateAddressDto } from "../../application/dto/address.dto";
+import { AddAddressDto } from "../../application/dto/add-remove-address.dto";
 
 describe('Address', () => {
   let app: INestApplication;
@@ -38,8 +39,13 @@ describe('Address', () => {
   })
 
   describe('POST /address', () => {
-    it('should create a new array of addresses', async () => {
-      const newAddresses = ['Av. Callao 789', 'San Martín 999', 'Buenos Aires 333'];
+    it('should create the address', async () => {
+      const newAddresses: CreateAddressDto = {
+        country: 'Argentina',
+        state: 'Mendoza',
+        city: 'Mendoza',
+        addresses: ['Av. Callao 789', 'San Martín 999', 'Buenos Aires 333']
+      };
       await request(app.getHttpServer())
         .post('/address')
         .send(newAddresses)
@@ -48,26 +54,44 @@ describe('Address', () => {
   })
 
   describe('PUT /address', () => {
-    it('should update an array of addresses', async () => {
+    it('should update the addresses data', async () => {
       const newAddress: UpdateAddressDto = {
-        address: 'Lencinas 856'
+        country: 'Argentina',
+        state: 'Córdoba',
+        city: 'Córdoba',
+        addresses: ['Avellaneda 888', 'Lencinas 856', 'Perú 999'],
       }
-      await request(app.getHttpAdapter())
-        .put('/address/add/1')
+      const { body } = await request(app.getHttpServer())
+        .put('/address/1')
         .send(newAddress)
-        .expect(201);
+        .expect(200);
+      expect(body).toHaveProperty('state', 'Córdoba');
     })
   })
 
   describe('PUT /address', () => {
-    it('should update an array of addresses', async () => {
-      const newAddress: UpdateAddressDto = { 
-        address: 'Lencinas 856'
+    it('should add a new address', async () => {
+      const newAddress: AddAddressDto = { 
+        address: 'Lencinas 856',
       };
-      await request(app.getHttpAdapter())
+      const { body } = await request(app.getHttpServer())
+        .put('/address/add/1')
+        .send(newAddress)
+        .expect(200);
+      expect(body.addresses).toContain('Lencinas 856')
+    })
+  })
+
+  describe('PUT /address', () => {
+    it('should add a new address', async () => {
+      const newAddress: AddAddressDto = { 
+        address: 'Lencinas 856',
+      };
+      const { body } = await request(app.getHttpServer())
         .put('/address/remove/1')
         .send(newAddress)
-        .expect(201);
+        .expect(200);
+      expect(body.addresses).not.toContain('Lencinas 856')
     })
   })
 

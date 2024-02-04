@@ -1,11 +1,13 @@
 export interface ICreateAddress {
-  address: string[],
-  createdDate: Date;
-  updatedDate: Date;
+  country: string;
+  state: string;
+  city: string;
+  addresses: string[];
 }
 
 export interface IUpdateAddress {
-  id: number;
+  country?: string;
+  state?: string;
+  city?: string;
   address?: string[];
-  updatedDate: Date;
 }
