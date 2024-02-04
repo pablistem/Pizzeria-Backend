@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AddressService } from './application/service/address.service';
 import { CreateAddressDto, UpdateAddressDto } from './application/dto/address.dto';
 import { AddAddressDto } from './application/dto/add-remove-address.dto';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
 
+@UseGuards(JwtGuard)
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
   
   @Get(':id')
-  async getAddresses(@Param('id', ParseIntPipe) id: number) {
+  async getAddress(@Param('id', ParseIntPipe) id: number) {
     return await this.addressService.getAddress(id);
   }
 
