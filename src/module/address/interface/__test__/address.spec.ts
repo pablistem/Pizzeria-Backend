@@ -4,7 +4,6 @@ import * as request from 'supertest';
 import { AppModule } from "src/app.module";
 import { TestService } from "src/module/test/application/service/test.service";
 import { CreateAddressDto, UpdateAddressDto } from "../../application/dto/address.dto";
-import { AddAddressDto } from "../../application/dto/add-remove-address.dto";
 import { tokens } from "src/common/fixtures/user";
 
 describe('Address', () => {
@@ -36,9 +35,6 @@ describe('Address', () => {
         .expect(200);
 
       expect(body).toHaveProperty('id', 1);
-      expect(body.addresses).toEqual(
-        expect.arrayContaining(['Av. Callao 123', 'San Martín 555', 'Buenos Aires 111'])
-      )
     })
 
     it('the address should not exist in the database', async () => {
@@ -55,7 +51,7 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Mendoza',
         city: 'Mendoza',
-        addresses: ['Av. Callao 789', 'San Martín 999', 'Buenos Aires 333']
+        address: 'Av. Callao 789',
       };
       await request(app.getHttpServer())
         .post('/address')
@@ -68,7 +64,7 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Mendoza',
         city: 'Mendoza',
-        addresses: ['Av. Callao 789', 'San Martín 999', 'Buenos Aires 333']
+        address: 'Av. Callao 789',
       };
       const { body } = await request(app.getHttpServer())
         .post('/address')
@@ -85,7 +81,7 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Córdoba',
         city: 'Córdoba',
-        addresses: ['Avellaneda 888', 'Lencinas 856', 'Perú 999'],
+        address: 'Avellaneda 888',
       }
       const { body } = await request(app.getHttpServer())
         .put('/address/1')
@@ -98,7 +94,7 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Córdoba',
         city: 'Córdoba',
-        addresses: ['Avellaneda 888', 'Lencinas 856', 'Perú 999'],
+        address: 'Avellaneda 888',
       }
       const { body } = await request(app.getHttpServer())
         .put('/address/1')
@@ -113,81 +109,13 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Córdoba',
         city: 'Córdoba',
-        addresses: ['Avellaneda 888', 'Lencinas 856', 'Perú 999'],
+        address: 'Avellaneda 888',
       }
       await request(app.getHttpServer())
         .put('/address/999')
         .auth(tokens.normalUserToken, { type: 'bearer'})
         .send(newAddress)
         .expect(404);
-    })
-  })
-
-  describe('PUT /add and remove addresses', () => {
-    it('should not be allowed to add a new address', async () => {
-      const newAddress: AddAddressDto = { 
-        address: 'Lencinas 856',
-      };
-      await request(app.getHttpServer())
-        .put('/address/add/1')
-        .send(newAddress)
-        .expect(401);
-    })
-
-    it('should not put a new address to an unexisting array', async () => {
-      const newAddress: AddAddressDto = { 
-        address: 'Lencinas 856',
-      };
-      const { body } = await request(app.getHttpServer())
-        .put('/address/add/999')
-        .auth(tokens.normalUserToken, { type: 'bearer' })
-        .send(newAddress)
-        .expect(404);
-    })
-
-    it('should add a new address', async () => {
-      const newAddress: AddAddressDto = { 
-        address: 'Lencinas 856',
-      };
-      const { body } = await request(app.getHttpServer())
-        .put('/address/add/1')
-        .auth(tokens.normalUserToken, { type: 'bearer' })
-        .send(newAddress)
-        .expect(200);
-      expect(body.addresses).toContain('Lencinas 856')
-    })
-
-    it('should not be allowed to remove an existing address', async () => {
-      const newAddress: AddAddressDto = { 
-        address: 'Lencinas 856',
-      };
-      await request(app.getHttpServer())
-        .put('/address/remove/1')
-        .send(newAddress)
-        .expect(401);
-    })
-
-    it('should not remove an address from an unexisting array', async () => {
-      const newAddress: AddAddressDto = { 
-        address: 'Lencinas 856',
-      };
-      const { body } = await request(app.getHttpServer())
-        .put('/address/remove/999')
-        .auth(tokens.normalUserToken, { type: 'bearer' })
-        .send(newAddress)
-        .expect(404);
-    })
-
-    it('should remove an existing address', async () => {
-      const newAddress: AddAddressDto = { 
-        address: 'Lencinas 856',
-      };
-      const { body } = await request(app.getHttpServer())
-        .put('/address/remove/1')
-        .auth(tokens.normalUserToken, { type: 'bearer' })
-        .send(newAddress)
-        .expect(200);
-      expect(body.addresses).not.toContain('Lencinas 856')
     })
   })
 

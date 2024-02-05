@@ -8,6 +8,12 @@ import { AddressRepository } from './infrastructure/address.repository';
 @Module({
     imports: [TypeOrmModule.forFeature([Address])],
     controllers: [AddressController],
-    providers: [AddressService, AddressRepository],
+    providers: [
+      AddressService,
+      {
+        provide: 'ADDRESS_REPOSITORY',
+        useClass: AddressRepository
+      }
+    ],
 })
 export class AddressModule {}

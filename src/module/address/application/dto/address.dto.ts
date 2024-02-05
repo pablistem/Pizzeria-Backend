@@ -21,7 +21,7 @@ export class CreateAddressDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsArray()
-  addresses: string[];
+  address: string;
 }
 
 export class UpdateAddressDto extends PartialType(CreateAddressDto) {}

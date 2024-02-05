@@ -2,7 +2,7 @@ import { AddressFixture } from "./types.fixture";
 
 export const address1: AddressFixture = {
   id: 1,
-  addresses: ['Av. Callao 123', 'San Martín 555', 'Buenos Aires 111'],
+  address: 'Av. Callao 123',
   country: 'Argentina',
   state: 'Mendoza',
   city: 'San Rafael',
@@ -10,7 +10,7 @@ export const address1: AddressFixture = {
 
 export const address2: AddressFixture = {
   id: 2,
-  addresses: ['Av. Callao 456', 'San Martín 777', 'Buenos Aires 222'],
+  address: 'Av. Callao 456',
   country: 'Argentina',
   state: 'Buenos Aires',
   city: 'Villa Gesel',

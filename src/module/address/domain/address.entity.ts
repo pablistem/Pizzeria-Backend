@@ -13,6 +13,6 @@ export class Address extends Base {
   @Column({ nullable: true })
   city: string;
   
-  @Column({ type: 'json', nullable: true, default: '[]'})
-  addresses: string[];
+  @Column({ nullable: true })
+  address: string;
 }

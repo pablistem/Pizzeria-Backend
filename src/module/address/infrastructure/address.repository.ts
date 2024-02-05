@@ -22,15 +22,7 @@ export class AddressRepository implements IAddressRepository {
     return await this.repository.save(newAddressesArray);
   }
 
-  async update(changes: IUpdateAddress): Promise<Address> {
+  async update(changes: IUpdateAddress): Promise<Partial<Address>> {
     return await this.repository.save(changes);
-  }
-
-  async addAddress(data: Address): Promise<Address> {
-    return await this.repository.save(data)
-  }
-
-  async removeAddress(data: Address): Promise<Address> {
-    return await this.repository.save(data)
   }
 }
