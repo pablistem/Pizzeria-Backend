@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AddressService } from './application/service/address.service';
 import { CreateAddressDto, UpdateAddressDto } from './application/dto/address.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
@@ -24,5 +24,10 @@ export class AddressController {
     @Body() changes: UpdateAddressDto,
   ) {
     return await this.addressService.updateAddress(id, changes);
+  }
+
+  @Delete(':id')
+  async deleteAddress(@Param('id', ParseIntPipe) id: number) {
+    await this.addressService.deleteAddress(id);
   }
 }

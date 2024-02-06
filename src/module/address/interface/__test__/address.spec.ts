@@ -76,20 +76,20 @@ describe('Address', () => {
   })
 
   describe('PUT /address', () => {
-    it('should not be allowed to update the addresses data', async () => {
+    it('should not be allowed to update the address', async () => {
       const newAddress: UpdateAddressDto = {
         country: 'Argentina',
         state: 'Córdoba',
         city: 'Córdoba',
         address: 'Avellaneda 888',
       }
-      const { body } = await request(app.getHttpServer())
-        .put('/address/1')
+      await request(app.getHttpServer())
+        .put('/address/3')
         .send(newAddress)
         .expect(401);
     })
 
-    it('should update the addresses data', async () => {
+    it('should update the address', async () => {
       const newAddress: UpdateAddressDto = {
         country: 'Argentina',
         state: 'Córdoba',
@@ -97,14 +97,16 @@ describe('Address', () => {
         address: 'Avellaneda 888',
       }
       const { body } = await request(app.getHttpServer())
-        .put('/address/1')
+        .put('/address/3')
         .auth(tokens.normalUserToken, { type: 'bearer'})
         .send(newAddress)
         .expect(200);
       expect(body).toHaveProperty('state', 'Córdoba');
+      expect(body).toHaveProperty('city', 'Córdoba');
+      expect(body).toHaveProperty('address', 'Avellaneda 888');
     })
 
-    it('should update the addresses data', async () => {
+    it('cannot retrieve the address to update', async () => {
       const newAddress: UpdateAddressDto = {
         country: 'Argentina',
         state: 'Córdoba',
@@ -118,6 +120,28 @@ describe('Address', () => {
         .expect(404);
     })
   })
+
+  describe('DELETE /address', () => {
+    it('should not be allowed to erase the address', async () => {
+      const { body } = await request(app.getHttpServer())
+        .delete('/address/1')
+        .expect(401);
+    })
+
+    it('should erase the address', async () => {
+      await request(app.getHttpServer())
+        .delete('/address/3')
+        .auth(tokens.normalUserToken, { type: 'bearer'})
+        .expect(200);
+    })
+
+    it('cannot retrieve the address to erase', async () => {
+      await request(app.getHttpServer())
+        .delete('/address/999')
+        .auth(tokens.normalUserToken, { type: 'bearer'})
+        .expect(404);
+      })
+    })
 
   afterAll(async () => {
     await app.close();

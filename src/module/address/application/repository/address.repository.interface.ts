@@ -5,4 +5,5 @@ export interface IAddressRepository {
   findOne(id: number): Promise<Address>;
   create(data: ICreateAddress): Promise<Address>;
   update(changes: IUpdateAddress): Promise<Partial<Address>>;
+  delete(id: number): Promise<void>;
 }

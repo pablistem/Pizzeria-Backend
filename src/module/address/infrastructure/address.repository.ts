@@ -25,4 +25,11 @@ export class AddressRepository implements IAddressRepository {
   async update(changes: IUpdateAddress): Promise<Partial<Address>> {
     return await this.repository.save(changes);
   }
+
+  async delete(id: number): Promise<void> {
+    const addressFound = await this.repository.findOne({
+      where: { id: id }
+    });
+    await this.repository.remove(addressFound);
+  }
 }
