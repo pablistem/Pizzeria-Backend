@@ -1,7 +1,8 @@
 import { Base } from '../../../common/domain/base.entity';
 import { Auth } from '../../auth/domain/auth.entity';
-import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Order } from '../../../module/order/domain/order.entity';
+import { Profile } from 'src/module/profile/domain/profile.entity';
 
 export enum RoleEnum {
   admin = 'admin',
@@ -32,6 +33,11 @@ export class User extends Base {
 
   @OneToMany(() => Auth, (auth) => auth.user)
   sessions: Auth | undefined;
+
+  @OneToOne(() => Profile, (profile) => profile.user, {
+    cascade: true,
+  })
+  profile: Profile;
 
   constructor(
     email: string,

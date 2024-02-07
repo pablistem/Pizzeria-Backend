@@ -5,6 +5,7 @@ import { Item } from 'src/module/item/domain/item.entity';
 import { Option } from 'src/module/option/domain/option.entity';
 import { Order } from 'src/module/order/domain/order.entity';
 import { Product } from 'src/module/product/domain/product.entity';
+import { Profile } from 'src/module/profile/domain/profile.entity';
 import { User } from 'src/module/user/domain/user.entity';
 
 export class AuthFixture extends OmitType(Auth, [
@@ -52,7 +53,16 @@ export class UserFixture extends OmitType(User, [
   'createdAt',
   'sessions',
   'orders',
+  'profile',
 ]) {}
+
+export class ProfileFixture extends OmitType(Profile, [
+  'updatedAt',
+  'createdAt',
+  'user',
+]) {
+  user: number;
+}
 
 interface FixturesTree {
   User: UserFixture[];
@@ -61,4 +71,5 @@ interface FixturesTree {
   Option: OptionFixture[];
   Order: OrderFixture[];
   Item: ItemFixture[];
+  Profile: ProfileFixture[];
 }
