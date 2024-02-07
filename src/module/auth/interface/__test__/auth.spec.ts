@@ -7,7 +7,10 @@ import { CreateUserDto } from '../../../user/application/dto/create-user.dto';
 import { AuthService } from '../../application/service/auth.service';
 import { loadFixtures } from '../../../../../src/common/fixtures/loader';
 import { tokens } from '../../../../../src/common/fixtures/user';
-import { refreshTokenUser } from './../../../../../src/common/fixtures/auth';
+import {
+  refreshTokenUser,
+  sessionToErase,
+} from './../../../../../src/common/fixtures/auth';
 
 describe('AuthController', () => {
   let app: INestApplication;
@@ -112,17 +115,6 @@ describe('AuthController', () => {
       .expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('Should logout user', async () => {
-    await request(app.getHttpServer())
-      .get('/auth/logout')
-      .auth(tokens.adminUserToken, { type: 'bearer' })
-      .expect(HttpStatus.OK);
-  });
-
-  afterAll(async () => {
-    await app.close();
-  });
-
   it('Should refresh token and cookie', async () => {
     const { body, header } = await request(app.getHttpServer())
       .get('/auth/session')
@@ -145,5 +137,24 @@ describe('AuthController', () => {
       .set('Cookie', `pizza=${invalidToken}`);
     expect(res.statusCode).toEqual(403);
     expect(res.error).toBeDefined();
+  });
+
+  it('Should logout user', async () => {
+    await request(app.getHttpServer())
+      .get('/auth/logout')
+      .auth(tokens.adminUserToken, { type: 'bearer' })
+      .set('Cookie', `pizza=${sessionToErase}`)
+      .expect(HttpStatus.OK);
+
+    const { body, header } = await request(app.getHttpServer())
+      .get('/auth/session')
+      .expect(HttpStatus.FORBIDDEN);
+
+    expect(body.accessToken).toBeUndefined();
+    expect(header['set-cookie']).toBeUndefined();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });
