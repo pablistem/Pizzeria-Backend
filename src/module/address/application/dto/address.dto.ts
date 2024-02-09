@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsArray } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { PartialType } from '@nestjs/mapped-types';
 
@@ -20,7 +20,7 @@ export class CreateAddressDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsArray()
+  @IsString()
   address: string;
 }
 

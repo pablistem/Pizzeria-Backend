@@ -13,6 +13,7 @@ import { CategoryModule } from './module/category/category.module';
 import { OptionModule } from './module/option/option.module';
 import { TestModule } from './module/test/test.module';
 import { AddressModule } from './module/address/address.module';
+import { ProfileModule } from './module/profile/profile.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { AddressModule } from './module/address/address.module';
     ItemModule,
     CategoryModule,
     TestModule,
+    ProfileModule,
   ],
 })
 export class AppModule {}

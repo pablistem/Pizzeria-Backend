@@ -71,7 +71,7 @@ describe('Address', () => {
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .send(newAddresses)
         .expect(201);
-      expect(body).toHaveProperty('id', 3);
+      expect(body).toHaveProperty('id', 7);
     })
   })
 

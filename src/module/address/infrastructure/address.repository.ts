@@ -13,7 +13,10 @@ export class AddressRepository implements IAddressRepository {
 
   async findOne(id: number): Promise<Address> {
     return await this.repository.findOne({
-      where: { id: id }
+      where: { id: id },
+      relations: {
+        profile: true
+      }
     })
   }
 
