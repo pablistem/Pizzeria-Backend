@@ -121,7 +121,7 @@ describe('Address', () => {
   describe('DELETE /address', () => {
     it('should not be allowed to erase the address', async () => {
       const { body } = await request(app.getHttpServer())
-        .delete('/address/1')
+        .delete('/address/7')
         .expect(401);
     })
 
