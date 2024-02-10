@@ -55,4 +55,4 @@ export const address6: AddressFixture = {
   profile: normalProfile.id,
 }
 
-export const addressFixture = [address1, address2, address3, address4, address5, address6];
+export const addressFixtures = [address1, address2, address3, address4, address5, address6];

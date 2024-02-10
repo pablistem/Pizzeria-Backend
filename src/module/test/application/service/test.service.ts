@@ -6,6 +6,7 @@ export interface IEntity {
   name: string;
   tableName: string;
   order: number;
+  relations: string;
 }
 
 @Injectable()
@@ -36,13 +37,15 @@ export class TestService {
 
   async getEntities(): Promise<IEntity[]> {
     const entities = [];
-    this.connectionManager.connection.entityMetadatas.forEach((entity) => {
+    this.connectionManager.connection.entityMetadatas.forEach(entity => {
       entities.push({
         name: entity.name,
         tableName: entity.tableName,
         order: this.getOrder(entity.name),
+        relations: entity.relations.forEach(relation => relation.inverseEntityMetadata.name)
       });
     });
+    console.log(entities)
     return entities;
   }
 

@@ -3,24 +3,23 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 import * as request from 'supertest';
 import { UpdateProfileDto } from '../../application/dto/update-profile.dto';
-import { TestService } from 'src/module/test/application/service/test.service';
 import { tokens } from './../../../../../src/common/fixtures/user';
 import { Profile } from '../../domain/profile.entity';
 import { CreateProfileDto } from '../../application/dto/create-profile.dto';
+import { loadFixtures } from 'src/common/fixtures/loader';
 
 describe('Profile', () => {
   let app: INestApplication;
-  let testService: TestService;
+
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
+
     app = moduleRef.createNestApplication();
     await app.init();
-    testService = app.get<TestService>(TestService);
-    const fixtures = await testService.getEntities();
-    const fixtureWithEntities = testService.entitiesWithFixtures(fixtures);
-    await testService.load(fixtureWithEntities);
+
+    await loadFixtures(app);
   });
 
   describe('GET /profile', () => {
@@ -31,7 +30,7 @@ describe('Profile', () => {
       expect(response.statusCode).toBe(200);
 
       const body: Profile[] = response.body;
-      expect(body).toHaveLength(2);
+      expect(body).toHaveLength(3);
       expect(body[0].user).toBeDefined();
     });
 

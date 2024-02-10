@@ -15,8 +15,10 @@ import { userFixtures } from './user';
 import { productFixtures } from './product';
 import { categoryFixture } from './category';
 import { optionFixtures } from './option';
-import { authFixture } from './auth';
-import { addressFixture } from './address';
+import { authFixtures } from './auth';
+import { addressFixtures } from './address';
+import { profileFixtures } from './profile';
+import { Profile } from 'src/module/profile/domain/profile.entity';
 
 export const loadFixtures = async (app: INestApplication) => {
   await request(app.getHttpServer())
@@ -45,9 +47,13 @@ export const loadFixtures = async (app: INestApplication) => {
 
   await request(app.getHttpServer())
     .post('/loader')
-    .send({ fixtures: authFixture, entity: Auth.name });
+    .send({ fixtures: authFixtures, entity: Auth.name });
 
   await request(app.getHttpServer())
     .post('/loader')
-    .send({ fixtures: addressFixture, entity: Address.name });
+    .send({ fixtures: profileFixtures, entity: Profile.name });
+
+  await request(app.getHttpServer())
+    .post('/loader')
+    .send({ fixtures: addressFixtures, entity: Address.name });
 };

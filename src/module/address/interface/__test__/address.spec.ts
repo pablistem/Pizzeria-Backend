@@ -2,25 +2,22 @@ import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing"; 
 import * as request from 'supertest';
 import { AppModule } from "src/app.module";
-import { TestService } from "src/module/test/application/service/test.service";
 import { CreateAddressDto, UpdateAddressDto } from "../../application/dto/address.dto";
 import { tokens } from "src/common/fixtures/user";
+import { loadFixtures } from "src/common/fixtures/loader";
 
 describe('Address', () => {
   let app: INestApplication;
-  let testService: TestService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
-    app = moduleRef.createNestApplication()
-    testService = moduleRef.get<TestService>(TestService);
-    const entities = await testService.getEntities();
-    const entitiesWithFixtures = await testService.entitiesWithFixtures(entities);
-    await testService.load(entitiesWithFixtures);
+    app = moduleRef.createNestApplication();
     await app.init();
+
+    await loadFixtures(app);
   });
 
   describe('GET /address', () => {
@@ -130,7 +127,7 @@ describe('Address', () => {
 
     it('should erase the address', async () => {
       await request(app.getHttpServer())
-        .delete('/address/3')
+        .delete('/address/7')
         .auth(tokens.normalUserToken, { type: 'bearer'})
         .expect(200);
     })

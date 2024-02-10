@@ -3,6 +3,7 @@ import { AddressService } from './application/service/address.service';
 import { CreateAddressDto, UpdateAddressDto } from './application/dto/address.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 
+@UseGuards(JwtGuard)
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
