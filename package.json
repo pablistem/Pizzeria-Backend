@@ -45,6 +45,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
     "mysql2": "^3.5.1",
+    "nestjs-sharp": "^1.1.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
