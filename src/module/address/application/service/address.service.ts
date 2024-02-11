@@ -16,12 +16,22 @@ export class AddressService {
   }
 
   async createAddress(data: CreateAddressDto) {
-    return await this.addressRepository.create(data);
+    const newAddress = new Address()
+    newAddress.country = data.country;
+    newAddress.state = data.state;
+    newAddress.city = data.city;
+    newAddress.address = data.address;
+    return await this.addressRepository.create(newAddress);
   }
 
   async updateAddress(id: number, changes: UpdateAddressDto) {
     await this.getAddress(id);
-    return await this.addressRepository.update(changes);
+    const updateAddress = new Address()
+    updateAddress.country = changes.country;
+    updateAddress.state = changes.state;
+    updateAddress.city = changes.city;
+    updateAddress.address = changes.address;
+    return await this.addressRepository.update(updateAddress);
   }
 
   async deleteAddress(id: number) {
