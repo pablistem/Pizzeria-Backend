@@ -4,6 +4,7 @@ import { Address } from './domain/address.entity';
 import { AddressController } from './address.controller';
 import { AddressService } from './application/service/address.service';
 import { AddressRepository } from './infrastructure/address.repository';
+import { ADDRESS_REPOSITORY } from './application/repository/address.repository.interface';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Address])],
@@ -11,7 +12,7 @@ import { AddressRepository } from './infrastructure/address.repository';
     providers: [
       AddressService,
       {
-        provide: 'ADDRESS_REPOSITORY',
+        provide: ADDRESS_REPOSITORY,
         useClass: AddressRepository
       }
     ],

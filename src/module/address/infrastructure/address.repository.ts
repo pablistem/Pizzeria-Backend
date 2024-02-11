@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { Repository, DataSource } from "typeorm";
 import { Address } from "../domain/address.entity";
 import { IAddressRepository } from "../application/repository/address.repository.interface";
-import { ICreateAddress, IUpdateAddress } from "../interface/address.interface";
 
 @Injectable()
 export class AddressRepository implements IAddressRepository {
@@ -20,12 +19,12 @@ export class AddressRepository implements IAddressRepository {
     })
   }
 
-  async create(data: ICreateAddress): Promise<Address> {
+  async create(data: Address): Promise<Address> {
     const newAddressesArray = this.repository.create(data);
     return await this.repository.save(newAddressesArray);
   }
 
-  async update(changes: IUpdateAddress): Promise<Partial<Address>> {
+  async update(changes: Address): Promise<Partial<Address>> {
     return await this.repository.save(changes);
   }
 
