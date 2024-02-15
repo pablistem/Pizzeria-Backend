@@ -35,7 +35,7 @@ export class User extends Base {
   sessions: Auth | undefined;
 
   @OneToOne(() => User, {
-    cascade: true
+    cascade: true,
   })
   @JoinColumn()
   profile: Profile;

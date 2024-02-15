@@ -31,5 +31,5 @@ export class CreateProfileDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  user: User
-};
+  user: User;
+}

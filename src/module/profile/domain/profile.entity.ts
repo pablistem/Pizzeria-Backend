@@ -1,6 +1,5 @@
 import { Base } from 'src/common/domain/base.entity';
-import { User } from 'src/module/user/domain/user.entity';
-import { Entity, Column, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 
 @Entity()
 export class Profile extends Base {

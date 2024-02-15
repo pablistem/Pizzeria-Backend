@@ -10,4 +10,4 @@ import { ProfileRepository } from './infrastructure/profile.repository';
   controllers: [ProfileController],
   providers: [ProfileService, ProfileRepository],
 })
-export class ProfileModule {};
+export class ProfileModule {}
