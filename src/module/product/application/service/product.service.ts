@@ -82,12 +82,7 @@ export class ProductService {
 
   async onApplicationBootstrap() {
     if (this.NODE_ENV === 'development') {
-      const entities = await this.testService.getEntities(fixtureDemoTree);
-      const entitiesWithFixtures = this.testService.entitiesWithFixtures(
-        entities,
-        fixtureDemoTree,
-      );
-      await this.testService.load(entitiesWithFixtures, fixtureDemoTree);
+      await this.testService.load(fixtureDemoTree);
     }
 
     await this.updateList();

@@ -7,6 +7,7 @@ import { TestService } from 'src/module/test/application/service/test.service';
 import { tokens } from './../../../../../src/common/fixtures/user';
 import { Profile } from '../../domain/profile.entity';
 import { CreateProfileDto } from '../../application/dto/create-profile.dto';
+import { fixturesTree } from 'src/common/fixtures/fixtureTree';
 
 describe('Profile', () => {
   let app: INestApplication;
@@ -18,9 +19,7 @@ describe('Profile', () => {
     app = moduleRef.createNestApplication();
     await app.init();
     testService = app.get<TestService>(TestService);
-    const fixtures = await testService.getEntities();
-    const fixtureWithEntities = testService.entitiesWithFixtures(fixtures);
-    await testService.load(fixtureWithEntities);
+    await testService.loadDefault();
   });
 
   describe('GET /profile', () => {

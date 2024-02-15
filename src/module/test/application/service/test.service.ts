@@ -16,12 +16,15 @@ export class TestService {
     this.connectionManager = this.dataSource.createEntityManager();
   }
 
-  async load(entities: IEntity[], fixture): Promise<void> {
-    for (const entity of entities.sort((a, b) => a.order - b.order)) {
+  async load(fixture: FixturesTree): Promise<void> {
+    const entities = await this.getEntities(fixture);
+    const entitiesWithFixtures = this.entitiesWithFixtures(entities, fixture);
+    for (const entity of entitiesWithFixtures.sort(
+      (a, b) => a.order - b.order,
+    )) {
       try {
         const repository = this.connectionManager.getRepository(entity.name);
         const items = fixture[entity.name];
-
         await repository
           .createQueryBuilder(entity.name)
           .insert()
@@ -51,18 +54,13 @@ export class TestService {
     return Object.keys(fixture).indexOf(entityName);
   }
 
-  entitiesWithFixtures(entities: IEntity[], fixture: FixturesTree) {
+  entitiesWithFixtures(entities: IEntity[], fixture: FixturesTree): IEntity[] {
     return entities.filter(
       (entity) => Object.keys(fixture).indexOf(entity.name) !== -1,
     );
   }
 
   async loadDefault() {
-    const entities = await this.getEntities(fixturesTree);
-    const entitiesWithFixtures = this.entitiesWithFixtures(
-      entities,
-      fixturesTree,
-    );
-    await this.load(entities, entitiesWithFixtures);
+    await this.load(fixturesTree);
   }
 }
