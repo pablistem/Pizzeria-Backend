@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { fixturesTree } from 'src/common/fixtures/fixtureTree';
+import { FixturesTree } from 'src/common/fixtures/types.fixture';
 import { DataSource, EntityManager } from 'typeorm';
 
 export interface IEntity {
@@ -15,11 +16,11 @@ export class TestService {
     this.connectionManager = this.dataSource.createEntityManager();
   }
 
-  async load(entities: IEntity[]): Promise<void> {
+  async load(entities: IEntity[], fixture): Promise<void> {
     for (const entity of entities.sort((a, b) => a.order - b.order)) {
       try {
         const repository = this.connectionManager.getRepository(entity.name);
-        const items = fixturesTree[entity.name];
+        const items = fixture[entity.name];
 
         await repository
           .createQueryBuilder(entity.name)
@@ -34,25 +35,34 @@ export class TestService {
     }
   }
 
-  async getEntities(): Promise<IEntity[]> {
+  async getEntities(fixture: FixturesTree): Promise<IEntity[]> {
     const entities = [];
     this.connectionManager.connection.entityMetadatas.forEach((entity) => {
       entities.push({
         name: entity.name,
         tableName: entity.tableName,
-        order: this.getOrder(entity.name),
+        order: this.getOrder(entity.name, fixture),
       });
     });
     return entities;
   }
 
-  getOrder(entityName: string): number {
-    return Object.keys(fixturesTree).indexOf(entityName);
+  getOrder(entityName: string, fixture: FixturesTree): number {
+    return Object.keys(fixture).indexOf(entityName);
   }
 
-  entitiesWithFixtures(entities) {
+  entitiesWithFixtures(entities: IEntity[], fixture: FixturesTree) {
     return entities.filter(
-      (entity) => Object.keys(fixturesTree).indexOf(entity.name) !== -1,
+      (entity) => Object.keys(fixture).indexOf(entity.name) !== -1,
     );
+  }
+
+  async loadDefault() {
+    const entities = await this.getEntities(fixturesTree);
+    const entitiesWithFixtures = this.entitiesWithFixtures(
+      entities,
+      fixturesTree,
+    );
+    await this.load(entities, entitiesWithFixtures);
   }
 }
