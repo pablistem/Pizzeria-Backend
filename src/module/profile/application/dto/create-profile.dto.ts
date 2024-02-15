@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString, IsNotEmpty } from 'class-validator';
-import { User } from 'src/module/user/domain/user.entity';
 
 export class CreateProfileDto {
   @ApiProperty()
@@ -31,5 +30,5 @@ export class CreateProfileDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  user: User;
+  user: number;
 }

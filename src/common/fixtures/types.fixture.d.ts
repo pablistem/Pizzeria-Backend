@@ -59,7 +59,10 @@ export class UserFixture extends OmitType(User, [
 export class ProfileFixture extends OmitType(Profile, [
   'updatedAt',
   'createdAt',
-]) {}
+  'user',
+]) {
+  user: number;
+}
 
 interface FixturesTree {
   User?: UserFixture[];

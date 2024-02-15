@@ -34,10 +34,9 @@ export class User extends Base {
   @OneToMany(() => Auth, (auth) => auth.user)
   sessions: Auth | undefined;
 
-  @OneToOne(() => User, {
+  @OneToOne(() => Profile, (profile) => profile.user, {
     cascade: true,
   })
-  @JoinColumn()
   profile: Profile;
 
   constructor(
