@@ -53,10 +53,8 @@ export class UserFixture extends OmitType(User, [
   'createdAt',
   'sessions',
   'orders',
-  'profile'
-]) {
-  profile: number
-}
+  'profile',
+]) {}
 
 export class ProfileFixture extends OmitType(Profile, [
   'updatedAt',
@@ -64,11 +62,11 @@ export class ProfileFixture extends OmitType(Profile, [
 ]) {}
 
 interface FixturesTree {
-  User: UserFixture[];
-  Category: CategoryFixture[];
-  Product: ProductFixture[];
-  Option: OptionFixture[];
-  Order: OrderFixture[];
-  Item: ItemFixture[];
-  Profile: ProfileFixture[];
+  User?: UserFixture[];
+  Category?: CategoryFixture[];
+  Product?: ProductFixture[];
+  Option?: OptionFixture[];
+  Order?: OrderFixture[];
+  Item?: ItemFixture[];
+  Profile?: ProfileFixture[];
 }
