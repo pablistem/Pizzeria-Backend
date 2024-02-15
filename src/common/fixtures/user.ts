@@ -1,6 +1,5 @@
 import { RoleEnum } from 'src/module/user/domain/user.entity';
 import { UserFixture } from './types.fixture';
-import { adminProfile, anonProfile, normalProfile } from './profile';
 
 export const anonUser: UserFixture = {
   id: 1,

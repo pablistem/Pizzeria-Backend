@@ -10,14 +10,19 @@ import { IProductRepository } from '../repository/product.repository.interface';
 import { Product } from '../../domain/product.entity';
 import { UserService } from 'src/module/user/application/service/user.service';
 import { RoleEnum } from 'src/module/user/domain/user.entity';
+import { TestService } from 'src/module/test/application/service/test.service';
+import { ConfigService } from '@nestjs/config';
+import { fixtureDemoTree } from 'src/common/fixtures/fixtureTree';
 
 @Injectable()
 export class ProductService {
+  NODE_ENV = this.config.get('NODE_ENV');
   constructor(
     @Inject(ProductRepository)
     private readonly productRepository: IProductRepository,
-    @Inject(UserService)
     private readonly userService: UserService,
+    private readonly testService: TestService,
+    private readonly config: ConfigService,
   ) {}
 
   public productsList: Product[] = [];
@@ -76,6 +81,10 @@ export class ProductService {
   };
 
   async onApplicationBootstrap() {
+    if (this.NODE_ENV === 'development') {
+      await this.testService.load(fixtureDemoTree);
+    }
+
     await this.updateList();
   }
 
