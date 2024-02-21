@@ -39,6 +39,7 @@ const development: DataSourceOptions = {
   type: 'better-sqlite3',
   database: 'devdb.sqlite',
   synchronize: true,
+  dropSchema: true,
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   namingStrategy: new SnakeNamingStrategy(),
 };

@@ -3,14 +3,15 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 import * as request from 'supertest';
 import { UpdateProfileDto } from '../../application/dto/update-profile.dto';
+import { TestService } from 'src/module/test/application/service/test.service';
 import { tokens } from './../../../../../src/common/fixtures/user';
 import { Profile } from '../../domain/profile.entity';
 import { CreateProfileDto } from '../../application/dto/create-profile.dto';
-import { loadFixtures } from 'src/common/fixtures/loader';
+import { fixturesTree } from 'src/common/fixtures/fixtureTree';
 
 describe('Profile', () => {
   let app: INestApplication;
-
+  let testService: TestService;
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
@@ -18,8 +19,8 @@ describe('Profile', () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
-
-    await loadFixtures(app);
+    testService = app.get<TestService>(TestService);
+    await testService.loadDefault();
   });
 
   describe('GET /profile', () => {

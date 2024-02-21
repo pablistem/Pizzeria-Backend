@@ -74,12 +74,12 @@ export class ProfileFixture extends OmitType(Profile, [
 }
 
 interface FixturesTree {
-  User: UserFixture[];
-  Category: CategoryFixture[];
-  Product: ProductFixture[];
-  Option: OptionFixture[];
-  Order: OrderFixture[];
-  Item: ItemFixture[];
-  Address: AddressFixture[];
-  Profile: ProfileFixture[];
+  User?: UserFixture[];
+  Category?: CategoryFixture[];
+  Product?: ProductFixture[];
+  Option?: OptionFixture[];
+  Order?: OrderFixture[];
+  Item?: ItemFixture[];
+  Profile?: ProfileFixture[];
+  Address?: AddressFixtures[];
 }
