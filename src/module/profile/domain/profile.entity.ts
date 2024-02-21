@@ -1,8 +1,9 @@
 import { Base } from 'src/common/domain/base.entity';
+import { Address } from 'src/module/address/domain/address.entity';
 import { User } from 'src/module/user/domain/user.entity';
-import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'profile' })
 export class Profile extends Base {
   @Column()
   avatar: string;
@@ -20,6 +21,9 @@ export class Profile extends Base {
   age: number;
 
   @OneToOne(() => User, (user) => user.profile)
-  @JoinColumn()
+  @JoinColumn({ name: 'user' })
   user: User;
+
+  @OneToMany(() => Address, (address) => address.profile)
+  addresses: Address[];
 }

@@ -1,5 +1,6 @@
 import { ProfileFixture } from './types.fixture';
 import { adminUser, anonUser, normalUser } from './user';
+import { address1, address2, address4 } from './address';
 
 export const anonProfile: ProfileFixture = {
   id: 1,
