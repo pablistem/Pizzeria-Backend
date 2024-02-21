@@ -14,7 +14,7 @@ import { item1, item2, item3 } from './item';
 import { option1, option2 } from './option';
 import { order1, order2 } from './order';
 import { product1, product2, product3 } from './product';
-import { anonProfile, normalProfile } from './profile';
+import { adminProfile, anonProfile, normalProfile } from './profile';
 import { FixturesTree } from './types.fixture';
 import { adminUser, anonUser, normalUser, userByProfile } from './user';
 
