@@ -25,25 +25,13 @@ export class ProfileService {
     }
   }
 
-  async getProfile(id: number, userId: number): Promise<Profile> {
+  async getProfile(id: number): Promise<Profile> {
     const profileFound = await this.profileRepository.findOne(id);
-    const userFound = await this.userService.findUserById(userId);
 
     if (!profileFound) {
       throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
     }
-
-    if (userFound.role === RoleEnum.admin) {
-      return profileFound;
-    }
-
-    if (userFound.id === id) {
-      delete profileFound.user.hash;
-      delete profileFound.user.verified;
-      return profileFound;
-    } else {
-      throw new HttpException('User Id not match', HttpStatus.UNAUTHORIZED);
-    }
+    return profileFound;
   }
 
   async updateProfile(
@@ -71,22 +59,14 @@ export class ProfileService {
     }
   }
 
-  async createProfile(createProfileDto: CreateProfileDto) {
-    const user = await this.userService.findUserById(createProfileDto.user);
-
+  async createProfile() {
     const userCompleted = new Profile();
-    userCompleted.street = createProfileDto.street;
-    userCompleted.age = createProfileDto.age;
-    userCompleted.avatar = createProfileDto.avatar;
-    userCompleted.height = createProfileDto.height;
-    userCompleted.postalCode = createProfileDto.postalCode;
-    userCompleted.user = user;
+    userCompleted.street = null;
+    userCompleted.age = null;
+    userCompleted.avatar = null;
+    userCompleted.height = null;
+    userCompleted.postalCode = null;
 
-    if (!user) {
-      throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
-    }
-
-    this.profileRepository.createProfile(userCompleted);
-    return 'El perfil fue creado correctamente!';
+    return await this.profileRepository.createProfile(userCompleted);
   }
 }

@@ -27,9 +27,9 @@ export class ProfileRepository implements IProfileRepository {
     });
   }
 
-  async createProfile(newProfile: Profile): Promise<void> {
+  async createProfile(newProfile: Profile): Promise<Profile> {
     const profileNew = this.repository.create(newProfile);
-    this.repository.save(profileNew);
+    return await this.repository.save(profileNew);
   }
 
   async updateProfile(changes: Profile): Promise<Profile | null> {

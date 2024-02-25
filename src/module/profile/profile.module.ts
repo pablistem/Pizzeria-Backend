@@ -10,5 +10,6 @@ import { UserModule } from '../user/user.module';
   imports: [TypeOrmModule.forFeature([Profile]), UserModule],
   controllers: [ProfileController],
   providers: [ProfileService, ProfileRepository],
+  exports: [ProfileService],
 })
 export class ProfileModule {}

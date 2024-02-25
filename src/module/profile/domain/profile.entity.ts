@@ -4,22 +4,21 @@ import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Profile extends Base {
-  @Column()
+  @Column({ nullable: true })
   avatar: string;
 
-  @Column()
+  @Column({ nullable: true })
   street: string;
 
-  @Column()
+  @Column({ nullable: true })
   height: number;
 
-  @Column()
+  @Column({ nullable: true })
   postalCode: number;
 
-  @Column()
+  @Column({ nullable: true })
   age: number;
 
   @OneToOne(() => User, (user) => user.profile)
-  @JoinColumn()
   user: User;
 }

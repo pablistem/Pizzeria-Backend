@@ -34,15 +34,15 @@ export class User extends Base {
   @OneToMany(() => Auth, (auth) => auth.user)
   sessions: Auth | undefined;
 
-  @OneToOne(() => Profile, (profile) => profile.user, {
-    cascade: true,
-  })
-  profile: Profile;
+  @OneToOne(() => Profile)
+  @JoinColumn({ name: 'profile_id' })
+  profile: Profile | number;
 
   constructor(
     email: string,
     name: string,
     lastName: string,
+    profile: number,
     hash?: string | undefined,
     verified?: boolean | undefined,
     role?: string | undefined,
@@ -56,6 +56,7 @@ export class User extends Base {
     this.name = name;
     this.lastName = lastName;
     this.hash = hash;
+    this.profile = profile;
     this.verified = verified;
     this.role = role;
     this.phone = phone;
