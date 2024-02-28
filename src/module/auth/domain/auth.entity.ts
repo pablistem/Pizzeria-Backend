@@ -4,10 +4,10 @@ import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Auth extends Base {
-  @Column()
+  @Column({ name: 'refresh_token' })
   refreshToken: string;
 
-  @ManyToOne(() => User, (user) => user.sessions)
+  @ManyToOne(() => User)
   @JoinColumn()
   user: User;
 

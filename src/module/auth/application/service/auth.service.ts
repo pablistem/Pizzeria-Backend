@@ -8,7 +8,7 @@ import {
 import * as argon2 from 'argon2';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
+import { CookieOptions, Response } from 'express';
 
 import { CreateAuthDto, LoginDto } from '../dto/index';
 import { UserService } from '../../../user/application/service/user.service';
@@ -102,7 +102,6 @@ export class AuthService {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      path: '/auth/logout',
     });
   }
 
@@ -143,10 +142,10 @@ export class AuthService {
   }
 
   private async setCookies(res: Response, refreshToken: string): Promise<void> {
-    const setConfig = {
+    const setConfig: CookieOptions = {
       httpOnly: true,
       secure: true,
-      path: '/auth/session',
+      sameSite: 'none',
       expires: new Date(new Date().getTime() + 60 * 60 * 24 * 14 * 1000),
     };
     res.cookie(this.COOKIE_NAME, refreshToken, setConfig);
@@ -174,21 +173,22 @@ export class AuthService {
         : this.REFRESH_TOKEN_SECRET;
 
     try {
-      const verify = this.jwtService.verify(refreshToken, {
-        secret,
+      if (!refreshToken) throw new NotFoundException('cookie not found!')
+      const verify = await this.jwtService.verifyAsync(refreshToken, {
+        secret: secret,
       });
       const user = await this.userService.getUserByEmail(verify.email);
-
       const accessToken = this.getAccessToken(user);
       const newRefreshToken = await this.getRefreshToken(user);
       const newAuth = new Auth(newRefreshToken, user);
-
+      await this.authRepository.removeRefreshToken(refreshToken);
+      await this.removeCookie(res);
       await this.setCookies(res, newRefreshToken);
       await this.authRepository.saveRefreshToken(newAuth);
-      await this.authRepository.removeRefreshToken(refreshToken);
       return accessToken;
     } catch (error) {
-      throw new HttpException('invalid token', 403);
+      await this.removeCookie(res);
+      throw new HttpException(error, 403);
     }
   }
 }

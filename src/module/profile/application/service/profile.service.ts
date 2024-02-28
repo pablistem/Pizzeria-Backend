@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Inject, InternalServerErrorException } from '@nestjs/common';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
 import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileRepository } from '../../infrastructure/profile.repository';
@@ -15,58 +15,44 @@ export class ProfileService {
     private readonly userService: UserService,
   ) {}
 
-  async getProfiles(userId: number) {
-    const userFound = await this.userService.findUserById(userId);
-
-    if (userFound.role === RoleEnum.admin) {
-      return this.profileRepository.findAll();
-    } else {
-      throw new HttpException('Only admin', HttpStatus.UNAUTHORIZED);
-    }
-  }
-
   async getProfile(id: number): Promise<Profile> {
     const profileFound = await this.profileRepository.findOne(id);
-
-    if (!profileFound) {
-      throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+    if (!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+    if(profileFound) {
+      if (!profileFound.age && 
+          !profileFound.avatar && 
+          !profileFound.height && 
+          !profileFound.postalCode && 
+          !profileFound.street) 
+      {
+        return null;
+      }
     }
     return profileFound;
   }
 
+  async fillProfile(profileId: number, profile: CreateProfileDto) {
+    const profileFound = await this.profileRepository.findOne(profileId);
+    if (!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+    const updateProfile = Object.assign(profileFound, profile);
+    return this.profileRepository.updateProfile(updateProfile);
+  }
+
   async updateProfile(
-    id: number,
     profile: UpdateProfileDto,
-    userId: number,
+    profileId: number,
   ): Promise<Profile> {
-    const profileFound = await this.profileRepository.findOne(id);
-    const userFound = await this.userService.findUserById(userId);
-
-    if (!profileFound) {
-      throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
-    }
-
-    if (userFound.role === RoleEnum.admin) {
-      const updateProfile = Object.assign(profileFound, profile);
-      return this.profileRepository.updateProfile(updateProfile);
-    }
-
-    if (userFound.id === id) {
-      const updateProfile = Object.assign(profileFound, profile);
-      return this.profileRepository.updateProfile(updateProfile);
-    } else {
-      throw new HttpException('User Id not match', HttpStatus.UNAUTHORIZED);
-    }
+    const profileFound = await this.profileRepository.findOne(profileId);
+    if (!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+    const updateProfile = Object.assign(profileFound, profile);
+    return this.profileRepository.updateProfile(updateProfile);
   }
 
   async createProfile() {
-    const userCompleted = new Profile();
-    userCompleted.street = null;
-    userCompleted.age = null;
-    userCompleted.avatar = null;
-    userCompleted.height = null;
-    userCompleted.postalCode = null;
-
-    return await this.profileRepository.createProfile(userCompleted);
+    try {
+      return await this.profileRepository.createProfile();
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

@@ -7,15 +7,8 @@ import { Profile } from '../domain/profile.entity';
 export class ProfileRepository implements IProfileRepository {
   repository: Repository<Profile>;
 
-  constructor(private readonly datasource: DataSource) {
+  constructor(datasource: DataSource) {
     this.repository = datasource.getRepository(Profile);
-  }
-
-  async findAll(): Promise<Profile[]> {
-    return this.repository
-      .createQueryBuilder('profile')
-      .leftJoinAndSelect('profile.user', 'user')
-      .getMany();
   }
 
   async findOne(id: number): Promise<Profile | null> {
@@ -27,8 +20,8 @@ export class ProfileRepository implements IProfileRepository {
     });
   }
 
-  async createProfile(newProfile: Profile): Promise<Profile> {
-    const profileNew = this.repository.create(newProfile);
+  async createProfile(): Promise<Profile> {
+    const profileNew = this.repository.create();
     return await this.repository.save(profileNew);
   }
 
