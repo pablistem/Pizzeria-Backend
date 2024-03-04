@@ -13,14 +13,19 @@ export enum RoleEnum {
 export class User extends Base {
   @Column({ unique: true })
   email: string;
+  
   @Column()
   name: string;
+
   @Column()
   lastName: string;
+
   @Column()
   hash: string | undefined;
+
   @Column()
   verified: boolean | undefined;
+
   @Column()
   role: string | undefined;
 
@@ -43,9 +48,9 @@ export class User extends Base {
     name: string,
     lastName: string,
     profile: number,
-    hash?: string | undefined,
-    verified?: boolean | undefined,
-    role?: string | undefined,
+    hash: string | undefined,
+    verified: boolean | undefined,
+    role: string | undefined,
     phone?: string,
     createdAt?: Date | undefined,
     updatedAt?: Date | undefined,
