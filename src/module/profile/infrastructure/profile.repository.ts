@@ -23,7 +23,9 @@ export class ProfileRepository implements IProfileRepository {
       where: {
         id: id,
       },
-      relations: { user: true },
+      relations: { 
+        user: true,
+      },
     });
   }
 

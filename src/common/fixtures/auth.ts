@@ -34,7 +34,7 @@ export const sessionProfile: AuthFixture = {
   refreshToken: refreshTokenProfile,
 };
 
-export const authFixture = [
+export const authFixtures = [
   sessionAdmin,
   sessionNormal,
   sessionToErase,

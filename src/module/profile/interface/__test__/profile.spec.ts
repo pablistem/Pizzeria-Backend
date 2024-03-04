@@ -16,6 +16,7 @@ describe('Profile', () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
+
     app = moduleRef.createNestApplication();
     await app.init();
     testService = app.get<TestService>(TestService);
@@ -30,7 +31,7 @@ describe('Profile', () => {
       expect(response.statusCode).toBe(200);
 
       const body: Profile[] = response.body;
-      expect(body).toHaveLength(2);
+      expect(body).toHaveLength(3);
       expect(body[0].user).toBeDefined();
     });
 
