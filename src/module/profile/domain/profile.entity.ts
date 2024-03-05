@@ -5,10 +5,10 @@ import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'profile' })
 export class Profile extends Base {
-  @Column({ nullable: true })
+  @Column()
   avatar: string;
 
-  @Column({ nullable: true })
+  @Column()
   age: number;
 
   @Column()
@@ -16,7 +16,7 @@ export class Profile extends Base {
 
   @OneToOne(() => User, (user) => user.profile)
   @JoinColumn({ name: 'user' })
-  user: User;
+  user: User | number;
 
   @OneToMany(() => Address, (address) => address.profile)
   addresses: Address[];

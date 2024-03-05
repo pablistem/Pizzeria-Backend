@@ -1,10 +1,10 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing"; 
 import * as request from 'supertest';
-import { AppModule } from "src/app.module";
+import { AppModule } from "../../../../app.module";
 import { CreateAddressDto, UpdateAddressDto } from "../../application/dto/address.dto";
-import { tokens } from "src/common/fixtures/user";
-import { loadFixtures } from "src/common/fixtures/loader";
+import { tokens } from "../../../../common/fixtures/user";
+import { loadFixtures } from "../../../../common/fixtures/loader";
 
 describe('Address', () => {
   let app: INestApplication;
@@ -48,7 +48,9 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Mendoza',
         city: 'Mendoza',
-        address: 'Av. Callao 789',
+        street: 'Av. Callao',
+        height: 789,
+        postalCode: 1000,
       };
       await request(app.getHttpServer())
         .post('/address')
@@ -61,7 +63,9 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Mendoza',
         city: 'Mendoza',
-        address: 'Av. Callao 789',
+        street: 'Av. Callao',
+        height: 789,
+        postalCode: 1000,
       };
       const { body } = await request(app.getHttpServer())
         .post('/address')
@@ -78,7 +82,9 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Córdoba',
         city: 'Córdoba',
-        address: 'Avellaneda 888',
+        street: 'Av. Callao',
+        height: 789,
+        postalCode: 1000,
       }
       await request(app.getHttpServer())
         .put('/address/3')
@@ -91,7 +97,9 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Córdoba',
         city: 'Córdoba',
-        address: 'Avellaneda 888',
+        street: 'Av. Avellaneda',
+        height: 789,
+        postalCode: 1000,
       }
       const { body } = await request(app.getHttpServer())
         .put('/address/3')
@@ -100,7 +108,9 @@ describe('Address', () => {
         .expect(200);
       expect(body).toHaveProperty('state', 'Córdoba');
       expect(body).toHaveProperty('city', 'Córdoba');
-      expect(body).toHaveProperty('address', 'Avellaneda 888');
+      expect(body).toHaveProperty('street', 'Av. Avellaneda');
+      expect(body).toHaveProperty('height', 789);
+      expect(body).toHaveProperty('postalCode', 1000);
     })
 
     it('cannot retrieve the address to update', async () => {
@@ -108,7 +118,9 @@ describe('Address', () => {
         country: 'Argentina',
         state: 'Córdoba',
         city: 'Córdoba',
-        address: 'Avellaneda 888',
+        street: 'Av. Callao',
+        height: 888,
+        postalCode: 1000,
       }
       await request(app.getHttpServer())
         .put('/address/999')

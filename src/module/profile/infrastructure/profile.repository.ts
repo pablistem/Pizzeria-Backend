@@ -11,10 +11,18 @@ export class ProfileRepository implements IProfileRepository {
     this.repository = datasource.getRepository(Profile);
   }
 
-  async findOne(id: number): Promise<Profile | null> {
+  async findById(id: number): Promise<Profile | null> {
     return await this.repository.findOne({
       where: {
         id: id,
+      },
+    });
+  }
+
+  async findByUser(user: number): Promise<Profile | null> {
+    return await this.repository.findOne({
+      where: {
+        user: user,
       },
       relations: { 
         user: true,
@@ -22,8 +30,8 @@ export class ProfileRepository implements IProfileRepository {
     });
   }
 
-  async createProfile(): Promise<Profile> {
-    const profileNew = this.repository.create();
+  async createProfile(data: Profile): Promise<Profile> {
+    const profileNew = this.repository.create(data);
     return await this.repository.save(profileNew);
   }
 

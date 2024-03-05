@@ -12,7 +12,6 @@ import { CookieOptions, Response } from 'express';
 
 import { CreateAuthDto, LoginDto } from '../dto/index';
 import { UserService } from '../../../user/application/service/user.service';
-import { ProfileService } from 'src/module/profile/application/service/profile.service';
 import { RoleEnum, User } from '../../../user/domain/user.entity';
 import { Auth } from '../../domain/auth.entity';
 import { AuthRepository } from '../../infrastructure/auth.repository';
@@ -29,7 +28,6 @@ export class AuthService {
     @Inject(AuthRepository)
     private readonly authRepository: IAuthRepository,
     @Inject(UserService) private userService: UserService,
-    private readonly profileService: ProfileService,
     private jwtService: JwtService,
     private config: ConfigService,
   ) {}
@@ -47,12 +45,10 @@ export class AuthService {
     } catch (err) {
       if (err instanceof NotFoundException) {
         const hash = await argon2.hash(createAuthDto.password);
-        const profile = await this.profileService.createProfile();
         const newUser = new User(
           createAuthDto.email,
           createAuthDto.name,
           createAuthDto.lastName,
-          profile.id,
           hash,
           true,
           RoleEnum.user,
@@ -101,7 +97,7 @@ export class AuthService {
   private async removeCookie(res: Response): Promise<void> {
     res.clearCookie(this.COOKIE_NAME, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: 'none',
     });
   }
@@ -118,7 +114,6 @@ export class AuthService {
       id: user.id,
       email: user.email,
       role: user.role,
-      profile: user.profile
     };
     const secret =
       this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST
@@ -147,7 +142,7 @@ export class AuthService {
   private async setCookies(res: Response, refreshToken: string): Promise<void> {
     const setConfig: CookieOptions = {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: 'none',
       expires: new Date(new Date().getTime() + 60 * 60 * 24 * 14 * 1000),
     };
@@ -159,7 +154,6 @@ export class AuthService {
       id: user.id,
       email: user.email,
       role: user.role,
-      profile: user.profile,
     };
     const options: JwtSignOptions = {
       secret: this.ACCESS_TOKEN_SECRET,

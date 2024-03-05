@@ -48,7 +48,6 @@ export class TestService {
         order: this.getOrder(entity.name, fixture),
         relation: entity.relations.forEach(relation => relation.foreignKeys)
       });
-      console.log(entities);
     });
     return entities;
   }

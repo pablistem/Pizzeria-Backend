@@ -44,3 +44,5 @@ lerna-debug.log*
 data/tests.db
 data/tests
 devdb.sqlite
+
+/uploads

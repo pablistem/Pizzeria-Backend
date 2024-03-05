@@ -15,7 +15,6 @@ import { JwtStrategy } from './application/strategy';
   imports: [
     TypeOrmModule.forFeature([User, Auth]),
     UserModule,
-    ProfileModule,
     JwtModule.register({}),
   ],
   controllers: [AuthController],

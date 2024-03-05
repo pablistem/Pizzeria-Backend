@@ -9,7 +9,6 @@ export const anonUser: UserFixture = {
   hash: '',
   verified: true,
   role: RoleEnum.user,
-  phone: '4321',
 };
 
 export const normalUser: UserFixture = {
@@ -20,7 +19,6 @@ export const normalUser: UserFixture = {
   hash: '',
   verified: true,
   role: RoleEnum.user,
-  phone: '1234',
 };
 
 export const adminUser: UserFixture = {
@@ -31,7 +29,6 @@ export const adminUser: UserFixture = {
   hash: '',
   verified: true,
   role: RoleEnum.admin,
-  phone: '',
 };
 
 export const userByProfile: UserFixture = {
@@ -42,19 +39,19 @@ export const userByProfile: UserFixture = {
   hash: '',
   verified: true,
   role: RoleEnum.user,
-  phone: '',
 };
+
 const anonUserToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbm9tQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwicHJvZmlsZSI6MX0.H2fgNi94BMWitqwfN4SuFffbzxljwbYdM8dGzAlHj3Y';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbm9uQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA5NjEyMzQ5fQ.9lB9Eii72Rt0NB9ZhGiG5SP5Rw0Hp_eM9I5odY7UbQY';
 
 const normalUserToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJub3JtYWxAZW1haWwuY29tIiwicm9sZSI6InVzZXIiLCJwcm9maWxlIjoyfQ.iEAhVapnmZ3VZWNpyrK-ogoBcPKObi-MWqDltMeZxOo';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJub3JtYWxAZW1haWwuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MDk2MTI1MjN9.qhN5RwF1UunVvO5Otu7FItTEQUh6jX9lCXTdXsG9SEA';
 
 const adminUserToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJwcm9maWxlIjozfQ._YB0PBaProPR6VnsILfD6P3_hBF6C0Qv0IpJ-5HKSjc';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDk2MTI5NTF9.ODzIKeqx0xFssvBBi6C3d4NcalAczQRg7BevvnLSj-Y';
 
 const userByProfileToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ1c2VyQnlQcm9maWxlQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwicHJvZmlsZSI6NH0.MjHYD6WvKY8p2mRV9NFDXW4Thtv5A5_WMdvLS6N6zTI';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ1c2VyQnlQcm9maWxlQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA5NjEzNjM1fQ.17VM4jM3oGnxQYfmMHDpfbtQk_Pg__aV6t_tIjnU9CA';
 
 export const tokens = {
   anonUserToken,

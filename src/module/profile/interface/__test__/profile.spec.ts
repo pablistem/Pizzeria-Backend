@@ -6,6 +6,7 @@ import { UpdateProfileDto } from '../../application/dto/update-profile.dto';
 import { TestService } from 'src/module/test/application/service/test.service';
 import { tokens } from './../../../../../src/common/fixtures/user';
 import { AuthService } from 'src/module/auth/application/service/auth.service';
+import { loadFixtures } from 'src/common/fixtures/loader';
 
 describe('Profile', () => {
   let app: INestApplication;
@@ -18,28 +19,26 @@ describe('Profile', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
-    testService = app.get<TestService>(TestService);
-    authService = app.get<AuthService>(AuthService);
-    await testService.loadDefault();
     await app.init();
+
+    await loadFixtures(app);
   });
 
   describe('GET /profile', () => {
-    it('Should get a profile by ID', async () => {
-      const response = await request(app.getHttpServer())
+    it('Should get a profile by ID being user', async () => {
+      await request(app.getHttpServer())
         .get('/profile')
-        .auth(tokens.adminUserToken, { type: 'bearer' });
-      expect(response.body).toHaveProperty('id', 1);
-      expect(response.body.user).toBeDefined();
+        .expect(401)
     });
 
     it('Should get a profile by ID being user', async () => {
-      const response = await request(app.getHttpServer())
+      const { body } = await request(app.getHttpServer())
         .get('/profile')
-        .auth(tokens.normalUserToken, { type: 'bearer' });
+        .auth(tokens.normalUserToken, { type: 'bearer' })
+        .expect(200)
       const token = await authService.decodeToken(tokens.normalUserToken);
-      console.log(token);
-      expect(token).toMatchObject({ profile: 2 });
+      expect(token).toMatchObject({ id: 2 });
+      expect(body).toHaveProperty('user', token.id);
     });
 
     it('Should get not found profile by ID', async () => {

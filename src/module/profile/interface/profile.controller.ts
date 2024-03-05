@@ -1,12 +1,23 @@
 import {
   Controller,
   Get,
-  Body,
+  Post,
   Put,
+  Param,
+  Body,
+  UploadedFile,
   UseGuards,
   Req,
+  ParseIntPipe,
+  ParseFilePipeBuilder,
+  UseInterceptors,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { diskStorage } from 'multer';
+import { extname } from 'node:path';
 import { ProfileService } from '../application/service/profile.service';
 import { UpdateProfileDto } from '../application/dto/update-profile.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
@@ -20,23 +31,53 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Get()
-  getProfile(@Req() req: UserRequest) {
-    return this.profileService.getProfile(req.user.profile);
+  async getProfile(@Req() req: UserRequest) {
+    return this.profileService.getProfile(req.user.id);
   }
 
-  @Put('fill')
-  fillProfile(
-    @Body() profile: CreateProfileDto,
+  @Post()
+  @UseInterceptors(FileInterceptor('avatar', { 
+    storage: diskStorage({
+      destination: 'uploads/profile',
+      filename: (req, file, cb) => {
+        const extName = extname(file.originalname);
+        const fileName = `${file.originalname}-${extName}`;
+        cb(null, fileName);
+      }
+    }),
+  }))
+  async createProfile(
+    @Body() data: CreateProfileDto,
     @Req() req: UserRequest,
+    @UploadedFile(new ParseFilePipeBuilder()
+      .addFileTypeValidator({ fileType: 'jpeg' })
+      .addMaxSizeValidator({ maxSize: 2 * 1024 * 1024 })
+      .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY })
+    ) file: Express.Multer.File
   ) {
-    return this.profileService.fillProfile(req.user.profile, profile);
+    return await this.profileService.createProfile(req.user.id, data, file);
   }
 
-  @Put('update')
-  updateProfile(
+  @Put(':id')
+  @UseInterceptors(FileInterceptor('avatar', {
+    storage: diskStorage({
+      destination: 'uploads/profile',
+      filename: (req, file, cb) => {
+        const extName = extname(file.originalname)
+        const fileName = `${file.originalname}-${extName}`;
+        cb(null, fileName);
+      }
+    })
+  }))
+  async updateProfile(
+    @Param('id', ParseIntPipe) id: number,
     @Body() profile: UpdateProfileDto,
-    @Req() req: UserRequest,
+    @UploadedFile(new ParseFilePipeBuilder()
+      .addFileTypeValidator({ fileType: 'jpeg' })
+      .addMaxSizeValidator({ maxSize: 2 * 1024 *1024 })
+      .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY })
+    ) file: Express.Multer.File
   ) {
-    return this.profileService.updateProfile(profile, req.user.profile);
+    return this.profileService.updateProfile(id, profile, file);
   }
 }

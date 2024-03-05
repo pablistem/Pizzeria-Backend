@@ -10,45 +10,33 @@ import { RoleEnum, User } from 'src/module/user/domain/user.entity';
 @Injectable()
 export class ProfileService {
   constructor(
-    @Inject(ProfileRepository)
-    private readonly profileRepository: IProfileRepository,
-    private readonly userService: UserService,
-  ) {}
+    @Inject(ProfileRepository) private readonly profileRepository: IProfileRepository) {}
 
   async getProfile(id: number): Promise<Profile> {
-    const profileFound = await this.profileRepository.findOne(id);
+    const profileFound = await this.profileRepository.findByUser(id);
     if (!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
-    if(profileFound) {
-      if (!profileFound.age && 
-          !profileFound.avatar && 
-          !profileFound.phone) 
-      {
-        return null;
-      }
-    }
     return profileFound;
   }
 
-  async fillProfile(profileId: number, profile: CreateProfileDto) {
-    const profileFound = await this.profileRepository.findOne(profileId);
-    if (!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
-    const updateProfile = Object.assign(profileFound, profile);
-    return this.profileRepository.updateProfile(updateProfile);
-  }
-
   async updateProfile(
-    profile: UpdateProfileDto,
-    profileId: number,
+    id: number,
+    changes: UpdateProfileDto,
+    file: Express.Multer.File,
   ): Promise<Profile> {
-    const profileFound = await this.profileRepository.findOne(profileId);
+    const profileFound = await this.profileRepository.findById(id);
     if (!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
-    const updateProfile = Object.assign(profileFound, profile);
+    const updateProfile = Object.assign(profileFound, changes);
     return this.profileRepository.updateProfile(updateProfile);
   }
 
-  async createProfile() {
+  async createProfile(user: number, data: CreateProfileDto, file: Express.Multer.File) {
     try {
-      return await this.profileRepository.createProfile();
+      const profile = new Profile();
+      profile.avatar = file.path;
+      profile.age = data.age;
+      profile.phone = data.phone;
+      profile.user = user;
+      return await this.profileRepository.createProfile(profile);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

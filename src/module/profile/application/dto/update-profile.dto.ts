@@ -9,26 +9,11 @@ export class UpdateProfileDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsString()
-  street?: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsNumber()
-  height?: number;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsNumber()
-  postalCode?: number;
-
-  @ApiProperty()
-  @IsOptional()
   @IsNumber()
   age?: number;
 
   @ApiProperty()
   @IsOptional()
   @IsNumber()
-  user?: number;
+  phone?: number;
 }
