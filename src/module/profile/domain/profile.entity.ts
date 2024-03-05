@@ -11,6 +11,9 @@ export class Profile extends Base {
   @Column({ nullable: true })
   age: number;
 
+  @Column()
+  phone: number;
+
   @OneToOne(() => User, (user) => user.profile)
   @JoinColumn({ name: 'user' })
   user: User;

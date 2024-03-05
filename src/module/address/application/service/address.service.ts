@@ -20,7 +20,9 @@ export class AddressService {
     newAddress.country = data.country;
     newAddress.state = data.state;
     newAddress.city = data.city;
-    newAddress.address = data.address;
+    newAddress.street = data.street;
+    newAddress.height = data.height;
+    newAddress.postalCode = data.postalCode;
     return await this.addressRepository.create(newAddress);
   }
 
@@ -30,7 +32,9 @@ export class AddressService {
     updateAddress.country = changes.country;
     updateAddress.state = changes.state;
     updateAddress.city = changes.city;
-    updateAddress.address = changes.address;
+    updateAddress.street = changes.street;
+    updateAddress.height = changes.height;
+    updateAddress.postalCode = changes.postalCode;
     return await this.addressRepository.update(updateAddress);
   }
 

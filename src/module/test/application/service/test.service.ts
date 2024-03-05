@@ -46,9 +46,10 @@ export class TestService {
         name: entity.name,
         tableName: entity.tableName,
         order: this.getOrder(entity.name, fixture),
+        relation: entity.relations.forEach(relation => relation.foreignKeys)
       });
+      console.log(entities);
     });
-    console.log(entities)
     return entities;
   }
 

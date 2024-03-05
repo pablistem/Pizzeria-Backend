@@ -21,9 +21,7 @@ export class ProfileService {
     if(profileFound) {
       if (!profileFound.age && 
           !profileFound.avatar && 
-          !profileFound.height && 
-          !profileFound.postalCode && 
-          !profileFound.street) 
+          !profileFound.phone) 
       {
         return null;
       }

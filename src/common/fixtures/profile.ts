@@ -5,30 +5,24 @@ import { address1, address2, address4 } from './address';
 export const anonProfile: ProfileFixture = {
   id: 1,
   avatar: 'imagen',
-  street: 'calle x',
-  height: 1234,
-  postalCode: 5000,
   age: 30,
+  phone: 2610000001,
   user: anonUser.id,
 };
 
 export const normalProfile: ProfileFixture = {
   id: 2,
   avatar: 'imagen',
-  street: 'calle x',
-  height: 1234,
-  postalCode: 5000,
   age: 30,
+  phone: 261000002,
   user: normalUser.id,
 };
 
 export const adminProfile: ProfileFixture = {
   id: 3,
   avatar: 'imagen',
-  street: 'calle x',
-  height: 1234,
-  postalCode: 5000,
   age: 30,
+  phone: 2610000001,
   user: adminUser.id,
 };
 

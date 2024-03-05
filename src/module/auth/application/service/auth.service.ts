@@ -18,6 +18,7 @@ import { Auth } from '../../domain/auth.entity';
 import { AuthRepository } from '../../infrastructure/auth.repository';
 import { IAuthRepository } from '../repository/auth.repository.interface';
 import { ENVIRONMENTS } from '../../../../../ormconfig';
+import { UserRequest } from 'src/common/interfaces/UserRequest';
 
 @Injectable()
 export class AuthService {
@@ -105,9 +106,10 @@ export class AuthService {
     });
   }
 
-  async logOut(id: number, res: Response) {
-    const user: User = await this.userService.findUserById(id);
-    this.authRepository.removeRefreshToken(user.sessions.refreshToken);
+  async logOut(cookie: string, userReq: UserRequest, res: Response) {
+    if (cookie === undefined ) throw new NotFoundException('cookie not found!')
+    const userFound: User = await this.userService.findUserById(userReq.user.id);
+    this.authRepository.removeRefreshToken(userFound.sessions.refreshToken);
     await this.removeCookie(res);
   }
 
@@ -116,6 +118,7 @@ export class AuthService {
       id: user.id,
       email: user.email,
       role: user.role,
+      profile: user.profile
     };
     const secret =
       this.config.get('NODE_ENV') === ENVIRONMENTS.AUTOMATED_TEST

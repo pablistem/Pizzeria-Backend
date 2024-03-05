@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import * as cookieParser from 'cookie-parser';
 
 declare const module: any;
 
@@ -12,8 +11,6 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({ origin: 'http://localhost:5173', credentials: true });
-
-  app.use(cookieParser())
 
   const config = new DocumentBuilder()
     .addBearerAuth()

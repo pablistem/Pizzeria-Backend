@@ -36,10 +36,12 @@ export class AuthController {
   @UseGuards(JwtGuard)
   @Get('logout')
   async logout(
-    @Req() req: UserRequest,
+    @Req() req: Request,
+    @Req() userRequest: UserRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    return await this.authService.logOut(req.user.id, res);
+    const cookie = req.headers.cookie;
+    return await this.authService.logOut(cookie, userRequest, res);
   }
 
   @Get('session')
