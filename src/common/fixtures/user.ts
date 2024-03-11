@@ -4,8 +4,6 @@ import { UserFixture } from './types.fixture';
 export const anonUser: UserFixture = {
   id: 1,
   email: 'anon@email.com',
-  name: 'anon',
-  lastName: 'anon',
   hash: '',
   verified: true,
   role: RoleEnum.user,
@@ -14,8 +12,6 @@ export const anonUser: UserFixture = {
 export const normalUser: UserFixture = {
   id: 2,
   email: 'normal@email.com',
-  name: 'normal',
-  lastName: 'normal',
   hash: '',
   verified: true,
   role: RoleEnum.user,
@@ -24,8 +20,6 @@ export const normalUser: UserFixture = {
 export const adminUser: UserFixture = {
   id: 3,
   email: 'admin@email.com',
-  name: 'admin',
-  lastName: 'admin',
   hash: '',
   verified: true,
   role: RoleEnum.admin,
@@ -34,8 +28,6 @@ export const adminUser: UserFixture = {
 export const userByProfile: UserFixture = {
   id: 4,
   email: 'userByProfile@email.com',
-  name: 'user',
-  lastName: 'profile',
   hash: '',
   verified: true,
   role: RoleEnum.user,
@@ -50,14 +42,14 @@ const normalUserToken =
 const adminUserToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDk2MTI5NTF9.ODzIKeqx0xFssvBBi6C3d4NcalAczQRg7BevvnLSj-Y';
 
-const userByProfileToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ1c2VyQnlQcm9maWxlQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA5NjEzNjM1fQ.17VM4jM3oGnxQYfmMHDpfbtQk_Pg__aV6t_tIjnU9CA';
+const newUserToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJuZXd1c2VyQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA5OTU2MjQ2fQ.6BfdIZAuk9X5hRXX44613KOSBZkq8K5Ab5FOINNadgY';
 
 export const tokens = {
   anonUserToken,
   normalUserToken,
   adminUserToken,
-  userByProfileToken,
+  newUserToken,
 };
 
 export const userFixtures = [anonUser, normalUser, adminUser, userByProfile];

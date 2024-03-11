@@ -5,7 +5,12 @@ export class UpdateProfileDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  avatar?: string;
+  name?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  lastName?: string;
 
   @ApiProperty()
   @IsOptional()

@@ -47,8 +47,6 @@ export class AuthService {
         const hash = await argon2.hash(createAuthDto.password);
         const newUser = new User(
           createAuthDto.email,
-          createAuthDto.name,
-          createAuthDto.lastName,
           hash,
           true,
           RoleEnum.user,
@@ -157,7 +155,6 @@ export class AuthService {
     };
     const options: JwtSignOptions = {
       secret: this.ACCESS_TOKEN_SECRET,
-      expiresIn: 60 * 15,
     };
     const accessToken = this.jwtService.sign(payload, options);
     return accessToken;

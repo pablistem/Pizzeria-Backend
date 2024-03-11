@@ -15,12 +15,6 @@ export class User extends Base {
   email: string;
   
   @Column()
-  name: string;
-
-  @Column()
-  lastName: string;
-
-  @Column()
   hash: string | undefined;
 
   @Column()
@@ -41,8 +35,6 @@ export class User extends Base {
 
   constructor(
     email: string,
-    name: string,
-    lastName: string,
     hash: string | undefined,
     verified: boolean | undefined,
     role: string | undefined,
@@ -52,8 +44,6 @@ export class User extends Base {
   ) {
     super();
     this.email = email;
-    this.name = name;
-    this.lastName = lastName;
     this.hash = hash;
     this.verified = verified;
     this.role = role;

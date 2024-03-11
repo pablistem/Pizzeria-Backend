@@ -64,8 +64,6 @@ export const productDemo4: ProductFixture = {
 
 export const userAdminDemo: UserFixture = {
   id: 1,
-  name: 'Pablo',
-  lastName: 'Medina',
   email: 'pablo.medina@email.com',
   hash: '$argon2id$v=19$m=65536,t=3,p=4$bfYxbFLMlMEl5iTN8uazBA$s3Pky6Xm8xi973SdXIqapD38Ws+FUi9Fdt2lGq9o5yU',
   verified: true,

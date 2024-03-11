@@ -6,33 +6,20 @@ import { Profile } from '../domain/profile.entity';
 @Injectable()
 export class ProfileRepository implements IProfileRepository {
   repository: Repository<Profile>;
-
   constructor(datasource: DataSource) {
     this.repository = datasource.getRepository(Profile);
   }
 
-  async findById(id: number): Promise<Profile | null> {
-    return await this.repository.findOne({
-      where: {
-        id: id,
-      },
-    });
-  }
-
   async findByUser(user: number): Promise<Profile | null> {
-    return await this.repository.findOne({
-      where: {
-        user: user,
-      },
-      relations: { 
-        user: true,
-      },
-    });
+    return await this.repository.createQueryBuilder('profile')
+      .leftJoinAndSelect('profile.user', 'user')
+      .where('profile.user = :id', { id: user })
+      .getOne();
   }
 
   async createProfile(data: Profile): Promise<Profile> {
-    const profileNew = this.repository.create(data);
-    return await this.repository.save(profileNew);
+    const newProfile = this.repository.create(data);
+    return await this.repository.save(newProfile);
   }
 
   async updateProfile(changes: Profile): Promise<Profile | null> {

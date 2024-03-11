@@ -8,5 +8,4 @@ export interface UserToken {
   id: number;
   email: string;
   role: RoleEnum;
-  profile: number;
 }
