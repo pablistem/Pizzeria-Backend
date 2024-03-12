@@ -4,7 +4,6 @@ import { Profile } from 'src/module/profile/domain/profile.entity';
 
 @Entity({ name: 'address'})
 export class Address extends Base {
-
   @Column({ nullable: true })
   country: string;
 
@@ -23,7 +22,7 @@ export class Address extends Base {
   @Column({ nullable: true })
   postalCode: number;
 
-  @ManyToOne(() => Profile, (profile) => profile.addresses)
+  @ManyToOne(() => Profile)
   @JoinColumn({ name: 'profile' })
   profile: Profile;
 }

@@ -46,3 +46,4 @@ data/tests
 devdb.sqlite
 
 /uploads
+*.jpeg

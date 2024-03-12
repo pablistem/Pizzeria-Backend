@@ -30,7 +30,7 @@ export class User extends Base {
   @OneToMany(() => Auth, (auth) => auth.user)
   sessions: Auth | undefined;
 
-  @OneToOne(() => Profile, (profile) => profile.user)
+  @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
   profile: Profile | undefined;
 
   constructor(

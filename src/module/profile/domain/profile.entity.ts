@@ -21,7 +21,7 @@ export class Profile extends Base {
   phone: number;
 
   @OneToOne(() => User)
-  @JoinColumn({ name: 'user' })
+  @JoinColumn()
   user: User | number;
 
   @OneToMany(() => Address, (address) => address.profile)

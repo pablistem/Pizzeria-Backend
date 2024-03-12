@@ -2,11 +2,11 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 import * as request from 'supertest';
-import { UpdateProfileDto } from '../../application/dto/update-profile.dto';
 import { tokens } from './../../../../../src/common/fixtures/user';
 import { AuthService } from 'src/module/auth/application/service/auth.service';
 import { loadFixtures } from 'src/common/fixtures/loader';
 import { CreateProfileDto } from '../../application/dto/create-profile.dto';
+import { UpdateProfileDto } from '../../application/dto/update-profile.dto';
 
 describe('Profile', () => {
   let app: INestApplication;
@@ -136,14 +136,14 @@ describe('Profile', () => {
         .expect(401)
     })
 
-    it('Should not create the profile because it already exists', async () => {
+    it('Should not create an already existing profile', async () => {
       await request(app.getHttpServer())
         .post('/profile')
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .expect(409);
     })
 
-    it('Should create a new profile', async () => {
+    it('Should create a new profile without an avatar', async () => {
       const { id } = await authService.decodeToken(tokens.newUserToken)
       const newProfile: CreateProfileDto = {
         name: 'Facundo',
@@ -161,6 +161,35 @@ describe('Profile', () => {
       expect(body).toHaveProperty('lastName', newProfile.lastName);
       expect(body).toHaveProperty('phone', newProfile.phone);
       expect(body).toHaveProperty('age', newProfile.age);
+      expect(body).toHaveProperty('avatar', null)
+    })
+
+    it('Should create a new profile with an avatar', async () => {
+      const { id } = await authService.decodeToken(tokens.newUserWithAvatarToken)
+      const newProfile: CreateProfileDto = {
+        name: 'Facundo',
+        lastName: 'Castro',
+        phone: 2610000005,
+        age: 32,
+      }
+      const filePath = `${__dirname}/image.jpeg`;
+      const fileName = `${newProfile.name}-${newProfile.lastName}-avatar`;
+      const { body } = await request(app.getHttpServer())
+        .post('/profile')
+        .auth(tokens.newUserWithAvatarToken, { type: 'bearer' })
+        .set('Content-Type', 'multipart/form-data')
+        .field({...newProfile})
+        .attach('avatar', filePath, {
+          filename: fileName,
+          contentType: 'image.jpeg'
+        })
+        .expect(201);
+      expect(body).toHaveProperty('user', id);
+      expect(body).toHaveProperty('name', newProfile.name);
+      expect(body).toHaveProperty('lastName', newProfile.lastName);
+      expect(body).toHaveProperty('phone', newProfile.phone.toString());
+      expect(body).toHaveProperty('age', newProfile.age.toString());
+      expect(body).toHaveProperty('avatar', `uploads\\profile\\${fileName}-`)
     })
   })
 

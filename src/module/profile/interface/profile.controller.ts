@@ -36,22 +36,6 @@ export class ProfileController {
   }
 
   @Post()
-  async createProfile(
-    @Body() data: CreateProfileDto,
-    @Req() req: UserRequest,
-  ) {
-    return await this.profileService.createProfile(req.user.id, data);
-  }
-
-  @Put()
-  async updateProfile(
-    @Req() req: UserRequest,
-    @Body() profile: UpdateProfileDto,
-  ) {
-    return this.profileService.updateProfile(req.user.id, profile);
-  }
-
-  @Put('avatar')
   @UseInterceptors(FileInterceptor('avatar', { 
     storage: diskStorage({
       destination: 'uploads/profile',
@@ -62,14 +46,30 @@ export class ProfileController {
       }
     }),
   }))
-  async uploadAvatar(
+  async createProfile(
+    @Body() data: CreateProfileDto,
     @Req() req: UserRequest,
-    @UploadedFile(new ParseFilePipeBuilder()
-      .addFileTypeValidator({ fileType: 'jpeg' })
-      .addMaxSizeValidator({ maxSize: 2 * 1024 * 1024 })
-      .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY })
-    ) file: Express.Multer.File
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.profileService.uploadAvatar(req.user.id, file);
+    return await this.profileService.createProfile(req.user.id, data, file);
+  }
+
+  @Put()
+  @UseInterceptors(FileInterceptor('avatar', { 
+    storage: diskStorage({
+      destination: 'uploads/profile',
+      filename: (req, file, cb) => {
+        const extName = extname(file.originalname);
+        const fileName = `${file.originalname}-${extName}`;
+        cb(null, fileName);
+      }
+    }),
+  }))
+  async updateProfile(
+    @Req() req: UserRequest,
+    @Body() profile: UpdateProfileDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.profileService.updateProfile(req.user.id, profile, file);
   }
 }

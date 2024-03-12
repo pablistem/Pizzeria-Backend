@@ -95,7 +95,7 @@ export class AuthService {
   private async removeCookie(res: Response): Promise<void> {
     res.clearCookie(this.COOKIE_NAME, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
     });
   }
@@ -140,7 +140,7 @@ export class AuthService {
   private async setCookies(res: Response, refreshToken: string): Promise<void> {
     const setConfig: CookieOptions = {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       expires: new Date(new Date().getTime() + 60 * 60 * 24 * 14 * 1000),
     };
@@ -155,6 +155,7 @@ export class AuthService {
     };
     const options: JwtSignOptions = {
       secret: this.ACCESS_TOKEN_SECRET,
+      expiresIn: 60 * 60
     };
     const accessToken = this.jwtService.sign(payload, options);
     return accessToken;

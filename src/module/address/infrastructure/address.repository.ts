@@ -11,12 +11,11 @@ export class AddressRepository implements IAddressRepository {
   }
 
   async findOne(id: number): Promise<Address> {
-    return await this.repository.findOne({
-      where: { id: id },
-      relations: {
-        profile: true
-      }
-    })
+    return await this.repository.createQueryBuilder('address')
+      .leftJoinAndSelect('address.profile', 'profile')
+      .leftJoinAndSelect('profile.user', 'user')
+      .where('address.id = :id', { id: id })
+      .getOne()
   }
 
   async create(data: Address): Promise<Address> {

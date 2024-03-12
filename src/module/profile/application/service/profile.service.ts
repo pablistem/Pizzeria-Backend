@@ -19,34 +19,37 @@ export class ProfileService {
   async updateProfile(
     id: number,
     changes: UpdateProfileDto,
+    file: Express.Multer.File,
   ): Promise<Profile> {
     const profileFound = await this.getProfile(id);
-    const updateProfile = Object.assign(profileFound, changes);
+    const avatar = file ? file.path : profileFound.avatar;
+    const updateProfile = Object.assign(profileFound, changes, avatar);
     return this.profileRepository.updateProfile(updateProfile);
   }
 
-  async createProfile(user: number, data: CreateProfileDto) {
-    const profileFound = await this.profileRepository.findByUser(user);
-    if (!profileFound) {
-      const profile = new Profile();
-      profile.age = data.age;
-      profile.name = data.name;
-      profile.lastName = data.lastName;
-      profile.phone = data.phone;
-      profile.user = user;
-      return await this.profileRepository.createProfile(profile);
-    } else {
-      throw new ConflictException('the profile has already been created!')
-    }
-  }
-
-  async uploadAvatar(id: number, file: Express.Multer.File) {
+  async createProfile(user: number, data: CreateProfileDto, file: Express.Multer.File) {
     try {
-      const profileFound = await this.getProfile(id);
-      profileFound.avatar = file.path;
-      return this.profileRepository.updateProfile(profileFound);
+      const profileFound = await this.profileRepository.findByUser(user);
+      if (!profileFound) {
+        const profile = new Profile();
+        profile.avatar = file ? file.path : null;
+        profile.age = data.age;
+        profile.name = data.name;
+        profile.lastName = data.lastName;
+        profile.phone = data.phone;
+        profile.user = user;
+        return await this.profileRepository.createProfile(profile);
+      } else {
+        throw new ConflictException('the profile has already been created!')
+      }
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      if (error instanceof ConflictException) {
+        throw new ConflictException(error.message)
+      } else {
+        console.log(error);
+        throw new InternalServerErrorException(error);
+      } 
     }
+    
   }
 }
