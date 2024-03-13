@@ -22,8 +22,8 @@ export class ProfileService {
     file: Express.Multer.File,
   ): Promise<Profile> {
     const profileFound = await this.getProfile(id);
-    const avatar = file ? file.path : profileFound.avatar;
-    const updateProfile = Object.assign(profileFound, changes, avatar);
+    profileFound.avatar = file ? file.path : profileFound.avatar;
+    const updateProfile = Object.assign(profileFound, changes, profileFound.avatar);
     return this.profileRepository.updateProfile(updateProfile);
   }
 
@@ -46,7 +46,6 @@ export class ProfileService {
       if (error instanceof ConflictException) {
         throw new ConflictException(error.message)
       } else {
-        console.log(error);
         throw new InternalServerErrorException(error);
       } 
     }

@@ -3,26 +3,23 @@ import {
   Get,
   Post,
   Put,
-  Param,
   Body,
   UploadedFile,
   UseGuards,
   Req,
-  ParseIntPipe,
-  ParseFilePipeBuilder,
   UseInterceptors,
-  HttpStatus,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { diskStorage } from 'multer';
-import { extname } from 'node:path';
 import { ProfileService } from '../application/service/profile.service';
 import { UpdateProfileDto } from '../application/dto/update-profile.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { UserRequest } from 'src/common/interfaces/UserRequest';
 import { CreateProfileDto } from '../application/dto/create-profile.dto';
+import { extname } from 'node:path';
 
 @UseGuards(JwtGuard)
 @ApiBearerAuth()
@@ -36,12 +33,24 @@ export class ProfileController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('avatar', { 
+  @UseInterceptors(FileInterceptor('avatar', {
+    limits: { fileSize: 2 * 1024 * 1024 }, 
+    fileFilter: (req, file, cb) => {
+      const formats = ['image/jpeg', 'image/png'];
+      const match = formats.some(format => format === file.mimetype)
+      if (match) {
+        cb(null, true)
+      } else {
+        cb(new UnprocessableEntityException(), false)
+      }
+    },
     storage: diskStorage({
       destination: 'uploads/profile',
       filename: (req, file, cb) => {
-        const extName = extname(file.originalname);
-        const fileName = `${file.originalname}-${extName}`;
+        const fileExt = extname(file.originalname);
+        const name = req.body.name.toLowerCase();
+        const lastName = req.body.lastName.toLowerCase();
+        const fileName = `${name}-${lastName}-avatar-${fileExt}`;
         cb(null, fileName);
       }
     }),
@@ -55,12 +64,21 @@ export class ProfileController {
   }
 
   @Put()
-  @UseInterceptors(FileInterceptor('avatar', { 
+  @UseInterceptors(FileInterceptor('avatar', {
+    limits: { fileSize: 2 * 1024 * 1024 }, 
+    fileFilter: (req, file, cb) => {
+      const formats = ['image/jpeg', 'image/png'];
+      const match = formats.some(format => format === file.mimetype)
+      if(match) {
+        cb(null, true)
+      } else {
+        cb(new UnprocessableEntityException(), false)
+      }
+    },
     storage: diskStorage({
       destination: 'uploads/profile',
       filename: (req, file, cb) => {
-        const extName = extname(file.originalname);
-        const fileName = `${file.originalname}-${extName}`;
+        const fileName = file.originalname;
         cb(null, fileName);
       }
     }),
