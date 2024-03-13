@@ -3,6 +3,7 @@ import { Address } from "../../domain/address.entity";
 export const ADDRESS_REPOSITORY = "ADDRESS_REPOSITORY"
 
 export interface IAddressRepository {
+  findMany(user: number): Promise<Address[]>;
   findOne(id: number): Promise<Address>;
   create(data: Address): Promise<Address>;
   update(changes: Address): Promise<Partial<Address>>;

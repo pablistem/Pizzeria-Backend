@@ -24,6 +24,63 @@ describe('Address', () => {
   });
 
   describe('GET /addresses', () => {
+    it('Should not be allowed to access to the addresses', async () => {
+      await request(app.getHttpServer())
+        .get('/address')
+        .expect(401);
+    })
+
+    it('Should not get a list of addresses from a new user', async () => {
+      await request(app.getHttpServer())
+        .get('/address')
+        .auth(tokens.newUserToken, { type: 'bearer' })
+        .expect(404);
+    })
+
+    it('Should get a list of addresses from the anon user', async () => {
+      const { id, role } = await authService.decodeToken(tokens.anonUserToken);
+      const { body } = await request(app.getHttpServer())
+        .get('/address')
+        .auth(tokens.anonUserToken, { type: 'bearer' })
+        .expect(200);
+      expect(body).toBeInstanceOf(Array);
+      expect(body).toHaveLength(2);
+      body.forEach(address => {
+        expect(address.profile.user).toHaveProperty('id', id);
+        expect(address.profile.user).toHaveProperty('role', role);
+      });
+    })
+
+    it('Should get a list of addresses from the normal user', async () => {
+      const { id, role } = await authService.decodeToken(tokens.normalUserToken);
+      const { body } = await request(app.getHttpServer())
+        .get('/address')
+        .auth(tokens.normalUserToken, { type: 'bearer' })
+        .expect(200);
+      expect(body).toBeInstanceOf(Array);
+      expect(body).toHaveLength(2);
+      body.forEach(address => {
+        expect(address.profile.user).toHaveProperty('id', id);
+        expect(address.profile.user).toHaveProperty('role', role);
+      });
+    })
+
+    it('Should get a list of addresses from the admin user', async () => {
+      const { id, role } = await authService.decodeToken(tokens.adminUserToken);
+      const { body } = await request(app.getHttpServer())
+        .get('/address')
+        .auth(tokens.adminUserToken, { type: 'bearer' })
+        .expect(200);
+      expect(body).toBeInstanceOf(Array);
+      expect(body).toHaveLength(2);
+      body.forEach(address => {
+        expect(address.profile.user).toHaveProperty('id', id);
+        expect(address.profile.user).toHaveProperty('role', role);
+      });
+    })
+  })
+
+  describe('GET /address', () => {
     it('Should not be allowed to access the address information', async () => {
       await request(app.getHttpServer()).get('/address/1').expect(401);
     });
@@ -36,7 +93,7 @@ describe('Address', () => {
     });
 
     it('Should show the address of the anon user', async () => {
-      const { id, role } = await authService.decodeToken(tokens.anonUserToken)
+      const { id, role } = await authService.decodeToken(tokens.anonUserToken);
       const { body } = await request(app.getHttpServer())
         .get('/address/3')
         .auth(tokens.anonUserToken, { type: 'bearer' })
@@ -61,7 +118,6 @@ describe('Address', () => {
         .get('/address/1')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .expect(200);
-      console.log(body)
       expect(body.profile.user).toHaveProperty('id', id);
       expect(body.profile.user).toHaveProperty('role', role);
     });

@@ -9,6 +9,12 @@ export class AddressService {
     @Inject(ADDRESS_REPOSITORY) 
     private readonly addressRepository: IAddressRepository) {}
 
+  async getAddresses(user: number): Promise<Address[]> {
+    const addressesFound = await this.addressRepository.findMany(user);
+    if (addressesFound.length === 0) throw new NotFoundException('address not found!');
+    return addressesFound;
+  }
+
   async getAddress(id: number): Promise<Address>  {
     const addressFound = await this.addressRepository.findOne(id)
     if (!addressFound) throw new NotFoundException('address not found!')
