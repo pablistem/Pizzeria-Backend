@@ -29,7 +29,7 @@ export class ProfileController {
 
   @Get()
   async getProfile(@Req() req: UserRequest) {
-    return this.profileService.getProfile(req.user.id);
+    return await this.profileService.getProfile(req.user.id);
   }
 
   @Post()

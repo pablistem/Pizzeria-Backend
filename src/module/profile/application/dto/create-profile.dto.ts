@@ -14,11 +14,11 @@ export class CreateProfileDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  age: number;
+  @IsString()
+  age: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  phone: number;
+  @IsString()
+  phone: string;
 }

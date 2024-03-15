@@ -88,48 +88,75 @@ describe('Profile', () => {
     })
 
     it('Should modify profile being an anon user', async () => {
+      const updateProfile: UpdateProfileDto = {
+        age: "fa",
+      };
+      await request(app.getHttpServer())
+        .put('/profile')
+        .auth(tokens.anonUserToken, { type: 'bearer' })
+        .set('Content-Type', 'multipart/form-data')
+        .field({...updateProfile})
+        .expect(400);
+    });
+
+    it('Should not modify a profile with the wrong type of data', async () => {
       const { id, role } = await authService.decodeToken(tokens.anonUserToken);
-      const updateProfileDto: UpdateProfileDto = {
-        age: 40,
+      const updateProfile: UpdateProfileDto = {
+        age: "40",
       };
       const { body } = await request(app.getHttpServer())
         .put('/profile')
         .auth(tokens.anonUserToken, { type: 'bearer' })
-        .send(updateProfileDto)
+        .set('Content-Type', 'multipart/form-data')
+        .field({...updateProfile})
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
-      expect(body).toHaveProperty('age', 40);
+      expect(body).toHaveProperty('avatar', 'image');
+      expect(body).toHaveProperty('name', 'anon');
+      expect(body).toHaveProperty('lastName', 'anon');
+      expect(body).toHaveProperty('phone', 2610000001);
+      expect(body).toHaveProperty('age', parseInt(updateProfile.age));
     });
 
     it('Should modify profile being an normal user', async () => {
       const { id, role } = await authService.decodeToken(tokens.normalUserToken);
-      const updateProfileDto: UpdateProfileDto = {
-        age: 40,
+      const updateProfile: UpdateProfileDto = {
+        age: "40",
       };
       const { body } = await request(app.getHttpServer())
         .put('/profile')
         .auth(tokens.normalUserToken, { type: 'bearer' })
-        .send(updateProfileDto)
+        .set('Content-Type', 'multipart/form-data')
+        .field({...updateProfile})
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
-      expect(body).toHaveProperty('age', 40);
+      expect(body).toHaveProperty('avatar', 'image');
+      expect(body).toHaveProperty('name', 'normal');
+      expect(body).toHaveProperty('lastName', 'normal');
+      expect(body).toHaveProperty('phone', 2610000002);
+      expect(body).toHaveProperty('age', parseInt(updateProfile.age));
     });
 
     it('Should modify profile being an admin', async () => {
       const { id, role } = await authService.decodeToken(tokens.adminUserToken);
-      const updateProfileDto: UpdateProfileDto = {
-        age: 40,
+      const updateProfile: UpdateProfileDto = {
+        age: "40",
       };
       const { body } = await request(app.getHttpServer())
         .put('/profile')
         .auth(tokens.adminUserToken, { type: 'bearer' })
-        .send(updateProfileDto)
+        .set('Content-Type', 'multipart/form-data')
+        .field({...updateProfile})
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
-      expect(body).toHaveProperty('age', 40);
+      expect(body).toHaveProperty('avatar', 'image');
+      expect(body).toHaveProperty('name', 'admin');
+      expect(body).toHaveProperty('lastName', 'admin');
+      expect(body).toHaveProperty('phone', 2610000003);
+      expect(body).toHaveProperty('age', parseInt(updateProfile.age));
     });
 
     it('Should not upload a non-compatible file as avatar', async () => {
@@ -137,6 +164,7 @@ describe('Profile', () => {
       await request(app.getHttpServer())
         .put('/profile')
         .auth(tokens.normalUserToken, { type: 'bearer' })
+        .set('Content-Type', 'multipart/form-data')
         .attach('avatar', filePath, {
           contentType: 'doc/pdf'
         })
@@ -154,6 +182,7 @@ describe('Profile', () => {
       const { body } = await request(app.getHttpServer())
         .put('/profile')
         .auth(tokens.normalUserToken, { type: 'bearer' })
+        .set('Content-Type', 'multipart/form-data')
         .attach('avatar', filePath, {
           filename: fileName,
           contentType: 'image/jpeg'
@@ -175,6 +204,7 @@ describe('Profile', () => {
       const { body } = await request(app.getHttpServer())
         .put('/profile')
         .auth(tokens.adminUserToken, { type: 'bearer' })
+        .set('Content-Type', 'multipart/form-data')
         .attach('avatar', filePath, {
           filename: fileName,
           contentType: 'image/jpeg'
@@ -200,13 +230,27 @@ describe('Profile', () => {
         .expect(409);
     })
 
+    it('Should not create a new profile by sending the wrong type of data', async () => {
+      const newProfile: CreateProfileDto = {
+        name: 'Facundo55',
+        lastName: 'Castro125',
+        phone: "02g0s6dd1",
+        age: "123fafa",
+      }
+      await request(app.getHttpServer())
+        .post('/profile')
+        .auth(tokens.newUserToken, { type: 'bearer' })
+        .send(newProfile)
+        .expect(400);
+    })
+
     it('Should create a new profile without an avatar', async () => {
       const { id } = await authService.decodeToken(tokens.newUserToken)
       const newProfile: CreateProfileDto = {
         name: 'Facundo',
         lastName: 'Castro',
-        phone: 2610000004,
-        age: 32,
+        phone: "2610000004",
+        age: "32",
       }
       const { body } = await request(app.getHttpServer())
         .post('/profile')
@@ -216,24 +260,17 @@ describe('Profile', () => {
       expect(body).toHaveProperty('user', id);
       expect(body).toHaveProperty('name', newProfile.name);
       expect(body).toHaveProperty('lastName', newProfile.lastName);
-      expect(body).toHaveProperty('phone', newProfile.phone);
-      expect(body).toHaveProperty('age', newProfile.age);
+      expect(body).toHaveProperty('phone', parseInt(newProfile.phone));
+      expect(body).toHaveProperty('age', parseInt(newProfile.age));
       expect(body).toHaveProperty('avatar', null)
     })
 
     it('Should not create a profile with a non-compatible file as avatar', async () => {
-      const newProfile: CreateProfileDto = {
-        name: 'Facundo',
-        lastName: 'Castro',
-        phone: 2610000005,
-        age: 32,
-      }
       const filePath = `${__dirname}/document.pdf`;
       await request(app.getHttpServer())
         .post('/profile')
         .auth(tokens.newUserWithAvatarToken, { type: 'bearer' })
         .set('Content-Type', 'multipart/form-data')
-        .field({...newProfile})
         .attach('avatar', filePath, {
           contentType: 'doc/pdf'
         })
@@ -245,8 +282,8 @@ describe('Profile', () => {
       const newProfile: CreateProfileDto = {
         name: 'Facundo',
         lastName: 'Castro',
-        phone: 2610000005,
-        age: 32,
+        phone: "2610000005",
+        age: "32",
       }
       const filePath = `${__dirname}/image.jpeg`;
       const fileExt = extname(filePath);
@@ -265,8 +302,8 @@ describe('Profile', () => {
       expect(body).toHaveProperty('user', id);
       expect(body).toHaveProperty('name', newProfile.name);
       expect(body).toHaveProperty('lastName', newProfile.lastName);
-      expect(body).toHaveProperty('phone', newProfile.phone.toString());
-      expect(body).toHaveProperty('age', newProfile.age.toString());
+      expect(body).toHaveProperty('phone', parseInt(newProfile.phone));
+      expect(body).toHaveProperty('age', parseInt(newProfile.age));
       expect(body).toHaveProperty('avatar', `uploads\\profile\\${fileName}`)
     })
   })

@@ -14,11 +14,11 @@ export class UpdateProfileDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsNumber()
-  age?: number;
+  @IsString()
+  age?: string;
 
   @ApiProperty()
   @IsOptional()
-  @IsNumber()
-  phone?: number;
+  @IsString()
+  phone?: string;
 }
