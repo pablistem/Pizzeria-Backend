@@ -24,5 +24,5 @@ export class Address extends Base {
 
   @ManyToOne(() => Profile)
   @JoinColumn({ name: 'profile' })
-  profile: Profile;
+  profile: Profile | number;
 }

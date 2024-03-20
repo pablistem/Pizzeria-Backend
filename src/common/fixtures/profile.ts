@@ -4,6 +4,7 @@ import { adminUser, anonUser, normalUser } from './user';
 export const anonProfile: ProfileFixture = {
   id: 1,
   avatar: 'image',
+  username: 'anon',
   name: 'anon',
   lastName: 'anon',
   age: 30,
@@ -14,6 +15,7 @@ export const anonProfile: ProfileFixture = {
 export const normalProfile: ProfileFixture = {
   id: 2,
   avatar: 'image',
+  username: 'normal',
   name: 'normal',
   lastName: 'normal',
   age: 30,
@@ -24,6 +26,7 @@ export const normalProfile: ProfileFixture = {
 export const adminProfile: ProfileFixture = {
   id: 3,
   avatar: 'image',
+  username: 'admin',
   name: 'admin',
   lastName: 'admin',
   age: 30,

@@ -32,6 +32,11 @@ export class CreateAddressDto {
   @IsNotEmpty()
   @IsNumber()
   postalCode: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  profile: number;
 }
 
 export class UpdateAddressDto extends PartialType(CreateAddressDto) {}

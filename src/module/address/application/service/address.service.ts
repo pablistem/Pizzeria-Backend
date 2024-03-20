@@ -29,6 +29,7 @@ export class AddressService {
     newAddress.street = data.street;
     newAddress.height = data.height;
     newAddress.postalCode = data.postalCode;
+    newAddress.profile = data.profile;
     return await this.addressRepository.create(newAddress);
   }
 

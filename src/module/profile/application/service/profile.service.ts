@@ -22,19 +22,22 @@ export class ProfileService {
     file: Express.Multer.File,
   ): Promise<Profile> {
     const profileFound = await this.getProfile(id);
+    const username = changes.username != null ? changes.username : profileFound.username;
     const name = changes.name != null ? changes.name : profileFound.name;
-    const lastName = changes.lastName != null ? changes.name : profileFound.lastName;
+    const lastName = changes.lastName != null ? changes.lastName : profileFound.lastName;
     const age = changes.age != null ? changes.age : profileFound.age.toString();
     const phone = changes.phone != null ? changes.phone : profileFound.phone.toString();
-    if (/^[^\d]+$/.test(name) === false) throw new BadRequestException('name should not contain any number!');
-    if (/^[^\d]+$/.test(lastName) === false) throw new BadRequestException('last name should not contain any number!');
+    if (/^[a-zA-Z0-9-_]+$/.test(username) === false) throw new BadRequestException('the username should not contain any of the followings: {}[]()^*¿?¡!.,;:!');
+    if (/^[a-zA-Z]+$/.test(name) === false) throw new BadRequestException('name should not contain any number!');
+    if (/^[a-zA-Z]+$/.test(lastName) === false) throw new BadRequestException('last name should not contain any number!');
     if (/^\d+$/.test(age) === false) throw new BadRequestException('age should be a number!');
     if (/^\d+$/.test(phone) === false) throw new BadRequestException('phone should be a number!');
     profileFound.avatar = file ? file.path : profileFound.avatar;
-    profileFound.name = name;
-    profileFound.lastName = lastName;
-    profileFound.age = parseInt(age);
-    profileFound.phone = parseInt(phone);
+    profileFound.username = username.trim();
+    profileFound.name = name.trim();
+    profileFound.lastName = lastName.trim();
+    profileFound.age = parseInt(age.trim());
+    profileFound.phone = parseInt(phone.trim());
     return this.profileRepository.updateProfile(profileFound);
   }
 
@@ -42,16 +45,18 @@ export class ProfileService {
     try {
       const profileFound = await this.profileRepository.findByUser(user);
       if (!profileFound) {
-        if (/^[^\d]+$/.test(data.name) === false) throw new BadRequestException('name should not contain any number!');
-        if (/^[^\d]+$/.test(data.lastName) === false) throw new BadRequestException('last name should not contain any number!');
+        if (/^[a-zA-Z0-9-_]+$/.test(data.username) === false) throw new BadRequestException('the username should not contain any special character except: "-" or "_"');
+        if (/^[a-zA-Z]+$/.test(data.name) === false) throw new BadRequestException('name should not contain any number!');
+        if (/^[a-zA-Z]+$/.test(data.lastName) === false) throw new BadRequestException('last name should not contain any number!');
         if (/^\d+$/.test(data.age) === false) throw new BadRequestException('age should be a number!');
         if (/^\d+$/.test(data.phone) === false) throw new BadRequestException('phone should be a number!');
         const profile = new Profile();
         profile.avatar = file ? file.path : null;
-        profile.name = data.name;
-        profile.lastName = data.lastName;
-        profile.age = parseInt(data.age);
-        profile.phone = parseInt(data.phone);
+        profile.username = data.username;
+        profile.name = data.name.trim();
+        profile.lastName = data.lastName.trim();
+        profile.age = parseInt(data.age.trim());
+        profile.phone = parseInt(data.phone.trim());
         profile.user = user;
         return await this.profileRepository.createProfile(profile);
       } else {

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Inject,
@@ -38,12 +39,13 @@ export class AuthService {
 
       if (user) {
         throw new HttpException(
-          `${createAuthDto.email} already register`,
+          `${createAuthDto.email} already registered`,
           HttpStatus.CONFLICT,
         );
       }
     } catch (err) {
       if (err instanceof NotFoundException) {
+        if(/^[a-zA-Z-0-9_-]+$/.test(createAuthDto.password) === false) throw new BadRequestException('the username should not contain any special character except: "-" or "_"');
         const hash = await argon2.hash(createAuthDto.password);
         const newUser = new User(
           createAuthDto.email,

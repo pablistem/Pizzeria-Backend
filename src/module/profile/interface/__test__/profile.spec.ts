@@ -87,7 +87,7 @@ describe('Profile', () => {
         .expect(404)
     })
 
-    it('Should modify profile being an anon user', async () => {
+    it('Should not modify a profile with the wrong type of data', async () => {
       const updateProfile: UpdateProfileDto = {
         age: "fa",
       };
@@ -99,7 +99,7 @@ describe('Profile', () => {
         .expect(400);
     });
 
-    it('Should not modify a profile with the wrong type of data', async () => {
+    it('Should modify profile being an anon user', async () => {
       const { id, role } = await authService.decodeToken(tokens.anonUserToken);
       const updateProfile: UpdateProfileDto = {
         age: "40",
@@ -113,6 +113,7 @@ describe('Profile', () => {
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
       expect(body).toHaveProperty('avatar', 'image');
+      expect(body).toHaveProperty('username', 'anon');
       expect(body).toHaveProperty('name', 'anon');
       expect(body).toHaveProperty('lastName', 'anon');
       expect(body).toHaveProperty('phone', 2610000001);
@@ -133,6 +134,7 @@ describe('Profile', () => {
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
       expect(body).toHaveProperty('avatar', 'image');
+      expect(body).toHaveProperty('username', 'normal');
       expect(body).toHaveProperty('name', 'normal');
       expect(body).toHaveProperty('lastName', 'normal');
       expect(body).toHaveProperty('phone', 2610000002);
@@ -153,6 +155,7 @@ describe('Profile', () => {
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
       expect(body).toHaveProperty('avatar', 'image');
+      expect(body).toHaveProperty('username', 'admin');
       expect(body).toHaveProperty('name', 'admin');
       expect(body).toHaveProperty('lastName', 'admin');
       expect(body).toHaveProperty('phone', 2610000003);
@@ -176,9 +179,7 @@ describe('Profile', () => {
       const profileFound = await profileService.getProfile(id);
       const filePath = `${__dirname}/image.jpeg`;
       const fileExt = extname(filePath);
-      const name =  profileFound.name.toLowerCase();
-      const lastName = profileFound.lastName.toLowerCase();
-      const fileName = `${name}-${lastName}-avatar-${fileExt}`;
+      const fileName = `${profileFound.username}-avatar-${fileExt}`;
       const { body } = await request(app.getHttpServer())
         .put('/profile')
         .auth(tokens.normalUserToken, { type: 'bearer' })
@@ -198,9 +199,7 @@ describe('Profile', () => {
       const profileFound = await profileService.getProfile(id);
       const filePath = `${__dirname}/image.jpeg`;
       const fileExt = extname(filePath);
-      const name =  profileFound.name.toLowerCase();
-      const lastName = profileFound.lastName.toLowerCase();
-      const fileName = `${name}-${lastName}-avatar-${fileExt}`;
+      const fileName = `${profileFound.username}-avatar-${fileExt}`;
       const { body } = await request(app.getHttpServer())
         .put('/profile')
         .auth(tokens.adminUserToken, { type: 'bearer' })
@@ -232,7 +231,8 @@ describe('Profile', () => {
 
     it('Should not create a new profile by sending the wrong type of data', async () => {
       const newProfile: CreateProfileDto = {
-        name: 'Facundo55',
+        username: '[Facu_49]',
+        name: 'Facundo49',
         lastName: 'Castro125',
         phone: "02g0s6dd1",
         age: "123fafa",
@@ -247,6 +247,7 @@ describe('Profile', () => {
     it('Should create a new profile without an avatar', async () => {
       const { id } = await authService.decodeToken(tokens.newUserToken)
       const newProfile: CreateProfileDto = {
+        username: 'Facu_497',
         name: 'Facundo',
         lastName: 'Castro',
         phone: "2610000004",
@@ -258,6 +259,7 @@ describe('Profile', () => {
         .send(newProfile)
         .expect(201);
       expect(body).toHaveProperty('user', id);
+      expect(body).toHaveProperty('username', newProfile.username);
       expect(body).toHaveProperty('name', newProfile.name);
       expect(body).toHaveProperty('lastName', newProfile.lastName);
       expect(body).toHaveProperty('phone', parseInt(newProfile.phone));
@@ -280,6 +282,7 @@ describe('Profile', () => {
     it('Should create a new profile with an avatar', async () => {
       const { id } = await authService.decodeToken(tokens.newUserWithAvatarToken)
       const newProfile: CreateProfileDto = {
+        username: 'facu_497',
         name: 'Facundo',
         lastName: 'Castro',
         phone: "2610000005",
@@ -287,9 +290,7 @@ describe('Profile', () => {
       }
       const filePath = `${__dirname}/image.jpeg`;
       const fileExt = extname(filePath);
-      const name =  newProfile.name.toLowerCase();
-      const lastName = newProfile.lastName.toLowerCase();
-      const fileName = `${name}-${lastName}-avatar-${fileExt}`;
+      const fileName = `${newProfile.username}-avatar-${fileExt}`;
       const { body } = await request(app.getHttpServer())
         .post('/profile')
         .auth(tokens.newUserWithAvatarToken, { type: 'bearer' })
@@ -300,6 +301,7 @@ describe('Profile', () => {
         })
         .expect(201);
       expect(body).toHaveProperty('user', id);
+      expect(body).toHaveProperty('username', newProfile.username);
       expect(body).toHaveProperty('name', newProfile.name);
       expect(body).toHaveProperty('lastName', newProfile.lastName);
       expect(body).toHaveProperty('phone', parseInt(newProfile.phone));

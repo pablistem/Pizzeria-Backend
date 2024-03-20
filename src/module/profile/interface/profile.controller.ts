@@ -48,9 +48,8 @@ export class ProfileController {
       destination: 'uploads/profile',
       filename: (req, file, cb) => {
         const fileExt = extname(file.originalname);
-        const name = req.body.name.toLowerCase();
-        const lastName = req.body.lastName.toLowerCase();
-        const fileName = `${name}-${lastName}-avatar-${fileExt}`;
+        const username = req.body.username;
+        const fileName = `${username}-avatar-${fileExt}`;
         cb(null, fileName);
       }
     }),

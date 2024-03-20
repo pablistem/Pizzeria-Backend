@@ -9,6 +9,9 @@ export class Profile extends Base {
   avatar: string;
 
   @Column()
+  username: string;
+
+  @Column()
   name: string;
 
   @Column({ name: 'last_name' })
