@@ -10,20 +10,10 @@ export class AddressRepository implements IAddressRepository {
     this.repository = this.dataSource.getRepository(Address)
   }
 
-  async findMany(user: number): Promise<Address[]> {
-    return await this.repository.createQueryBuilder('address')
-      .leftJoinAndSelect('address.profile', 'profile')
-      .leftJoinAndSelect('profile.user', 'user')
-      .where('profile.user = :id', { id: user })
-      .getMany();
-    }
-
   async findOne(id: number): Promise<Address> {
-    return await this.repository.createQueryBuilder('address')
-      .leftJoinAndSelect('address.profile', 'profile')
-      .leftJoinAndSelect('profile.user', 'user')
-      .where('address.id = :id', { id: id })
-      .getOne()
+    return await this.repository.findOne({
+      where: { id: id }
+    })
   }
 
   async create(data: Address): Promise<Address> {

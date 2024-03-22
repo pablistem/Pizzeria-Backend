@@ -6,10 +6,12 @@ import { CreateAddressDto, UpdateAddressDto } from "../../application/dto/addres
 import { tokens } from "../../../../common/fixtures/user";
 import { loadFixtures } from "../../../../common/fixtures/loader";
 import { AuthService } from "src/module/auth/application/service/auth.service";
+import { ProfileService } from "src/module/profile/application/service/profile.service";
 
 describe('Address', () => {
   let app: INestApplication;
   let authService: AuthService;
+  let profileService: ProfileService;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -18,67 +20,11 @@ describe('Address', () => {
 
     app = moduleRef.createNestApplication();
     authService = app.get<AuthService>(AuthService);
+    profileService = app.get<ProfileService>(ProfileService);
     await app.init();
 
     await loadFixtures(app);
   });
-
-  describe('GET /addresses', () => {
-    it('Should not be allowed to access to the addresses', async () => {
-      await request(app.getHttpServer())
-        .get('/address')
-        .expect(401);
-    })
-
-    it('Should not get a list of addresses from a new user', async () => {
-      await request(app.getHttpServer())
-        .get('/address')
-        .auth(tokens.newUserToken, { type: 'bearer' })
-        .expect(404);
-    })
-
-    it('Should get a list of addresses from the anon user', async () => {
-      const { id, role } = await authService.decodeToken(tokens.anonUserToken);
-      const { body } = await request(app.getHttpServer())
-        .get('/address')
-        .auth(tokens.anonUserToken, { type: 'bearer' })
-        .expect(200);
-      expect(body).toBeInstanceOf(Array);
-      expect(body).toHaveLength(2);
-      body.forEach(address => {
-        expect(address.profile.user).toHaveProperty('id', id);
-        expect(address.profile.user).toHaveProperty('role', role);
-      });
-    })
-
-    it('Should get a list of addresses from the normal user', async () => {
-      const { id, role } = await authService.decodeToken(tokens.normalUserToken);
-      const { body } = await request(app.getHttpServer())
-        .get('/address')
-        .auth(tokens.normalUserToken, { type: 'bearer' })
-        .expect(200);
-      expect(body).toBeInstanceOf(Array);
-      expect(body).toHaveLength(2);
-      body.forEach(address => {
-        expect(address.profile.user).toHaveProperty('id', id);
-        expect(address.profile.user).toHaveProperty('role', role);
-      });
-    })
-
-    it('Should get a list of addresses from the admin user', async () => {
-      const { id, role } = await authService.decodeToken(tokens.adminUserToken);
-      const { body } = await request(app.getHttpServer())
-        .get('/address')
-        .auth(tokens.adminUserToken, { type: 'bearer' })
-        .expect(200);
-      expect(body).toBeInstanceOf(Array);
-      expect(body).toHaveLength(2);
-      body.forEach(address => {
-        expect(address.profile.user).toHaveProperty('id', id);
-        expect(address.profile.user).toHaveProperty('role', role);
-      });
-    })
-  })
 
   describe('GET /address', () => {
     it('Should not be allowed to access the address information', async () => {
@@ -92,34 +38,52 @@ describe('Address', () => {
         .expect(404);
     });
 
-    it('Should show the address of the anon user', async () => {
-      const { id, role } = await authService.decodeToken(tokens.anonUserToken);
+    it('Should show an address of the anon user', async () => {
+      const { id } = await authService.decodeToken(tokens.anonUserToken);
+      const { addresses } = await profileService.getProfile(id)
       const { body } = await request(app.getHttpServer())
         .get('/address/3')
         .auth(tokens.anonUserToken, { type: 'bearer' })
         .expect(200);
-      expect(body.profile.user).toHaveProperty('id', id);
-      expect(body.profile.user).toHaveProperty('role', role);
+      const addressFound = addresses.find(address => address.id === body.id)
+      expect(body).toHaveProperty('id', addressFound.id);
+      expect(body).toHaveProperty('country', addressFound.country);
+      expect(body).toHaveProperty('state', addressFound.state);
+      expect(body).toHaveProperty('city', addressFound.city);
+      expect(body).toHaveProperty('height', addressFound.height);
+      expect(body).toHaveProperty('postalCode', addressFound.postalCode);
     });
 
-    it('Should show the address of the normal user', async () => {
-      const { id, role } = await authService.decodeToken(tokens.normalUserToken)
+    it('Should show an address of the normal user', async () => {
+      const { id } = await authService.decodeToken(tokens.normalUserToken)
+      const { addresses } = await profileService.getProfile(id)
       const { body } = await request(app.getHttpServer())
         .get('/address/5')
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .expect(200);
-      expect(body.profile.user).toHaveProperty('id', id);
-      expect(body.profile.user).toHaveProperty('role', role);
+      const addressFound = addresses.find(address => address.id === body.id)
+      expect(body).toHaveProperty('id', addressFound.id);
+      expect(body).toHaveProperty('country', addressFound.country);
+      expect(body).toHaveProperty('state', addressFound.state);
+      expect(body).toHaveProperty('city', addressFound.city);
+      expect(body).toHaveProperty('height', addressFound.height);
+      expect(body).toHaveProperty('postalCode', addressFound.postalCode);
     });
 
-    it('Should show the address of the admin user', async () => {
-      const { id, role } = await authService.decodeToken(tokens.adminUserToken)
+    it('Should show an address of the admin user', async () => {
+      const { id } = await authService.decodeToken(tokens.adminUserToken);
+      const { addresses } = await profileService.getProfile(id)
       const { body } = await request(app.getHttpServer())
         .get('/address/1')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .expect(200);
-      expect(body.profile.user).toHaveProperty('id', id);
-      expect(body.profile.user).toHaveProperty('role', role);
+        const addressFound = addresses.find(address => address.id === body.id)
+      expect(body).toHaveProperty('id', addressFound.id);
+      expect(body).toHaveProperty('country', addressFound.country);
+      expect(body).toHaveProperty('state', addressFound.state);
+      expect(body).toHaveProperty('city', addressFound.city);
+      expect(body).toHaveProperty('height', addressFound.height);
+      expect(body).toHaveProperty('postalCode', addressFound.postalCode);
     });
   });
 
@@ -130,7 +94,7 @@ describe('Address', () => {
         .expect(401);
     });
 
-    it('Should create the address', async () => {
+    it('Should create an address', async () => {
       const newAddress: CreateAddressDto = {
         country: 'Argentina',
         state: 'Mendoza',
@@ -138,6 +102,7 @@ describe('Address', () => {
         street: 'Av. Callao',
         height: 789,
         postalCode: 1000,
+        profile: 2,
       };
       const { body } = await request(app.getHttpServer())
         .post('/address')
@@ -164,7 +129,7 @@ describe('Address', () => {
     it('Cannot retrieve the address to update', async () => {
       await request(app.getHttpServer())
         .put('/address/999')
-        .auth(tokens.normalUserToken, { type: 'bearer'})
+        .auth(tokens.normalUserToken, { type: 'bearer' })
         .expect(404);
     });
 

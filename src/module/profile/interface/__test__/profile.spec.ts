@@ -50,6 +50,8 @@ describe('Profile', () => {
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
+      expect(body.addresses).toBeInstanceOf(Array);
+      expect(body.addresses).toHaveLength(2);
     });
 
     it('Should get a profile by user ID being a normal user', async () => {
@@ -60,6 +62,8 @@ describe('Profile', () => {
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
+      expect(body.addresses).toBeInstanceOf(Array);
+      expect(body.addresses).toHaveLength(2);
     });
 
     it('Should get a profile by user ID being an admin user', async () => {
@@ -70,6 +74,8 @@ describe('Profile', () => {
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
+      expect(body.addresses).toBeInstanceOf(Array);
+      expect(body.addresses).toHaveLength(2);
     });
   });
 

@@ -2,17 +2,11 @@ import { Controller, Get, Post, Put, Delete, Param, Req, Body, ParseIntPipe, Use
 import { AddressService } from './application/service/address.service';
 import { CreateAddressDto, UpdateAddressDto } from './application/dto/address.dto';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
-import { UserRequest } from 'src/common/interfaces/UserRequest';
 
 @UseGuards(JwtGuard)
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
-
-  @Get()
-  async getAddresses(@Req() req: UserRequest) {
-    return await this.addressService.getAddresses(req.user.id);
-  }
   
   @Get(':id')
   async getAddress(@Param('id', ParseIntPipe) id: number) {

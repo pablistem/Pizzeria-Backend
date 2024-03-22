@@ -13,6 +13,7 @@ export class ProfileRepository implements IProfileRepository {
   async findByUser(user: number): Promise<Profile | null> {
     return await this.repository.createQueryBuilder('profile')
       .leftJoinAndSelect('profile.user', 'user')
+      .leftJoinAndSelect('profile.addresses', 'address')
       .where('profile.user = :id', { id: user })
       .getOne();
   }
