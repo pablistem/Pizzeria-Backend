@@ -144,7 +144,7 @@ describe('Address', () => {
       }
       const { body } = await request(app.getHttpServer())
         .put('/address/3')
-        .auth(tokens.normalUserToken, { type: 'bearer'})
+        .auth(tokens.anonUserToken, { type: 'bearer'})
         .send(updateAddress)
         .expect(200);
       expect(body).toHaveProperty('country', updateAddress.country);

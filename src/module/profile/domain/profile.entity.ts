@@ -27,6 +27,6 @@ export class Profile extends Base {
   @JoinColumn()
   user: User | number;
 
-  @OneToMany(() => Address, (address) => address.profile)
+  @OneToMany(() => Address, (address) => address.profile, { onDelete: 'CASCADE' })
   addresses: Address[];
 }

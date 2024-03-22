@@ -28,15 +28,14 @@ export class AddressService {
   }
 
   async updateAddress(id: number, changes: UpdateAddressDto) {
-    await this.getAddress(id);
-    const updateAddress = new Address()
-    updateAddress.country = changes.country;
-    updateAddress.state = changes.state;
-    updateAddress.city = changes.city;
-    updateAddress.street = changes.street;
-    updateAddress.height = changes.height;
-    updateAddress.postalCode = changes.postalCode;
-    return await this.addressRepository.update(updateAddress);
+    const addressFound = await this.getAddress(id);
+    addressFound.country = changes.country;
+    addressFound.state = changes.state;
+    addressFound.city = changes.city;
+    addressFound.street = changes.street;
+    addressFound.height = changes.height;
+    addressFound.postalCode = changes.postalCode;
+    return await this.addressRepository.update(addressFound);
   }
 
   async deleteAddress(id: number) {
