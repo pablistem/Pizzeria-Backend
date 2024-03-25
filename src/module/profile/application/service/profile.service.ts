@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus, Inject, InternalServerErrorException, ConflictException, BadRequestException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Inject, InternalServerErrorException, ConflictException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
 import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileRepository } from '../../infrastructure/profile.repository';
@@ -12,44 +12,36 @@ export class ProfileService {
 
   async getProfile(user: number): Promise<Profile> {
     const profileFound = await this.profileRepository.findByUser(user);
-    if (!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+    if (!profileFound) throw new NotFoundException('Profile not found');
     return profileFound;
   }
 
   async updateProfile(
-    id: number,
+    user: number,
     changes: UpdateProfileDto,
     file: Express.Multer.File,
   ): Promise<Profile> {
-    const profileFound = await this.getProfile(id);
-    const username = changes.username != null ? changes.username : profileFound.username;
-    const name = changes.name != null ? changes.name : profileFound.name;
-    const lastName = changes.lastName != null ? changes.lastName : profileFound.lastName;
-    const age = changes.age != null ? changes.age : profileFound.age.toString();
-    const phone = changes.phone != null ? changes.phone : profileFound.phone.toString();
-    if (/^[a-zA-Z0-9-_]+$/.test(username) === false) throw new BadRequestException('the username should not contain any of the followings: {}[]()^*¿?¡!.,;:!');
-    if (/^[a-zA-Z]+$/.test(name) === false) throw new BadRequestException('name should not contain any number!');
-    if (/^[a-zA-Z]+$/.test(lastName) === false) throw new BadRequestException('last name should not contain any number!');
-    if (/^\d+$/.test(age) === false) throw new BadRequestException('age should be a number!');
-    if (/^\d+$/.test(phone) === false) throw new BadRequestException('phone should be a number!');
-    profileFound.avatar = file ? file.path : profileFound.avatar;
-    profileFound.username = username.trim();
-    profileFound.name = name.trim();
-    profileFound.lastName = lastName.trim();
-    profileFound.age = parseInt(age.trim());
-    profileFound.phone = parseInt(phone.trim());
-    return this.profileRepository.updateProfile(profileFound);
+    try {
+      const profileFound = await this.getProfile(user);
+      profileFound.avatar = file ? file.path : profileFound.avatar;
+      profileFound.username = changes.username != null ? changes.username.trim() : profileFound.username;
+      profileFound.name = changes.name != null ? changes.name.trim() : profileFound.name;
+      profileFound.lastName = changes.lastName != null ? changes.lastName.trim() : profileFound.lastName;
+      profileFound.age = changes.age != null ? parseInt(changes.age.trim()) : profileFound.age;
+      profileFound.phone = changes.phone != null ? parseInt(changes.phone.trim()) : profileFound.phone;
+      return await this.profileRepository.updateProfile(profileFound);
+    } catch (error) {
+      if (error instanceof BadRequestException) throw new BadRequestException(error.message);
+      else if (error instanceof NotFoundException) throw new NotFoundException(error.message);
+      else throw new InternalServerErrorException(error); 
+    }
+    
   }
 
   async createProfile(user: number, data: CreateProfileDto, file: Express.Multer.File) {
     try {
       const profileFound = await this.profileRepository.findByUser(user);
       if (!profileFound) {
-        if (/^[a-zA-Z0-9-_]+$/.test(data.username) === false) throw new BadRequestException('the username should not contain any special character except: "-" or "_"');
-        if (/^[a-zA-Z]+$/.test(data.name) === false) throw new BadRequestException('name should not contain any number!');
-        if (/^[a-zA-Z]+$/.test(data.lastName) === false) throw new BadRequestException('last name should not contain any number!');
-        if (/^\d+$/.test(data.age) === false) throw new BadRequestException('age should be a number!');
-        if (/^\d+$/.test(data.phone) === false) throw new BadRequestException('phone should be a number!');
         const profile = new Profile();
         profile.avatar = file ? file.path : null;
         profile.username = data.username;
@@ -63,13 +55,9 @@ export class ProfileService {
         throw new ConflictException('the profile has already been created!')
       }
     } catch (error) {
-      if (error instanceof ConflictException) {
-        throw new ConflictException(error.message)
-      } else if (error instanceof BadRequestException) {
-        throw new BadRequestException(error.message)
-      } else {
-        throw new InternalServerErrorException(error);
-      } 
+      if (error instanceof ConflictException) throw new ConflictException(error.message)
+      else if (error instanceof BadRequestException) throw new BadRequestException(error.message)
+      else throw new InternalServerErrorException(error); 
     }
   }
 }

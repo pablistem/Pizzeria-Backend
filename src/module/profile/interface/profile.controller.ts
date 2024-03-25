@@ -9,6 +9,8 @@ import {
   Req,
   UseInterceptors,
   UnprocessableEntityException,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
