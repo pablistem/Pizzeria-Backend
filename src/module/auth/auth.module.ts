@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './application/service/auth.service';
 import { AuthController } from './interface/auth.controller';
 import { UserModule } from '../user/user.module';
+import { ProfileModule } from '../profile/profile.module';
 import { User } from '../user/domain/user.entity';
 import { Auth } from './domain/auth.entity';
 import { AuthRepository } from './infrastructure/auth.repository';

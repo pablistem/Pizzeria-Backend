@@ -13,6 +13,8 @@ async function bootstrap() {
   app.enableCors({ origin: 'http://localhost:5173', credentials: true });
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
+    .addCookieAuth('pizza')
     .setTitle('Pizzeria API')
     .setDescription('Pizzeria API description')
     .setVersion('1.0')

@@ -12,7 +12,6 @@ import { UserService } from 'src/module/user/application/service/user.service';
 import { RoleEnum } from 'src/module/user/domain/user.entity';
 import { TestService } from 'src/module/test/application/service/test.service';
 import { ConfigService } from '@nestjs/config';
-import { fixtureDemoTree } from 'src/common/fixtures/fixtureTree';
 
 @Injectable()
 export class ProductService {
@@ -79,14 +78,6 @@ export class ProductService {
   updateList = async () => {
     this.productsList = await this.getAllProducts();
   };
-
-  async onApplicationBootstrap() {
-    if (this.NODE_ENV === 'development') {
-      await this.testService.load(fixtureDemoTree);
-    }
-
-    await this.updateList();
-  }
 
   async refreshList() {
     await this.getAllProducts();

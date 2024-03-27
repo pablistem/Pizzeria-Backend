@@ -15,9 +15,7 @@ export class UserController {
     private readonly userRepository: UserRepository,
     private readonly config: ConfigService,
   ) {}
-
-  @ApiBearerAuth('Authorization')
-  @UseGuards(JwtGuard)
+  
   @Get('me')
   async getMe(@Req() req: Request) {
     return req.user;

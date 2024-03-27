@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Inject,
@@ -8,7 +9,7 @@ import {
 import * as argon2 from 'argon2';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
+import { CookieOptions, Response } from 'express';
 
 import { CreateAuthDto, LoginDto } from '../dto/index';
 import { UserService } from '../../../user/application/service/user.service';
@@ -17,6 +18,7 @@ import { Auth } from '../../domain/auth.entity';
 import { AuthRepository } from '../../infrastructure/auth.repository';
 import { IAuthRepository } from '../repository/auth.repository.interface';
 import { ENVIRONMENTS } from '../../../../../ormconfig';
+import { UserRequest } from 'src/common/interfaces/UserRequest';
 
 @Injectable()
 export class AuthService {
@@ -34,19 +36,19 @@ export class AuthService {
   async signUp(createAuthDto: CreateAuthDto) {
     try {
       const user = await this.userService.getUserByEmail(createAuthDto.email);
+
       if (user) {
         throw new HttpException(
-          `${createAuthDto.email} already register`,
+          `${createAuthDto.email} already registered`,
           HttpStatus.CONFLICT,
         );
       }
     } catch (err) {
       if (err instanceof NotFoundException) {
+        if(/^[a-zA-Z-0-9_-]+$/.test(createAuthDto.password) === false) throw new BadRequestException('the username should not contain any special character except: "-" or "_"');
         const hash = await argon2.hash(createAuthDto.password);
         const newUser = new User(
           createAuthDto.email,
-          createAuthDto.name,
-          createAuthDto.lastName,
           hash,
           true,
           RoleEnum.user,
@@ -97,13 +99,13 @@ export class AuthService {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      path: '/auth/logout',
     });
   }
 
-  async logOut(id: number, res: Response) {
-    const user: User = await this.userService.findUserById(id);
-    this.authRepository.removeRefreshToken(user.sessions.refreshToken);
+  async logOut(cookie: string, userReq: UserRequest, res: Response) {
+    if (cookie === undefined ) throw new NotFoundException('cookie not found!')
+    const userFound: User = await this.userService.findUserById(userReq.user.id);
+    this.authRepository.removeRefreshToken(userFound.sessions.refreshToken);
     await this.removeCookie(res);
   }
 
@@ -138,20 +140,24 @@ export class AuthService {
   }
 
   private async setCookies(res: Response, refreshToken: string): Promise<void> {
-    const setConfig = {
+    const setConfig: CookieOptions = {
       httpOnly: true,
       secure: true,
-      path: '/auth/session',
+      sameSite: 'none',
       expires: new Date(new Date().getTime() + 60 * 60 * 24 * 14 * 1000),
     };
     res.cookie(this.COOKIE_NAME, refreshToken, setConfig);
   }
 
   private getAccessToken(user: User): string {
-    const payload = { id: user.id, email: user.email, role: user.role };
+    const payload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
     const options: JwtSignOptions = {
       secret: this.ACCESS_TOKEN_SECRET,
-      expiresIn: 60 * 15,
+      expiresIn: 60 * 60
     };
     const accessToken = this.jwtService.sign(payload, options);
     return accessToken;
@@ -164,21 +170,22 @@ export class AuthService {
         : this.REFRESH_TOKEN_SECRET;
 
     try {
-      const verify = this.jwtService.verify(refreshToken, {
-        secret,
+      if (!refreshToken) throw new NotFoundException('cookie not found!')
+      const verify = await this.jwtService.verifyAsync(refreshToken, {
+        secret: secret,
       });
       const user = await this.userService.getUserByEmail(verify.email);
-
       const accessToken = this.getAccessToken(user);
       const newRefreshToken = await this.getRefreshToken(user);
       const newAuth = new Auth(newRefreshToken, user);
-
+      await this.authRepository.removeRefreshToken(refreshToken);
+      await this.removeCookie(res);
       await this.setCookies(res, newRefreshToken);
       await this.authRepository.saveRefreshToken(newAuth);
-      await this.authRepository.removeRefreshToken(refreshToken);
       return accessToken;
     } catch (error) {
-      throw new HttpException('invalid token', 403);
+      await this.removeCookie(res);
+      throw new HttpException(error, 403);
     }
   }
 }

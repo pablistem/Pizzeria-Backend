@@ -1,92 +1,74 @@
-import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { 
+  Injectable,
+  Inject, 
+  InternalServerErrorException, 
+  ConflictException, 
+  BadRequestException, 
+  NotFoundException 
+} from '@nestjs/common';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
 import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileRepository } from '../../infrastructure/profile.repository';
 import { IProfileRepository } from '../repository/profile.repository.interface';
 import { Profile } from '../../domain/profile.entity';
-import { UserService } from 'src/module/user/application/service/user.service';
-import { RoleEnum, User } from 'src/module/user/domain/user.entity';
 
 @Injectable()
 export class ProfileService {
   constructor(
-    @Inject(ProfileRepository)
-    private readonly profileRepository: IProfileRepository,
-    private readonly userService: UserService,
-  ) {}
+    @Inject(ProfileRepository) private readonly profileRepository: IProfileRepository) {}
 
-  async getProfiles(userId: number) {
-    const userFound = await this.userService.findUserById(userId);
-
-    if (userFound.role === RoleEnum.admin) {
-      return this.profileRepository.findAll();
-    } else {
-      throw new HttpException('Only admin', HttpStatus.UNAUTHORIZED);
-    }
-  }
-
-  async getProfile(id: number, userId: number): Promise<Profile> {
-    const profileFound = await this.profileRepository.findOne(id);
-    const userFound = await this.userService.findUserById(userId);
-
-    if (!profileFound) {
-      throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
-    }
-
-    if (userFound.role === RoleEnum.admin) {
-      return profileFound;
-    }
-
-    if (userFound.id === id) {
-      delete profileFound.user.hash;
-      delete profileFound.user.verified;
-      return profileFound;
-    } else {
-      throw new HttpException('User Id not match', HttpStatus.UNAUTHORIZED);
-    }
+  async getProfile(user: number): Promise<Profile> {
+    const profileFound = await this.profileRepository.findByUser(user);
+    if (!profileFound) throw new NotFoundException('Profile not found');
+    return profileFound;
   }
 
   async updateProfile(
-    id: number,
-    profile: UpdateProfileDto,
-    userId: number,
+    user: number,
+    changes: UpdateProfileDto,
+    file: Express.Multer.File,
   ): Promise<Profile> {
-    const profileFound = await this.profileRepository.findOne(id);
-    const userFound = await this.userService.findUserById(userId);
-
-    if (!profileFound) {
-      throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+    try {
+      const profileFound = await this.getProfile(user);
+      profileFound.avatar = file ? file.path : profileFound.avatar;
+      profileFound.username = changes.username != null ? changes.username.trim() : profileFound.username;
+      profileFound.name = changes.name != null ? changes.name.trim() : profileFound.name;
+      profileFound.lastName = changes.lastName != null ? changes.lastName.trim() : profileFound.lastName;
+      profileFound.age = changes.age != null ? parseInt(changes.age.trim()) : profileFound.age;
+      profileFound.phone = changes.phone != null ? parseInt(changes.phone.trim()) : profileFound.phone;
+      return await this.profileRepository.updateProfile(profileFound);
+    } catch (error) {
+      if (error instanceof BadRequestException) throw new BadRequestException(error.message);
+      else if (error instanceof NotFoundException) throw new NotFoundException(error.message);
+      else throw new InternalServerErrorException(error); 
     }
-
-    if (userFound.role === RoleEnum.admin) {
-      const updateProfile = Object.assign(profileFound, profile);
-      return this.profileRepository.updateProfile(updateProfile);
-    }
-
-    if (userFound.id === id) {
-      const updateProfile = Object.assign(profileFound, profile);
-      return this.profileRepository.updateProfile(updateProfile);
-    } else {
-      throw new HttpException('User Id not match', HttpStatus.UNAUTHORIZED);
-    }
+    
   }
 
-  async createProfile(createProfileDto: CreateProfileDto) {
-    const user = await this.userService.findUserById(createProfileDto.user);
-
-    const userCompleted = new Profile();
-    userCompleted.street = createProfileDto.street;
-    userCompleted.age = createProfileDto.age;
-    userCompleted.avatar = createProfileDto.avatar;
-    userCompleted.height = createProfileDto.height;
-    userCompleted.postalCode = createProfileDto.postalCode;
-    userCompleted.user = user;
-
-    if (!user) {
-      throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+  async createProfile(
+    user: number, 
+    data: CreateProfileDto, 
+    file: Express.Multer.File
+  ): Promise<Profile> {
+    try {
+      const profileFound = await this.profileRepository.findByUser(user);
+      if (!profileFound) {
+        const profile = new Profile();
+        profile.avatar = file ? file.path : null;
+        profile.username = data.username;
+        profile.name = data.name.trim();
+        profile.lastName = data.lastName.trim();
+        profile.age = parseInt(data.age.trim());
+        profile.phone = parseInt(data.phone.trim());
+        profile.user = user;
+        return await this.profileRepository.createProfile(profile);
+      } else {
+        throw new ConflictException('the profile has already been created!')
+      }
+    } catch (error) {
+      if (error instanceof ConflictException) throw new ConflictException(error.message)
+      else if (error instanceof BadRequestException) throw new BadRequestException(error.message)
+      else throw new InternalServerErrorException(error); 
     }
-
-    this.profileRepository.createProfile(userCompleted);
-    return 'El perfil fue creado correctamente!';
   }
 }
