@@ -8,8 +8,8 @@ import { ProfileService } from '../../application/service/profile.service';
 import { loadFixtures } from 'src/common/fixtures/loader';
 import { CreateProfileDto } from '../../application/dto/create-profile.dto';
 import { UpdateProfileDto } from '../../application/dto/update-profile.dto';
-import { extname } from 'node:path';
-import { ValidationErrorMessagesEnum } from '../../application/dto/create-profile.dto';
+import { extname, normalize } from 'node:path';
+import { EmptyFieldErrorMessagesEnum, ValidationErrorMessagesEnum } from '../../application/dto/validation-error-messages'; 
 
 describe('Profile', () => {
   let app: INestApplication;
@@ -106,7 +106,7 @@ describe('Profile', () => {
       } catch (error) {
         expect(error.getResponse().statusCode).toEqual(400);
         expect(error.getResponse().message).toEqual([
-          ValidationErrorMessagesEnum.AGE_FIELD_ERROR,
+          ValidationErrorMessagesEnum.AGE_INVALID_ERROR,
         ])            
       }
     });
@@ -227,7 +227,7 @@ describe('Profile', () => {
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
-      expect(body).toHaveProperty('avatar', `uploads\\profile\\${fileName}`)
+      expect(body).toHaveProperty('avatar', normalize(`uploads\\profile\\${fileName}`))
     });
 
     it('Should upload avatar being an admin user', async () => {
@@ -252,12 +252,12 @@ describe('Profile', () => {
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
-      expect(body).toHaveProperty('avatar', `uploads\\profile\\${fileName}`)
+      expect(body).toHaveProperty('avatar', normalize(`uploads\\profile\\${fileName}`))
     });
   });
 
   describe('POST /profile', () => {
-    it('Not allow to create a profile', async () => {
+    it('Not allowed to create a profile', async () => {
       await request(app.getHttpServer())
         .post('/profile')
         .expect(401)
@@ -270,25 +270,27 @@ describe('Profile', () => {
         .expect(409);
     })
 
-    it('Should not create a new profile by sending the wrong type of data', async () => {
+    it('Should not create a new profile with invalid data or empty fields', async () => {
       const newProfile: CreateProfileDto = {
         username: '[Facu_49]',
         name: 'Facundo49',
-        lastName: 'Castro125',
-        phone: "02g0s6dd1",
-        age: "123fafa",
+        lastName: '',
+        age: '',
+        phone: '02g0s6dd1',
       }
       try {
         await validationPipe.transform(newProfile, { type: 'body', metatype: CreateProfileDto });
-        fail('Validation pipe should throw an exception for invalid data')
+        fail('Validation pipe should throw an exception for invalid data or empty data')
       } catch (error) {
         expect(error.getResponse().statusCode).toEqual(400);
         expect(error.getResponse().message).toEqual([
-          ValidationErrorMessagesEnum.USERNAME_FIELD_ERROR,
-          ValidationErrorMessagesEnum.NAME_FIELD_ERROR,
-          ValidationErrorMessagesEnum.LASTNAME_FIELD_ERROR,
-          ValidationErrorMessagesEnum.AGE_FIELD_ERROR,
-          ValidationErrorMessagesEnum.PHONE_FIELD_ERROR
+          ValidationErrorMessagesEnum.USERNAME_INVALID_ERROR,
+          ValidationErrorMessagesEnum.NAME_INVALID_ERROR,
+          ValidationErrorMessagesEnum.LASTNAME_INVALID_ERROR,
+          EmptyFieldErrorMessagesEnum.LASTNAME_EMPTY_ERROR,
+          ValidationErrorMessagesEnum.AGE_INVALID_ERROR,
+          EmptyFieldErrorMessagesEnum.AGE_EMPTY_ERROR,
+          ValidationErrorMessagesEnum.PHONE_INVALID_ERROR,
         ])       
       }
     })
@@ -319,7 +321,6 @@ describe('Profile', () => {
       } catch (error) {
         fail('Validation pipe should not throw an exception for valid data')
       }
-      
     })
 
     it('Should not create a profile with a non-compatible file as avatar', async () => {
@@ -371,7 +372,7 @@ describe('Profile', () => {
         expect(body).toHaveProperty('lastName', newProfile.lastName);
         expect(body).toHaveProperty('phone', parseInt(newProfile.phone));
         expect(body).toHaveProperty('age', parseInt(newProfile.age));
-        expect(body).toHaveProperty('avatar', `uploads\\profile\\${fileName}`)
+        expect(body).toHaveProperty('avatar', normalize(`uploads\\profile\\${fileName}`))
       } catch (error) {
         fail('Validation pipe should not throw an exception for valid data');
       }

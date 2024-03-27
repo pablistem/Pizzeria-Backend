@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import { AppModule } from '../../../../../src/app.module';
 import { loadFixtures } from '../../../../../src/common/fixtures/loader';
 import { tokens } from '../../../../../src/common/fixtures/user';
-import { createCategoryDto } from '../../application/dto/create-category.dto';
+import { CreateCategoryDto } from '../../application/dto/create-category.dto';
 import { UpdateCategoryDto } from '../../application/dto';
 
 describe('Category', () => {
@@ -46,9 +46,9 @@ describe('Category', () => {
 
   describe('POST /category', () => {
     it('Should create category as admin ', async () => {
-      const newCategory: createCategoryDto = { name: 'newCategory' };
+      const newCategory: CreateCategoryDto = { name: 'newCategory' };
       const { body } = await request(app.getHttpServer())
-        .post('/category/create')
+        .post('/category')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newCategory)
         .expect(201);
@@ -56,17 +56,17 @@ describe('Category', () => {
     });
 
     it('Should not create category as user ', async () => {
-      const newCategory: createCategoryDto = { name: 'newCategory' };
-      await request(app.getHttpServer())
-        .post('/category/create')
+      const newCategory: CreateCategoryDto = { name: 'newCategory' };
+      await request(app.getHttpServer()) 
+        .post('/category')
         .auth(tokens.normalUserToken, { type: 'bearer' })
         .send(newCategory)
         .expect(401);
     });
     it('Should not create category with duplicate name', async () => {
-      const newCategory: createCategoryDto = { name: 'newCategory' };
+      const newCategory: CreateCategoryDto = { name: 'newCategory' };
       await request(app.getHttpServer())
-        .post('/category/create')
+        .post('/category')
         .auth(tokens.adminUserToken, { type: 'bearer' })
         .send(newCategory)
         .expect(409);

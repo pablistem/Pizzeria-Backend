@@ -1,4 +1,11 @@
-import { Injectable, HttpException, HttpStatus, Inject, InternalServerErrorException, ConflictException, BadRequestException, NotFoundException } from '@nestjs/common';
+import { 
+  Injectable,
+  Inject, 
+  InternalServerErrorException, 
+  ConflictException, 
+  BadRequestException, 
+  NotFoundException 
+} from '@nestjs/common';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
 import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileRepository } from '../../infrastructure/profile.repository';
@@ -38,7 +45,11 @@ export class ProfileService {
     
   }
 
-  async createProfile(user: number, data: CreateProfileDto, file: Express.Multer.File) {
+  async createProfile(
+    user: number, 
+    data: CreateProfileDto, 
+    file: Express.Multer.File
+  ): Promise<Profile> {
     try {
       const profileFound = await this.profileRepository.findByUser(user);
       if (!profileFound) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Category } from './domain/category.entity';
-import { UpdateCategoryDto, createCategoryDto, CategoryDto } from './dto';
+import { UpdateCategoryDto, CreateCategoryDto, CategoryDto } from './dto';
 
 @Injectable()
 export class CategoryMapper {
@@ -13,7 +13,7 @@ export class CategoryMapper {
   }
 
   fromDtoToEntity(
-    dto: UpdateCategoryDto | createCategoryDto | CategoryDto,
+    dto: UpdateCategoryDto | CreateCategoryDto | CategoryDto,
   ): Category {
     const category = new Category();
     Object.keys(dto).forEach((key) => {

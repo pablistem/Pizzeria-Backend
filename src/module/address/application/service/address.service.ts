@@ -15,7 +15,7 @@ export class AddressService {
     return addressFound;
   }
 
-  async createAddress(data: CreateAddressDto) {
+  async createAddress(data: CreateAddressDto): Promise<Address> {
     const newAddress = new Address()
     newAddress.country = data.country;
     newAddress.state = data.state;
@@ -27,7 +27,7 @@ export class AddressService {
     return await this.addressRepository.create(newAddress);
   }
 
-  async updateAddress(id: number, changes: UpdateAddressDto) {
+  async updateAddress(id: number, changes: UpdateAddressDto): Promise<Address> {
     const addressFound = await this.getAddress(id);
     addressFound.country = changes.country;
     addressFound.state = changes.state;

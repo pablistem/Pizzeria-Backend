@@ -1,42 +1,39 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, Matches } from 'class-validator';
-
-export enum ValidationErrorMessagesEnum {
-  USERNAME_FIELD_ERROR = 'the username should not contain any special character except: "-" or "_"',
-  NAME_FIELD_ERROR = 'the name should not contain any number or special character',
-  LASTNAME_FIELD_ERROR = 'the last name should not contain any number or special character',
-  AGE_FIELD_ERROR = 'the age should be only a number',
-  PHONE_FIELD_ERROR = 'the age should be only a number',
-}
+import { IsString, IsNotEmpty, Matches, IsOptional } from 'class-validator';
+import { ValidationErrorMessagesEnum, EmptyFieldErrorMessagesEnum } from './validation-error-messages';
 
 export class CreateProfileDto {
+  @ApiProperty({ type: 'string', format: 'binary' })
+  @IsOptional()
+  avatar?: Express.Multer.File
+
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: EmptyFieldErrorMessagesEnum.USERNAME_EMPTY_ERROR })
   @IsString()
-  @Matches(/^[a-zA-Z0-9-_]+$/, { message: ValidationErrorMessagesEnum.USERNAME_FIELD_ERROR })
+  @Matches(/^[a-zA-Z0-9-_]+$/, { message: ValidationErrorMessagesEnum.USERNAME_INVALID_ERROR })
   username: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: EmptyFieldErrorMessagesEnum.NAME_EMPTY_ERROR })
   @IsString()
-  @Matches(/^[a-zA-Z]+$/, { message: ValidationErrorMessagesEnum.NAME_FIELD_ERROR })
+  @Matches(/^[a-zA-Z]+$/, { message: ValidationErrorMessagesEnum.NAME_INVALID_ERROR })
   name: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: EmptyFieldErrorMessagesEnum.LASTNAME_EMPTY_ERROR })
   @IsString()
-  @Matches(/^[a-zA-Z]+$/, { message: ValidationErrorMessagesEnum.LASTNAME_FIELD_ERROR })
+  @Matches(/^[a-zA-Z]+$/, { message: ValidationErrorMessagesEnum.LASTNAME_INVALID_ERROR })
   lastName: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: EmptyFieldErrorMessagesEnum.AGE_EMPTY_ERROR })
   @IsString()
-  @Matches(/^\d+$/, { message: ValidationErrorMessagesEnum.AGE_FIELD_ERROR })
+  @Matches(/^\d+$/, { message: ValidationErrorMessagesEnum.AGE_INVALID_ERROR })
   age: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: EmptyFieldErrorMessagesEnum.PHONE_EMPTY_ERROR })
   @IsString()
-  @Matches(/^\d+$/, { message: ValidationErrorMessagesEnum.PHONE_FIELD_ERROR })
+  @Matches(/^\d+$/, { message: ValidationErrorMessagesEnum.PHONE_INVALID_ERROR })
   phone: string;
 }
