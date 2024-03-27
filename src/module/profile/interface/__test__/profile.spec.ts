@@ -227,7 +227,7 @@ describe('Profile', () => {
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
-      expect(body).toHaveProperty('avatar', normalize(`uploads\\profile\\${fileName}`))
+      expect(body).toHaveProperty('avatar', normalize(`uploads/profile/${fileName}`))
     });
 
     it('Should upload avatar being an admin user', async () => {
@@ -252,7 +252,7 @@ describe('Profile', () => {
         .expect(200)
       expect(body.user).toHaveProperty('id', id);
       expect(body.user).toHaveProperty('role', role);
-      expect(body).toHaveProperty('avatar', normalize(`uploads\\profile\\${fileName}`))
+      expect(body).toHaveProperty('avatar', normalize(`uploads/profile/${fileName}`))
     });
   });
 
@@ -372,7 +372,7 @@ describe('Profile', () => {
         expect(body).toHaveProperty('lastName', newProfile.lastName);
         expect(body).toHaveProperty('phone', parseInt(newProfile.phone));
         expect(body).toHaveProperty('age', parseInt(newProfile.age));
-        expect(body).toHaveProperty('avatar', normalize(`uploads\\profile\\${fileName}`))
+        expect(body).toHaveProperty('avatar', normalize(`uploads/profile/${fileName}`))
       } catch (error) {
         fail('Validation pipe should not throw an exception for valid data');
       }
